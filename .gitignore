@@ -1,0 +1,49 @@
+# Godot-specific ignores
+.godot/
+*.tmp
+*.translation
+export_presets.cfg
+export_presets.tmp
+
+# Imported translations (automatically generated from CSV files)
+*.translation
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash.*.json
+
+# System/OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Build results
+bin/
+obj/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# User-specific files
+*.csproj.user
+*.csproj.user.*
+
+# Godot 4+ specific
+.godot/
+*.godot/
+*.import/
