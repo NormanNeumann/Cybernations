@@ -2,9 +2,15 @@ using Godot;
 
 public partial class MainUI : Control
 {
+    private static readonly Vector2 LayoutShift = new Vector2(40.0f, 0.0f);
+
     private const int TotalTurns = 6;
     private const int TotalResourceCells = 25;
     private const int ConflictCells = 3;
+    private const float HexOuterSide = 112.0f;
+    private const float HexInnerSide = 108.0f;
+    private const float HexOverlayOuterSide = 84.0f;
+    private const float HexOverlayInnerSide = 80.0f;
 
     private readonly Color _inkColor = Color.FromHtml("#2B2726");
     private readonly Color _textColor = Color.FromHtml("#16222B");
@@ -32,17 +38,17 @@ public partial class MainUI : Control
 
     private readonly HexTileData[] _hexTiles =
     {
-        new HexTileData(new Vector2(20, 0),  HexBase.Wilds, OverlayType.None),
-        new HexTileData(new Vector2(390, 0), HexBase.Wilds, OverlayType.None),
-        new HexTileData(new Vector2(760, 0), HexBase.Wilds, OverlayType.None),
-        new HexTileData(new Vector2(205, 110), HexBase.Wasted, OverlayType.None),
-        new HexTileData(new Vector2(575, 110), HexBase.Wilds, OverlayType.None),
-        new HexTileData(new Vector2(390, 220), HexBase.Wilds, OverlayType.Human),
-        new HexTileData(new Vector2(575, 330), HexBase.Wasted, OverlayType.Human),
-        new HexTileData(new Vector2(205, 330), HexBase.Wilds, OverlayType.None),
-        new HexTileData(new Vector2(20, 440), HexBase.Wilds, OverlayType.None),
-        new HexTileData(new Vector2(390, 440), HexBase.Wasted, OverlayType.Tech),
-        new HexTileData(new Vector2(760, 440), HexBase.Wasted, OverlayType.Tech),
+        new HexTileData(new Vector2(0, 0), HexBase.Wilds, OverlayType.None),
+        new HexTileData(new Vector2(348, 0), HexBase.Wilds, OverlayType.None),
+        new HexTileData(new Vector2(696, 0), HexBase.Wilds, OverlayType.None),
+        new HexTileData(new Vector2(174, 100), HexBase.Wasted, OverlayType.None),
+        new HexTileData(new Vector2(522, 100), HexBase.Wilds, OverlayType.None),
+        new HexTileData(new Vector2(348, 200), HexBase.Wilds, OverlayType.Human),
+        new HexTileData(new Vector2(522, 300), HexBase.Wasted, OverlayType.Human),
+        new HexTileData(new Vector2(174, 300), HexBase.Wilds, OverlayType.None),
+        new HexTileData(new Vector2(0, 400), HexBase.Wilds, OverlayType.None),
+        new HexTileData(new Vector2(348, 400), HexBase.Wasted, OverlayType.Tech),
+        new HexTileData(new Vector2(696, 400), HexBase.Wasted, OverlayType.Tech),
     };
 
     public override void _Ready()
@@ -64,7 +70,7 @@ public partial class MainUI : Control
         for (int index = 0; index < _players.Length; index++)
         {
             var block = CreatePlayerBlock(_players[index]);
-            block.Position = new Vector2(34, startY + spacing * index);
+            block.Position = Shift(new Vector2(34, startY + spacing * index));
             parent.AddChild(block);
         }
     }
@@ -90,7 +96,7 @@ public partial class MainUI : Control
     private void BuildNationLevel(Control parent)
     {
         var wrapper = new Control();
-        wrapper.Position = new Vector2(52, 784);
+        wrapper.Position = Shift(new Vector2(52, 784));
         wrapper.Size = new Vector2(112, 140);
 
         var outline = new Polygon2D();
@@ -104,14 +110,13 @@ public partial class MainUI : Control
         wrapper.AddChild(fill);
 
         wrapper.AddChild(CreateTextLabel("10", 58, Colors.Black, new Vector2(6, 18), new Vector2(100, 64), HorizontalAlignment.Center));
-        wrapper.AddChild(CreateTextLabel("nation_level", 10, _mutedTextColor, new Vector2(0, 112), new Vector2(112, 18), HorizontalAlignment.Center));
 
         parent.AddChild(wrapper);
     }
 
     private void BuildTurnDots(Control parent, int completedTurns)
     {
-        var start = new Vector2(36, 952);
+        var start = Shift(new Vector2(36, 952));
         var dotSize = new Vector2(38, 38);
         var gapX = 48.0f;
         var gapY = 52.0f;
@@ -136,9 +141,15 @@ public partial class MainUI : Control
 
     private void BuildHexCluster(Control parent)
     {
+        var clusterSize = GetHexClusterSize();
+        var boardArea = new Rect2(Shift(new Vector2(240, 48)), new Vector2(1040, 690));
+
         var cluster = new Control();
-        cluster.Position = new Vector2(242, 68);
-        cluster.Size = new Vector2(1020, 670);
+        cluster.Position = new Vector2(
+            boardArea.Position.X + (boardArea.Size.X - clusterSize.X) * 0.5f,
+            boardArea.Position.Y + (boardArea.Size.Y - clusterSize.Y) * 0.5f
+        );
+        cluster.Size = clusterSize;
 
         foreach (var tile in _hexTiles)
         {
@@ -148,21 +159,38 @@ public partial class MainUI : Control
         parent.AddChild(cluster);
     }
 
+    private Vector2 GetHexClusterSize()
+    {
+        var outerSize = GetHexBounds(HexOuterSide);
+        var maxX = 0.0f;
+        var maxY = 0.0f;
+
+        foreach (var tile in _hexTiles)
+        {
+            maxX = Mathf.Max(maxX, tile.Position.X + outerSize.X);
+            maxY = Mathf.Max(maxY, tile.Position.Y + outerSize.Y);
+        }
+
+        return new Vector2(maxX, maxY);
+    }
+
     private Control CreateHexTile(HexTileData tile)
     {
         var wrapper = new Control();
         wrapper.Position = tile.Position;
-        wrapper.Size = new Vector2(220, 208);
+        var outerSize = GetHexBounds(HexOuterSide);
+        wrapper.Size = outerSize;
 
         var baseColor = tile.Base == HexBase.Wilds ? _wildsColor : _wastedColor;
-        wrapper.AddChild(CreateHexPolygon(new Vector2(220, 208), Vector2.Zero, _inkColor));
-        wrapper.AddChild(CreateHexPolygon(new Vector2(210, 198), new Vector2(5, 5), baseColor));
+        var center = outerSize / 2.0f;
+        wrapper.AddChild(CreateHexPolygon(HexOuterSide, center, _inkColor));
+        wrapper.AddChild(CreateHexPolygon(HexInnerSide, center, baseColor));
 
         if (tile.Overlay != OverlayType.None)
         {
             var overlayColor = tile.Overlay == OverlayType.Human ? _humanOverlayColor : _techOverlayColor;
-            wrapper.AddChild(CreateHexPolygon(new Vector2(136, 130), new Vector2(42, 39), _inkColor));
-            wrapper.AddChild(CreateHexPolygon(new Vector2(126, 120), new Vector2(47, 44), overlayColor));
+            wrapper.AddChild(CreateHexPolygon(HexOverlayOuterSide, center, _inkColor));
+            wrapper.AddChild(CreateHexPolygon(HexOverlayInnerSide, center, overlayColor));
         }
 
         return wrapper;
@@ -170,12 +198,12 @@ public partial class MainUI : Control
 
     private void BuildResourceTracks(Control parent)
     {
-        parent.AddChild(CreateTrackRow(new Vector2(205, 800), "H", "human_resources", 13, Color.FromHtml("#F4F4F4")));
-        parent.AddChild(CreateTrackRow(new Vector2(205, 888), "T", "technology_resources", 10, Color.FromHtml("#F4F4F4")));
-        parent.AddChild(CreateTrackRow(new Vector2(205, 976), "E", "environment_resources", 8, Color.FromHtml("#F4F4F4")));
+        parent.AddChild(CreateTrackRow(Shift(new Vector2(205, 800)), "H", 13, Color.FromHtml("#F4F4F4")));
+        parent.AddChild(CreateTrackRow(Shift(new Vector2(205, 888)), "T", 10, Color.FromHtml("#F4F4F4")));
+        parent.AddChild(CreateTrackRow(Shift(new Vector2(205, 976)), "E", 8, Color.FromHtml("#F4F4F4")));
     }
 
-    private Control CreateTrackRow(Vector2 position, string iconText, string labelText, int filledCells, Color filledColor)
+    private Control CreateTrackRow(Vector2 position, string iconText, int filledCells, Color filledColor)
     {
         var row = new Control();
         row.Position = position;
@@ -184,7 +212,6 @@ public partial class MainUI : Control
         var iconBox = CreateRoundedPanel(Vector2.Zero, new Vector2(72, 72), _iconFillColor, 18);
         row.AddChild(iconBox);
         row.AddChild(CreateTextLabel(iconText, 28, Colors.Black, new Vector2(0, 18), new Vector2(72, 34), HorizontalAlignment.Center));
-        row.AddChild(CreateTextLabel(labelText, 11, _mutedTextColor, new Vector2(84, -16), new Vector2(220, 16), HorizontalAlignment.Left));
 
         var trackStartX = 102.0f;
         var cellWidth = 28.0f;
@@ -231,9 +258,9 @@ public partial class MainUI : Control
     {
         parent.AddChild(
             CreateInfoPanel(
-                new Vector2(1305, 34),
+                Shift(new Vector2(1305, 34)),
                 new Vector2(500, 232),
-                "major_goal",
+                "Major Goal",
                 "Shared objective for every player:\nStabilize the board, raise nation level, and stop conflict from shrinking the usable tracks.",
                 Color.FromHtml("#D7D7D7"),
                 0
@@ -242,9 +269,9 @@ public partial class MainUI : Control
 
         parent.AddChild(
             CreateInfoPanel(
-                new Vector2(1305, 296),
+                Shift(new Vector2(1305, 296)),
                 new Vector2(500, 292),
-                "information_panel",
+                "Information Panel",
                 "Key state summary:\n- 5 players on the left\n- 11 map hexes in the center\n- 3 resource tracks at the bottom",
                 Color.FromHtml("#CFCFCF"),
                 30
@@ -253,21 +280,20 @@ public partial class MainUI : Control
 
         parent.AddChild(
             CreateInfoPanel(
-                new Vector2(1305, 618),
+                Shift(new Vector2(1305, 618)),
                 new Vector2(500, 350),
-                "chat_log",
+                "Chat Log",
                 "[P1] Secure the wilds.\n[P3] Human build next turn.\n[P5] Conflict blocks the final cells.",
                 Color.FromHtml("#F1F1F1"),
                 0
             )
         );
 
-        var inputPanel = CreateRoundedPanel(new Vector2(1305, 986), new Vector2(500, 56), Color.FromHtml("#F1F1F1"), 16);
+        var inputPanel = CreateRoundedPanel(Shift(new Vector2(1305, 986)), new Vector2(500, 56), Color.FromHtml("#F1F1F1"), 16);
         parent.AddChild(inputPanel);
-        parent.AddChild(CreateTextLabel("chat_input", 14, _mutedTextColor, new Vector2(1323, 952), new Vector2(160, 22), HorizontalAlignment.Left));
 
         var lineEdit = new LineEdit();
-        lineEdit.Position = new Vector2(1323, 999);
+        lineEdit.Position = Shift(new Vector2(1323, 999));
         lineEdit.Size = new Vector2(464, 30);
         lineEdit.PlaceholderText = "Type a message...";
         parent.AddChild(lineEdit);
@@ -283,11 +309,37 @@ public partial class MainUI : Control
     )
     {
         var panel = CreateRoundedPanel(position, size, fillColor, radius);
-        panel.AddChild(CreateTextLabel(title, 16, _mutedTextColor, new Vector2(18, 16), new Vector2(size.X - 36, 22), HorizontalAlignment.Left));
+        panel.ClipContents = true;
 
-        var bodyLabel = CreateTextLabel(body, 15, _textColor, new Vector2(18, 48), new Vector2(size.X - 36, size.Y - 64), HorizontalAlignment.Left);
+        var layout = new VBoxContainer();
+        layout.Position = new Vector2(18, 14);
+        layout.Size = new Vector2(size.X - 36, size.Y - 28);
+        layout.AddThemeConstantOverride("separation", 10);
+        layout.ClipContents = true;
+        panel.AddChild(layout);
+
+        var titleLabel = new Label();
+        titleLabel.Text = title;
+        titleLabel.CustomMinimumSize = new Vector2(0, 30);
+        titleLabel.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+        titleLabel.HorizontalAlignment = HorizontalAlignment.Left;
+        titleLabel.VerticalAlignment = VerticalAlignment.Center;
+        titleLabel.AddThemeFontSizeOverride("font_size", 22);
+        titleLabel.AddThemeColorOverride("font_color", _textColor);
+        layout.AddChild(titleLabel);
+
+        var bodyLabel = new Label();
+        bodyLabel.Text = body;
+        bodyLabel.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+        bodyLabel.HorizontalAlignment = HorizontalAlignment.Left;
+        bodyLabel.VerticalAlignment = VerticalAlignment.Top;
         bodyLabel.AutowrapMode = TextServer.AutowrapMode.WordSmart;
-        panel.AddChild(bodyLabel);
+        bodyLabel.ClipText = true;
+        bodyLabel.SizeFlagsVertical = Control.SizeFlags.ExpandFill;
+        bodyLabel.AddThemeFontSizeOverride("font_size", 14);
+        bodyLabel.AddThemeColorOverride("font_color", _textColor);
+        layout.AddChild(bodyLabel);
+
         return panel;
     }
 
@@ -343,24 +395,32 @@ public partial class MainUI : Control
         return bubble;
     }
 
-    private Polygon2D CreateHexPolygon(Vector2 size, Vector2 offset, Color color)
+    private Polygon2D CreateHexPolygon(float sideLength, Vector2 center, Color color)
     {
         var polygon = new Polygon2D();
         polygon.Color = color;
-        polygon.Polygon = BuildFlatHexPolygon(size, offset);
+        polygon.Polygon = BuildRegularHexPolygon(sideLength, center);
         return polygon;
     }
 
-    private Vector2[] BuildFlatHexPolygon(Vector2 size, Vector2 offset)
+    private Vector2 GetHexBounds(float sideLength)
     {
+        return new Vector2(sideLength * 2.0f, Mathf.Sqrt(3.0f) * sideLength);
+    }
+
+    private Vector2[] BuildRegularHexPolygon(float sideLength, Vector2 center)
+    {
+        var halfHeight = Mathf.Sqrt(3.0f) * sideLength * 0.5f;
+        var halfSide = sideLength * 0.5f;
+
         return new[]
         {
-            new Vector2(offset.X + size.X * 0.25f, offset.Y),
-            new Vector2(offset.X + size.X * 0.75f, offset.Y),
-            new Vector2(offset.X + size.X, offset.Y + size.Y * 0.5f),
-            new Vector2(offset.X + size.X * 0.75f, offset.Y + size.Y),
-            new Vector2(offset.X + size.X * 0.25f, offset.Y + size.Y),
-            new Vector2(offset.X, offset.Y + size.Y * 0.5f),
+            new Vector2(center.X + sideLength, center.Y),
+            new Vector2(center.X + halfSide, center.Y + halfHeight),
+            new Vector2(center.X - halfSide, center.Y + halfHeight),
+            new Vector2(center.X - sideLength, center.Y),
+            new Vector2(center.X - halfSide, center.Y - halfHeight),
+            new Vector2(center.X + halfSide, center.Y - halfHeight),
         };
     }
 
@@ -396,6 +456,11 @@ public partial class MainUI : Control
         label.AddThemeFontSizeOverride("font_size", fontSize);
         label.AddThemeColorOverride("font_color", fontColor);
         return label;
+    }
+
+    private Vector2 Shift(Vector2 position)
+    {
+        return position + LayoutShift;
     }
 
     private readonly struct PlayerData
