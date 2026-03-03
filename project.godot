@@ -10,18 +10,17 @@ config_version=5
 
 [application]
 
-config/name="CyberNationsGodot"
-config/features=PackedStringArray("4.6", "Forward Plus")
+config/name="CyberNationsPrototype"
+run/main_scene="res://MainUI.tscn"
+config/features=PackedStringArray("4.6", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/stretch/mode="canvas_items"
 
 [dotnet]
 
-project/assembly_name="CyberNationsGodot"
-
-[physics]
-
-3d/physics_engine="Jolt Physics"
-
-[rendering]
-
-rendering_device/driver.windows="d3d12"
+project/assembly_name="CyberNationsPrototype"
