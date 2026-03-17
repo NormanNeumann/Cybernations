@@ -4,12 +4,17 @@ using System.Collections.Generic;
 public partial class ChatPanelView : Control
 {
     private static readonly Vector2 LayoutShift = new Vector2(40.0f, 0.0f);
+    private static readonly Vector2 RootPosition = Shift(new Vector2(1305, 34));
+    private static readonly Vector2 CollapsedLogPosition = new Vector2(0.0f, 584.0f);
+    private static readonly Vector2 ExpandedLogPosition = Vector2.Zero;
+    private static readonly Vector2 InputPanelPosition = new Vector2(0.0f, 952.0f);
+    private static readonly Vector2 InputLinePosition = new Vector2(18.0f, 965.0f);
 
     private readonly Color _textColor = Color.FromHtml("#16222B");
 
-    private Button _collapseBackdrop = null!;
     private Panel _chatLogPanel = null!;
     private Button _chatLogHitArea = null!;
+    private Panel _chatInputPanel = null!;
     private Label _chatBodyLabel = null!;
     private LineEdit _chatInputLineEdit = null!;
     private bool _isExpanded;
@@ -23,10 +28,11 @@ public partial class ChatPanelView : Control
 
     public override void _Ready()
     {
-        AnchorRight = 1.0f;
-        AnchorBottom = 1.0f;
-        GrowHorizontal = GrowDirection.Both;
-        GrowVertical = GrowDirection.Both;
+        MouseFilter = MouseFilterEnum.Ignore;
+        SetAnchorsPreset(LayoutPreset.TopLeft);
+        Position = RootPosition;
+        Size = new Vector2(500, 1008);
+        CustomMinimumSize = Size;
 
         BuildChatLogPanel();
         BuildInputPanel();
@@ -34,21 +40,7 @@ public partial class ChatPanelView : Control
 
     private void BuildChatLogPanel()
     {
-        _collapseBackdrop = new Button();
-        _collapseBackdrop.AnchorRight = 1.0f;
-        _collapseBackdrop.AnchorBottom = 1.0f;
-        _collapseBackdrop.GrowHorizontal = GrowDirection.Both;
-        _collapseBackdrop.GrowVertical = GrowDirection.Both;
-        _collapseBackdrop.Flat = true;
-        _collapseBackdrop.Text = string.Empty;
-        _collapseBackdrop.Modulate = new Color(1, 1, 1, 0);
-        _collapseBackdrop.FocusMode = FocusModeEnum.None;
-        _collapseBackdrop.Visible = false;
-        _collapseBackdrop.ZIndex = 83;
-        _collapseBackdrop.Pressed += CollapseChatLog;
-        AddChild(_collapseBackdrop);
-
-        _chatLogPanel = CreateRoundedPanel(Shift(new Vector2(1305, 618)), new Vector2(500, 350), Color.FromHtml("#F1F1F1"), 0);
+        _chatLogPanel = CreateRoundedPanel(CollapsedLogPosition, new Vector2(500, 350), Color.FromHtml("#F1F1F1"), 0);
         _chatLogPanel.ClipContents = true;
         _chatLogPanel.ZIndex = 84;
         AddChild(_chatLogPanel);
@@ -83,11 +75,11 @@ public partial class ChatPanelView : Control
 
     private void BuildInputPanel()
     {
-        var inputPanel = CreateRoundedPanel(Shift(new Vector2(1305, 986)), new Vector2(500, 56), Color.FromHtml("#F1F1F1"), 16);
-        AddChild(inputPanel);
+        _chatInputPanel = CreateRoundedPanel(InputPanelPosition, new Vector2(500, 56), Color.FromHtml("#F1F1F1"), 16);
+        AddChild(_chatInputPanel);
 
         _chatInputLineEdit = new LineEdit();
-        _chatInputLineEdit.Position = Shift(new Vector2(1323, 999));
+        _chatInputLineEdit.Position = InputLinePosition;
         _chatInputLineEdit.Size = new Vector2(464, 30);
         _chatInputLineEdit.PlaceholderText = "Type a message...";
         _chatInputLineEdit.TextSubmitted += OnChatInputSubmitted;
@@ -102,8 +94,7 @@ public partial class ChatPanelView : Control
         }
 
         _isExpanded = true;
-        _collapseBackdrop.Visible = true;
-        _chatLogPanel.Position = Shift(new Vector2(1305, 34));
+        _chatLogPanel.Position = ExpandedLogPosition;
         _chatLogPanel.Size = new Vector2(500, 934);
         _chatLogHitArea.Position = _chatLogPanel.Position;
         _chatLogHitArea.Size = _chatLogPanel.Size;
@@ -119,13 +110,36 @@ public partial class ChatPanelView : Control
         }
 
         _isExpanded = false;
-        _collapseBackdrop.Visible = false;
-        _chatLogPanel.Position = Shift(new Vector2(1305, 618));
+        _chatLogPanel.Position = CollapsedLogPosition;
         _chatLogPanel.Size = new Vector2(500, 350);
         _chatLogHitArea.Position = _chatLogPanel.Position;
         _chatLogHitArea.Size = _chatLogPanel.Size;
         _chatBodyLabel.Size = new Vector2(464, 280);
         RefreshChatLogDisplay();
+    }
+
+    public override void _Input(InputEvent @event)
+    {
+        if (!_isExpanded)
+        {
+            return;
+        }
+
+        if (@event is not InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left } mouseButton)
+        {
+            return;
+        }
+
+        var clickPoint = mouseButton.GlobalPosition;
+        if (GetGlobalRect(_chatLogPanel).HasPoint(clickPoint)
+            || GetGlobalRect(_chatInputPanel).HasPoint(clickPoint)
+            || GetGlobalRect(_chatInputLineEdit).HasPoint(clickPoint))
+        {
+            return;
+        }
+
+        CollapseChatLog();
+        GetViewport().SetInputAsHandled();
     }
 
     private void OnChatInputSubmitted(string text)
@@ -310,6 +324,11 @@ public partial class ChatPanelView : Control
     private static float MeasureTextWidth(string text, Font font, int fontSize)
     {
         return font.GetStringSize(text, HorizontalAlignment.Left, -1, fontSize).X;
+    }
+
+    private static Rect2 GetGlobalRect(Control control)
+    {
+        return new Rect2(control.GlobalPosition, control.Size);
     }
 
     private static Panel CreateRoundedPanel(

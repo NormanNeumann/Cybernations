@@ -6,6 +6,7 @@ public partial class InfoSummaryPanelView : Control
 
     public override void _Ready()
     {
+        MouseFilter = MouseFilterEnum.Ignore;
         Size = new Vector2(500, 292);
         CustomMinimumSize = Size;
 

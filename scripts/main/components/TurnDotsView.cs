@@ -13,6 +13,7 @@ public partial class TurnDotsView : Control
 
     public override void _Ready()
     {
+        MouseFilter = MouseFilterEnum.Ignore;
         Size = new Vector2(150, 98);
         CustomMinimumSize = Size;
 

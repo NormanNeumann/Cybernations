@@ -6,36 +6,24 @@ public partial class PlayerDetailPopupView : Control
     private readonly Color _textColor = Color.FromHtml("#16222B");
     private readonly Color _mutedTextColor = Color.FromHtml("#4B5E69");
 
-    private Button _backdrop = null!;
     private Panel _panel = null!;
     private Label _titleLabel = null!;
     private Label _bodyLabel = null!;
 
     public override void _Ready()
     {
+        MouseFilter = MouseFilterEnum.Stop;
         AnchorRight = 1.0f;
         AnchorBottom = 1.0f;
         GrowHorizontal = GrowDirection.Both;
         GrowVertical = GrowDirection.Both;
-
-        _backdrop = new Button();
-        _backdrop.AnchorRight = 1.0f;
-        _backdrop.AnchorBottom = 1.0f;
-        _backdrop.GrowHorizontal = GrowDirection.Both;
-        _backdrop.GrowVertical = GrowDirection.Both;
-        _backdrop.Flat = true;
-        _backdrop.Text = string.Empty;
-        _backdrop.Modulate = new Color(1, 1, 1, 0);
-        _backdrop.FocusMode = FocusModeEnum.None;
-        _backdrop.Visible = false;
-        _backdrop.ZIndex = 99;
-        _backdrop.Pressed += HidePopup;
-        AddChild(_backdrop);
+        Visible = false;
 
         _panel = CreateRoundedPanel(Vector2.Zero, new Vector2(650, 400), Color.FromHtml("#F4F4F4"), 18, _inkColor, 2);
         _panel.Visible = false;
         _panel.ZIndex = 100;
         _panel.ClipContents = true;
+        _panel.MouseFilter = MouseFilterEnum.Pass;
         AddChild(_panel);
 
         var layout = new VBoxContainer();
@@ -72,6 +60,27 @@ public partial class PlayerDetailPopupView : Control
         _panel.AddChild(closeButton);
     }
 
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        if (!Visible || !_panel.Visible)
+        {
+            return;
+        }
+
+        if (@event is not InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left } mouseButton)
+        {
+            return;
+        }
+
+        if (GetGlobalRect(_panel).HasPoint(mouseButton.GlobalPosition))
+        {
+            return;
+        }
+
+        HidePopup();
+        GetViewport().SetInputAsHandled();
+    }
+
     public void ShowPopup(int slot, string progress, Vector2 preferredPosition)
     {
         _titleLabel.Text = "Player detail";
@@ -86,7 +95,7 @@ public partial class PlayerDetailPopupView : Control
             Mathf.Clamp(preferredPosition.Y, 0, viewportSize.Y - _panel.Size.Y)
         );
 
-        _backdrop.Visible = true;
+        Visible = true;
         _panel.Position = clampedPosition;
         _panel.Visible = true;
     }
@@ -94,7 +103,7 @@ public partial class PlayerDetailPopupView : Control
     public void HidePopup()
     {
         _panel.Visible = false;
-        _backdrop.Visible = false;
+        Visible = false;
     }
 
     private static Panel CreateRoundedPanel(
@@ -123,5 +132,10 @@ public partial class PlayerDetailPopupView : Control
         style.BorderWidthBottom = borderWidth;
         panel.AddThemeStyleboxOverride("panel", style);
         return panel;
+    }
+
+    private static Rect2 GetGlobalRect(Control control)
+    {
+        return new Rect2(control.GlobalPosition, control.Size);
     }
 }

@@ -33,6 +33,7 @@ public partial class PlayerView : Control
 
     public override void _Ready()
     {
+        MouseFilter = MouseFilterEnum.Pass;
         Size = new Vector2(180, 122);
         CustomMinimumSize = Size;
 

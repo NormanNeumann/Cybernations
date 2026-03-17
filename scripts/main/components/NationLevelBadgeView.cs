@@ -10,6 +10,7 @@ public partial class NationLevelBadgeView : Control
 
     public override void _Ready()
     {
+        MouseFilter = MouseFilterEnum.Ignore;
         Size = new Vector2(112, 140);
         CustomMinimumSize = Size;
 

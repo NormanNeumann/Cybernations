@@ -3,6 +3,9 @@ using Godot;
 public partial class TeamGoalPanelView : Control
 {
     private static readonly Vector2 LayoutShift = new Vector2(40.0f, 0.0f);
+    private static readonly Vector2 RootPosition = Shift(new Vector2(1045, 34));
+    private static readonly Vector2 PreviewPosition = new Vector2(260.0f, 0.0f);
+    private static readonly Vector2 DropdownPosition = Vector2.Zero;
 
     private readonly Color _inkColor = Color.FromHtml("#2B2726");
     private readonly Color _textColor = Color.FromHtml("#16222B");
@@ -13,7 +16,6 @@ public partial class TeamGoalPanelView : Control
 
     private Panel _previewPanel = null!;
     private Button _hitArea = null!;
-    private Button _backdrop = null!;
     private Panel _dropdownPanel = null!;
 
     private readonly HexTileData[] _hexTiles =
@@ -33,10 +35,11 @@ public partial class TeamGoalPanelView : Control
 
     public override void _Ready()
     {
-        AnchorRight = 1.0f;
-        AnchorBottom = 1.0f;
-        GrowHorizontal = GrowDirection.Both;
-        GrowVertical = GrowDirection.Both;
+        MouseFilter = MouseFilterEnum.Ignore;
+        SetAnchorsPreset(LayoutPreset.TopLeft);
+        Position = RootPosition;
+        Size = new Vector2(760, 900);
+        CustomMinimumSize = Size;
 
         BuildPreviewPanel();
         BuildDropdown();
@@ -45,7 +48,7 @@ public partial class TeamGoalPanelView : Control
     private void BuildPreviewPanel()
     {
         _previewPanel = CreateInfoPanel(
-            Shift(new Vector2(1305, 34)),
+            PreviewPosition,
             new Vector2(500, 232),
             "Team Goal",
             "Shared objective for every player:\nStabilize the board, raise nation level, and stop conflict from shrinking the usable tracks.",
@@ -69,22 +72,8 @@ public partial class TeamGoalPanelView : Control
 
     private void BuildDropdown()
     {
-        _backdrop = new Button();
-        _backdrop.AnchorRight = 1.0f;
-        _backdrop.AnchorBottom = 1.0f;
-        _backdrop.GrowHorizontal = GrowDirection.Both;
-        _backdrop.GrowVertical = GrowDirection.Both;
-        _backdrop.Flat = true;
-        _backdrop.Text = string.Empty;
-        _backdrop.Modulate = new Color(1, 1, 1, 0);
-        _backdrop.FocusMode = FocusModeEnum.None;
-        _backdrop.Visible = false;
-        _backdrop.ZIndex = 89;
-        _backdrop.Pressed += HideDropdown;
-        AddChild(_backdrop);
-
         _dropdownPanel = CreateRoundedPanel(
-            Shift(new Vector2(1045, 34)),
+            DropdownPosition,
             new Vector2(760, 900),
             Colors.Transparent,
             0
@@ -121,14 +110,34 @@ public partial class TeamGoalPanelView : Control
 
     private void ShowDropdown()
     {
-        _backdrop.Visible = true;
         _dropdownPanel.Visible = true;
     }
 
     private void HideDropdown()
     {
         _dropdownPanel.Visible = false;
-        _backdrop.Visible = false;
+    }
+
+    public override void _Input(InputEvent @event)
+    {
+        if (!_dropdownPanel.Visible)
+        {
+            return;
+        }
+
+        if (@event is not InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left } mouseButton)
+        {
+            return;
+        }
+
+        var clickPoint = mouseButton.GlobalPosition;
+        if (GetGlobalRect(_dropdownPanel).HasPoint(clickPoint) || GetGlobalRect(_hitArea).HasPoint(clickPoint))
+        {
+            return;
+        }
+
+        HideDropdown();
+        GetViewport().SetInputAsHandled();
     }
 
     private Panel CreateDescriptionSection(Vector2 size)
@@ -469,6 +478,11 @@ public partial class TeamGoalPanelView : Control
     private static Vector2 Shift(Vector2 position)
     {
         return position + LayoutShift;
+    }
+
+    private static Rect2 GetGlobalRect(Control control)
+    {
+        return new Rect2(control.GlobalPosition, control.Size);
     }
 
     private readonly struct HexTileData(Vector2 position, HexBase @base, OverlayType overlay)

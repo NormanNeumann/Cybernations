@@ -46,62 +46,6 @@ layout_mode = 0
 offset_right = 180.0
 offset_bottom = 760.0
 
-[node name="StagePanel" type="Control" parent="UIMain"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="CommunityBoard" type="Control" parent="UIMain"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="EnvironmentTrack" type="Control" parent="UIMain/CommunityBoard"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="PeopleTrack" type="Control" parent="UIMain/CommunityBoard"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="TechTrack" type="Control" parent="UIMain/CommunityBoard"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="CohesionTrack" type="Control" parent="UIMain/CommunityBoard"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="CybernationTrack" type="Control" parent="UIMain/CommunityBoard"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="GlobalTarget" type="Control" parent="UIMain/CommunityBoard"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="TurnCounter" type="Control" parent="UIMain/CommunityBoard"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="ChatBox" type="VBoxContainer" parent="UIMain/CommunityBoard"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="InputBox" type="TextEdit" parent="UIMain/CommunityBoard/ChatBox"]
-layout_mode = 2
-
-[node name="ChatLogBox" type="RichTextLabel" parent="UIMain/CommunityBoard/ChatBox"]
-layout_mode = 2
-
 [node name="GlobalButtons" type="Control" parent="UIMain"]
 layout_mode = 0
 offset_right = 40.0
@@ -135,6 +79,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="InfoSummaryPanel" parent="UIMain" instance=ExtResource("6_info")]
 layout_mode = 0
@@ -150,6 +95,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="Popups" type="Control" parent="UIMain"]
 layout_mode = 1
@@ -158,6 +104,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="PlayerDetailPopup" parent="UIMain/Popups" instance=ExtResource("8_popup")]
 layout_mode = 1
@@ -166,3 +113,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+visible = false

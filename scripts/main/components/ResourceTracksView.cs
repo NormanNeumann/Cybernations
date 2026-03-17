@@ -12,6 +12,7 @@ public partial class ResourceTracksView : Control
 
     public override void _Ready()
     {
+        MouseFilter = MouseFilterEnum.Ignore;
         Size = new Vector2(1010, 240);
         CustomMinimumSize = Size;
 
