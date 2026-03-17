@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class MainUI : Control
@@ -6,6 +7,11 @@ public partial class MainUI : Control
     private const float HexOuterSide = 112.0f;
 
     private PlayerDetailPopupView _playerDetailPopupView = null!;
+    private MainUiPresenter _presenter = null!;
+    private IGameGateway _gameGateway = null!;
+    private event Action<int, string, Vector2>? PlayerCardSelected;
+    [Export]
+    public string ServerUrl { get; set; } = "";
 
     private readonly PlayerData[] _players =
     {
@@ -35,7 +41,14 @@ public partial class MainUI : Control
     {
         var playerPanel = GetNode<VBoxContainer>("UIMain/PlayerPanel");
         var gameBoard = GetNode<Node2D>("World/GameBoard");
+        var teamGoalPanelView = GetNode<TeamGoalPanelView>("UIMain/TeamGoalPanel");
+        var chatPanelView = GetNode<ChatPanelView>("UIMain/ChatPanel");
         _playerDetailPopupView = GetNode<PlayerDetailPopupView>("UIMain/Popups/PlayerDetailPopup");
+
+        _gameGateway = new WebSocketGameGateway(ServerUrl);
+        _presenter = new MainUiPresenter(chatPanelView, teamGoalPanelView, _playerDetailPopupView, _gameGateway);
+        _presenter.Initialize();
+        PlayerCardSelected += _presenter.OnPlayerSelected;
 
         playerPanel.Position = Shift(new Vector2(34, 38));
         playerPanel.Size = new Vector2(180, 760);
@@ -43,6 +56,28 @@ public partial class MainUI : Control
 
         BuildPlayerColumn(playerPanel);
         BuildHexCluster(gameBoard);
+    }
+
+    public override void _ExitTree()
+    {
+        if (_presenter == null)
+        {
+            return;
+        }
+
+        PlayerCardSelected -= _presenter.OnPlayerSelected;
+        _presenter.Dispose();
+        _gameGateway.Shutdown();
+    }
+
+    public override void _Process(double delta)
+    {
+        if (_gameGateway == null)
+        {
+            return;
+        }
+
+        _gameGateway.Poll();
     }
 
     private static Vector2 Shift(Vector2 position)

@@ -14,7 +14,7 @@ public partial class MainUI
             view.PlayerSelected += () =>
             {
                 var preferred = view.GlobalPosition + new Vector2(view.Size.X + 14.0f, 0.0f);
-                _playerDetailPopupView.ShowPopup(player.Slot, player.IndividualProcess, preferred);
+                PlayerCardSelected?.Invoke(player.Slot, player.IndividualProcess, preferred);
             };
             parent.AddChild(view);
         }

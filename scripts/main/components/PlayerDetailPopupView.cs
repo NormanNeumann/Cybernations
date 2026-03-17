@@ -1,6 +1,7 @@
+using System;
 using Godot;
 
-public partial class PlayerDetailPopupView : Control
+public partial class PlayerDetailPopupView : Control, IPlayerDetailPopupView
 {
     private readonly Color _inkColor = Color.FromHtml("#2B2726");
     private readonly Color _textColor = Color.FromHtml("#16222B");
@@ -9,6 +10,10 @@ public partial class PlayerDetailPopupView : Control
     private Panel _panel = null!;
     private Label _titleLabel = null!;
     private Label _bodyLabel = null!;
+
+    public event Action? CloseRequested;
+
+    public bool IsOpen => Visible && _panel.Visible;
 
     public override void _Ready()
     {
@@ -56,7 +61,7 @@ public partial class PlayerDetailPopupView : Control
         closeButton.MouseDefaultCursorShape = CursorShape.PointingHand;
         closeButton.AddThemeFontSizeOverride("font_size", 28);
         closeButton.AddThemeColorOverride("font_color", _inkColor);
-        closeButton.Pressed += HidePopup;
+        closeButton.Pressed += () => CloseRequested?.Invoke();
         _panel.AddChild(closeButton);
     }
 
@@ -77,17 +82,17 @@ public partial class PlayerDetailPopupView : Control
             return;
         }
 
-        HidePopup();
+        CloseRequested?.Invoke();
         GetViewport().SetInputAsHandled();
     }
 
-    public void ShowPopup(int slot, string progress, Vector2 preferredPosition)
+    public void ShowPlayerDetail(PlayerDetailVm detail, Vector2 preferredPosition)
     {
         _titleLabel.Text = "Player detail";
         _bodyLabel.Text =
-            $"Player {slot}\n" +
-            $"Progress: {progress}\n\n" +
-            "More player data can be rendered here.";
+            $"Player {detail.Slot}\n" +
+            $"Progress: {detail.Progress}\n\n" +
+            detail.Description;
 
         var viewportSize = GetViewportRect().Size;
         var clampedPosition = new Vector2(
@@ -98,6 +103,18 @@ public partial class PlayerDetailPopupView : Control
         Visible = true;
         _panel.Position = clampedPosition;
         _panel.Visible = true;
+    }
+
+    public void ShowPopup(int slot, string progress, Vector2 preferredPosition)
+    {
+        ShowPlayerDetail(
+            new PlayerDetailVm(
+                slot,
+                progress,
+                "More player data can be rendered here."
+            ),
+            preferredPosition
+        );
     }
 
     public void HidePopup()

@@ -1,7 +1,8 @@
+using System;
 using Godot;
 using System.Collections.Generic;
 
-public partial class ChatPanelView : Control
+public partial class ChatPanelView : Control, IChatPanelView
 {
     private static readonly Vector2 LayoutShift = new Vector2(40.0f, 0.0f);
     private static readonly Vector2 RootPosition = Shift(new Vector2(1305, 34));
@@ -19,12 +20,13 @@ public partial class ChatPanelView : Control
     private LineEdit _chatInputLineEdit = null!;
     private bool _isExpanded;
 
-    private readonly List<string> _chatMessages =
-    [
-        "[P1] Secure the wilds.",
-        "[P3] Human build next turn.",
-        "[P5] Conflict blocks the final cells.",
-    ];
+    private readonly List<string> _chatMessages = [];
+
+    public event Action? ExpandRequested;
+    public event Action? CollapseRequested;
+    public event Action<string>? ChatSubmitted;
+
+    public bool IsExpanded => _isExpanded;
 
     public override void _Ready()
     {
@@ -36,6 +38,7 @@ public partial class ChatPanelView : Control
 
         BuildChatLogPanel();
         BuildInputPanel();
+        SetExpanded(false);
     }
 
     private void BuildChatLogPanel()
@@ -67,7 +70,7 @@ public partial class ChatPanelView : Control
         _chatLogHitArea.FocusMode = FocusModeEnum.None;
         _chatLogHitArea.MouseDefaultCursorShape = CursorShape.PointingHand;
         _chatLogHitArea.ZIndex = 85;
-        _chatLogHitArea.Pressed += ExpandChatLog;
+        _chatLogHitArea.Pressed += () => ExpandRequested?.Invoke();
         AddChild(_chatLogHitArea);
 
         RefreshChatLogDisplay();
@@ -86,35 +89,29 @@ public partial class ChatPanelView : Control
         AddChild(_chatInputLineEdit);
     }
 
-    private void ExpandChatLog()
+    public void SetExpanded(bool expanded)
     {
-        if (_isExpanded)
+        if (_isExpanded == expanded)
         {
             return;
         }
 
-        _isExpanded = true;
-        _chatLogPanel.Position = ExpandedLogPosition;
-        _chatLogPanel.Size = new Vector2(500, 934);
+        _isExpanded = expanded;
+        _chatLogPanel.Position = expanded ? ExpandedLogPosition : CollapsedLogPosition;
+        _chatLogPanel.Size = expanded ? new Vector2(500, 934) : new Vector2(500, 350);
         _chatLogHitArea.Position = _chatLogPanel.Position;
         _chatLogHitArea.Size = _chatLogPanel.Size;
-        _chatBodyLabel.Size = new Vector2(464, 864);
+        _chatBodyLabel.Size = expanded ? new Vector2(464, 864) : new Vector2(464, 280);
         RefreshChatLogDisplay();
     }
 
-    private void CollapseChatLog()
+    public void SetMessages(IReadOnlyList<ChatMessageVm> messages)
     {
-        if (!_isExpanded)
+        _chatMessages.Clear();
+        foreach (var message in messages)
         {
-            return;
+            _chatMessages.Add($"[{message.Sender}] {message.Content}");
         }
-
-        _isExpanded = false;
-        _chatLogPanel.Position = CollapsedLogPosition;
-        _chatLogPanel.Size = new Vector2(500, 350);
-        _chatLogHitArea.Position = _chatLogPanel.Position;
-        _chatLogHitArea.Size = _chatLogPanel.Size;
-        _chatBodyLabel.Size = new Vector2(464, 280);
         RefreshChatLogDisplay();
     }
 
@@ -138,7 +135,7 @@ public partial class ChatPanelView : Control
             return;
         }
 
-        CollapseChatLog();
+        CollapseRequested?.Invoke();
         GetViewport().SetInputAsHandled();
     }
 
@@ -150,9 +147,8 @@ public partial class ChatPanelView : Control
             return;
         }
 
-        _chatMessages.Add($"[You] {trimmed}");
         _chatInputLineEdit.Clear();
-        RefreshChatLogDisplay();
+        ChatSubmitted?.Invoke(trimmed);
     }
 
     private void RefreshChatLogDisplay()

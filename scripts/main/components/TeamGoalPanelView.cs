@@ -1,6 +1,7 @@
+using System;
 using Godot;
 
-public partial class TeamGoalPanelView : Control
+public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
 {
     private static readonly Vector2 LayoutShift = new Vector2(40.0f, 0.0f);
     private static readonly Vector2 RootPosition = Shift(new Vector2(1045, 34));
@@ -17,6 +18,11 @@ public partial class TeamGoalPanelView : Control
     private Panel _previewPanel = null!;
     private Button _hitArea = null!;
     private Panel _dropdownPanel = null!;
+
+    public event Action? ToggleRequested;
+    public event Action? CloseRequested;
+
+    public bool IsDropdownVisible => _dropdownPanel != null && _dropdownPanel.Visible;
 
     private readonly HexTileData[] _hexTiles =
     [
@@ -43,6 +49,7 @@ public partial class TeamGoalPanelView : Control
 
         BuildPreviewPanel();
         BuildDropdown();
+        SetDropdownVisible(false);
     }
 
     private void BuildPreviewPanel()
@@ -66,7 +73,7 @@ public partial class TeamGoalPanelView : Control
         _hitArea.FocusMode = FocusModeEnum.None;
         _hitArea.MouseDefaultCursorShape = CursorShape.PointingHand;
         _hitArea.ZIndex = 82;
-        _hitArea.Pressed += ToggleDropdown;
+        _hitArea.Pressed += () => ToggleRequested?.Invoke();
         AddChild(_hitArea);
     }
 
@@ -96,26 +103,9 @@ public partial class TeamGoalPanelView : Control
         sections.AddChild(CreateConditionSection(new Vector2(760, 170)));
     }
 
-    private void ToggleDropdown()
+    public void SetDropdownVisible(bool visible)
     {
-        if (_dropdownPanel.Visible)
-        {
-            HideDropdown();
-        }
-        else
-        {
-            ShowDropdown();
-        }
-    }
-
-    private void ShowDropdown()
-    {
-        _dropdownPanel.Visible = true;
-    }
-
-    private void HideDropdown()
-    {
-        _dropdownPanel.Visible = false;
+        _dropdownPanel.Visible = visible;
     }
 
     public override void _Input(InputEvent @event)
@@ -136,7 +126,7 @@ public partial class TeamGoalPanelView : Control
             return;
         }
 
-        HideDropdown();
+        CloseRequested?.Invoke();
         GetViewport().SetInputAsHandled();
     }
 
