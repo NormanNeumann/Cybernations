@@ -1,8 +1,15 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/main/MainUI.cs" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/main/components/NationLevelBadge.tscn" id="2_nation"]
+[ext_resource type="PackedScene" path="res://scenes/main/components/TurnDots.tscn" id="3_turn"]
+[ext_resource type="PackedScene" path="res://scenes/main/components/ResourceTracks.tscn" id="4_tracks"]
+[ext_resource type="PackedScene" path="res://scenes/main/components/TeamGoalPanel.tscn" id="5_team_goal"]
+[ext_resource type="PackedScene" path="res://scenes/main/components/InfoSummaryPanel.tscn" id="6_info"]
+[ext_resource type="PackedScene" path="res://scenes/main/components/ChatPanel.tscn" id="7_chat"]
+[ext_resource type="PackedScene" path="res://scenes/main/components/PlayerDetailPopup.tscn" id="8_popup"]
 
-[node name="MainUI" type="Control"]
+[node name="Main" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,10 +27,91 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.77, 0.89, 0.93, 1)
 
-[node name="LayoutCanvas" type="Control" parent="."]
+[node name="World" type="Node2D" parent="."]
+
+[node name="GameBoard" type="Node2D" parent="World"]
+
+[node name="PeopleTokenLayer" type="Node2D" parent="World"]
+
+[node name="UIMain" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="PlayerPanel" type="VBoxContainer" parent="UIMain"]
+layout_mode = 0
+offset_right = 180.0
+offset_bottom = 760.0
+
+[node name="GlobalButtons" type="Control" parent="UIMain"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="NationLevelBadge" parent="UIMain" instance=ExtResource("2_nation")]
+layout_mode = 0
+offset_left = 92.0
+offset_top = 784.0
+offset_right = 204.0
+offset_bottom = 924.0
+
+[node name="TurnDots" parent="UIMain" instance=ExtResource("3_turn")]
+layout_mode = 0
+offset_left = 76.0
+offset_top = 952.0
+offset_right = 226.0
+offset_bottom = 1050.0
+
+[node name="ResourceTracks" parent="UIMain" instance=ExtResource("4_tracks")]
+layout_mode = 0
+offset_left = 245.0
+offset_top = 800.0
+offset_right = 1255.0
+offset_bottom = 1040.0
+
+[node name="TeamGoalPanel" parent="UIMain" instance=ExtResource("5_team_goal")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="InfoSummaryPanel" parent="UIMain" instance=ExtResource("6_info")]
+layout_mode = 0
+offset_left = 1345.0
+offset_top = 296.0
+offset_right = 1845.0
+offset_bottom = 588.0
+
+[node name="ChatPanel" parent="UIMain" instance=ExtResource("7_chat")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Popups" type="Control" parent="UIMain"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PlayerDetailPopup" parent="UIMain/Popups" instance=ExtResource("8_popup")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+visible = false
