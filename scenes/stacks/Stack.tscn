@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://c6cy0cve7xewi"]
+
+[node name="Stack" type="Node2D" unique_id=2025983587]
+
+[node name="Environment" type="Sprite2D" parent="." unique_id=357505777]
+
+[node name="Development" type="Sprite2D" parent="." unique_id=563648276]
+
+[node name="Feedback Marker" type="Sprite2D" parent="." unique_id=920853976]
