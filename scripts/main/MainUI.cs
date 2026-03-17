@@ -1,49 +1,11 @@
 using Godot;
-using System.Collections.Generic;
 
 public partial class MainUI : Control
 {
     private static readonly Vector2 LayoutShift = new Vector2(40.0f, 0.0f);
-
-    private const int TotalTurns = 6;
-    private const int TotalResourceCells = 25;
-    private const int ConflictCells = 3;
     private const float HexOuterSide = 112.0f;
-    private const float HexInnerSide = 108.0f;
-    private const float HexOverlayOuterSide = 84.0f;
-    private const float HexOverlayInnerSide = 80.0f;
 
-    private readonly Color _inkColor = Color.FromHtml("#2B2726");
-    private readonly Color _textColor = Color.FromHtml("#16222B");
-    private readonly Color _mutedTextColor = Color.FromHtml("#4B5E69");
-    private readonly Color _avatarFillColor = Color.FromHtml("#EAE6E0");
-    private readonly Color _passBubbleColor = Color.FromHtml("#D8D3CB");
-    private readonly Color _passTextColor = Color.FromHtml("#61F41E");
-    private readonly Color _iconFillColor = Color.FromHtml("#DFD7CE");
-    private readonly Color _nationFillColor = Color.FromHtml("#F0B54B");
-    private readonly Color _trackEmptyColor = Color.FromHtml("#D9D9D9");
-    private readonly Color _trackConflictColor = Color.FromHtml("#D46F6F");
-    private readonly Color _wildsColor = Color.FromHtml("#6CE575");
-    private readonly Color _wastedColor = Color.FromHtml("#D07D29");
-    private readonly Color _humanOverlayColor = Color.FromHtml("#C92CC1");
-    private readonly Color _techOverlayColor = Color.FromHtml("#3D29ED");
-
-    private Panel _teamGoalPreviewPanel = null!;
-    private Button _teamGoalHitArea = null!;
-    private Button _teamGoalBackdrop = null!;
-    private Panel _teamGoalDropdownPanel = null!;
-
-    private Button _chatCollapseBackdrop = null!;
-    private Panel _chatLogPanel = null!;
-    private Button _chatLogHitArea = null!;
-    private Label _chatLogBodyLabel = null!;
-    private LineEdit _chatInputLineEdit = null!;
-    private bool _isChatExpanded;
-
-    private Button _playerDetailBackdrop = null!;
-    private Panel _playerDetailPanel = null!;
-    private Label _playerDetailTitleLabel = null!;
-    private Label _playerDetailBodyLabel = null!;
+    private PlayerDetailPopupView _playerDetailPopupView = null!;
 
     private readonly PlayerData[] _players =
     {
@@ -53,14 +15,6 @@ public partial class MainUI : Control
         new PlayerData(4, "90.7%", true),
         new PlayerData(5, "33.3%", false),
     };
-
-    private readonly List<string> _chatMessages =
-        new()
-        {
-            "[P1] Secure the wilds.",
-            "[P3] Human build next turn.",
-            "[P5] Conflict blocks the final cells.",
-        };
 
     private readonly HexTileData[] _hexTiles =
     {
@@ -79,18 +33,19 @@ public partial class MainUI : Control
 
     public override void _Ready()
     {
-        var canvas = GetNode<Control>("LayoutCanvas");
-        BuildPlayerColumn(canvas);
-        BuildNationLevel(canvas);
-        BuildTurnDots(canvas, 0);
-        BuildHexCluster(canvas);
-        BuildResourceTracks(canvas);
-        BuildRightPanels(canvas);
-        BuildTeamGoalDropdown(canvas);
-        BuildPlayerDetailPopup(canvas);
+        var playerPanel = GetNode<VBoxContainer>("UIMain/PlayerPanel");
+        var gameBoard = GetNode<Node2D>("World/GameBoard");
+        _playerDetailPopupView = GetNode<PlayerDetailPopupView>("UIMain/Popups/PlayerDetailPopup");
+
+        playerPanel.Position = Shift(new Vector2(34, 38));
+        playerPanel.Size = new Vector2(180, 760);
+        playerPanel.AddThemeConstantOverride("separation", 28);
+
+        BuildPlayerColumn(playerPanel);
+        BuildHexCluster(gameBoard);
     }
 
-    private Vector2 Shift(Vector2 position)
+    private static Vector2 Shift(Vector2 position)
     {
         return position + LayoutShift;
     }
@@ -134,12 +89,5 @@ public partial class MainUI : Control
         None,
         Human,
         Tech,
-    }
-
-    private enum CellState
-    {
-        Empty,
-        Filled,
-        Conflict,
     }
 }

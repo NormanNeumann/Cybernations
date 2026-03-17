@@ -1,3 +1,9 @@
-[gd_scene format=3 uid="uid://d36d88fn2sa1o"]
+[gd_scene load_steps=2 format=3]
 
-[node name="Player" type="Node2D" unique_id=482621800]
+[ext_resource type="Script" path="res://scripts/players/PlayerView.cs" id="1_script"]
+
+[node name="Player" type="Control"]
+custom_minimum_size = Vector2(180, 122)
+offset_right = 180.0
+offset_bottom = 122.0
+script = ExtResource("1_script")

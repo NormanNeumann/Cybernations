@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/main/components/InfoSummaryPanelView.cs" id="1_script"]
+
+[node name="InfoSummaryPanel" type="Control"]
+offset_right = 500.0
+offset_bottom = 292.0
+script = ExtResource("1_script")
