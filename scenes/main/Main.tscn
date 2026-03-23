@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/main/components/InfoSummaryPanel.tscn" id="6_info"]
 [ext_resource type="PackedScene" path="res://scenes/main/components/ChatPanel.tscn" id="7_chat"]
 [ext_resource type="PackedScene" path="res://scenes/main/components/PlayerDetailPopup.tscn" id="8_popup"]
+[ext_resource type="PackedScene" path="res://scenes/main/components/EnvisionPhasePanel.tscn" id="99"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -115,3 +116,11 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 visible = false
+
+[node name="EnvisionPhasePanel" parent="UIMain" instance=ExtResource("99")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

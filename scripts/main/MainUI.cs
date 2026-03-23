@@ -1,5 +1,7 @@
 using System;
 using Godot;
+using Cybernations.Application.ViewModels;
+using Cybernations.Scripts.Main.Components;
 
 public partial class MainUI : Control
 {
@@ -12,6 +14,9 @@ public partial class MainUI : Control
     private event Action<int, string, Vector2>? PlayerCardSelected;
     [Export]
     public string ServerUrl { get; set; } = "";
+
+    private EnvisionPhasePanelView _envisionPhasePanel = null!;
+    private EnvisionPhaseVm _currentEnvisionVm = new();
 
     private readonly PlayerData[] _players =
     {
@@ -50,6 +55,11 @@ public partial class MainUI : Control
         _presenter.Initialize();
         PlayerCardSelected += _presenter.OnPlayerSelected;
 
+         _envisionPhasePanel = GetNode<EnvisionPhasePanelView>("UIMain/EnvisionPhasePanel");
+
+            BindEnvisionPhaseSignals();
+            LoadFakeEnvisionPhase();
+
         playerPanel.Position = Shift(new Vector2(34, 38));
         playerPanel.Size = new Vector2(180, 760);
         playerPanel.AddThemeConstantOverride("separation", 28);
@@ -79,6 +89,158 @@ public partial class MainUI : Control
 
         _gameGateway.Poll();
     }
+
+    private void BindEnvisionPhaseSignals()
+    {
+        _envisionPhasePanel.ShiftPowerPressed += OnShiftPowerPressed;
+        _envisionPhasePanel.ComeTogetherPressed += OnComeTogetherPressed;
+        _envisionPhasePanel.ConnectPressed += OnConnectPressed;
+        _envisionPhasePanel.SetCoursePressed += OnSetCoursePressed;
+        _envisionPhasePanel.PreparePressed += OnPreparePressed;
+        _envisionPhasePanel.SteerPressed += OnSteerPressed;
+        _envisionPhasePanel.PassPressed += OnPassPressed;
+    }
+
+    private void OnShiftPowerPressed()
+    {
+        GD.Print("Envision Action: Shift Power");
+        UpdateStatus("Shift Power selected.");
+    }
+
+    private void OnComeTogetherPressed()
+    {
+        GD.Print("Envision Action: Come Together");
+        UpdateStatus("Come Together selected.");
+    }
+
+    private void OnConnectPressed()
+    {
+        GD.Print("Envision Action: Connect");
+        UpdateStatus("Connect selected.");
+    }
+
+    private void OnSetCoursePressed()
+    {
+        GD.Print("Envision Action: Set Course");
+        UpdateStatus("Set Course selected.");
+    }
+
+    private void OnPreparePressed()
+    {
+        GD.Print("Envision Action: Prepare");
+        UpdateStatus("Prepare selected.");
+    }
+
+    private void OnSteerPressed()
+    {
+        GD.Print("Envision Action: Steer");
+        UpdateStatus("Steer selected.");
+    }
+
+    private void OnPassPressed()
+    {
+        GD.Print("Envision Action: Pass");
+        UpdateStatus("Player passed.");
+    }
+
+    private void UpdateStatus(string message)
+    {
+        _currentEnvisionVm = new EnvisionPhaseVm
+        {
+            IsVisible = _currentEnvisionVm.IsVisible,
+            PhaseTitle = _currentEnvisionVm.PhaseTitle,
+            ActivePlayerText = _currentEnvisionVm.ActivePlayerText,
+            PhaseHintText = _currentEnvisionVm.PhaseHintText,
+            ActionCostText = _currentEnvisionVm.ActionCostText,
+            FeedbackSlots = _currentEnvisionVm.FeedbackSlots,
+            CanShiftPower = _currentEnvisionVm.CanShiftPower,
+            CanComeTogether = _currentEnvisionVm.CanComeTogether,
+            CanConnect = _currentEnvisionVm.CanConnect,
+            CanSetCourse = _currentEnvisionVm.CanSetCourse,
+            CanPrepare = _currentEnvisionVm.CanPrepare,
+            CanSteer = _currentEnvisionVm.CanSteer,
+            CanPass = _currentEnvisionVm.CanPass,
+            StatusMessage = message
+        };
+
+        _envisionPhasePanel.Configure(_currentEnvisionVm);
+    }
+
+    private void LoadFakeEnvisionPhase()
+    {
+        _currentEnvisionVm = new EnvisionPhaseVm
+        {
+            IsVisible = true,
+            PhaseTitle = "Envision Phase",
+            ActivePlayerText = "Current Player: P1",
+            PhaseHintText = "Players take actions clockwise until all players pass.",
+            ActionCostText = "Current extra cost: none",
+            StatusMessage = "Choose an action.",
+            FeedbackSlots = new[]
+            {
+                "Wilds",
+                "Wastes",
+                "Develop",
+                "Agora",
+                "-",
+                "-",
+                "-",
+                "-",
+                "-",
+                "-",
+                "-"
+            },
+            CanShiftPower = true,
+            CanComeTogether = true,
+            CanConnect = true,
+            CanSetCourse = true,
+            CanPrepare = true,
+            CanSteer = true,
+            CanPass = true
+        };
+
+        _envisionPhasePanel.Configure(_currentEnvisionVm);
+    }
+
+    private void RefreshEnvisionAvailability(
+        bool canShiftPower,
+        bool canComeTogether,
+        bool canConnect,
+        bool canSetCourse,
+        bool canPrepare,
+        bool canSteer,
+        bool canPass)
+    {
+        _currentEnvisionVm = new EnvisionPhaseVm
+        {
+            IsVisible = _currentEnvisionVm.IsVisible,
+            PhaseTitle = _currentEnvisionVm.PhaseTitle,
+            ActivePlayerText = _currentEnvisionVm.ActivePlayerText,
+            PhaseHintText = _currentEnvisionVm.PhaseHintText,
+            ActionCostText = _currentEnvisionVm.ActionCostText,
+            StatusMessage = _currentEnvisionVm.StatusMessage,
+            FeedbackSlots = _currentEnvisionVm.FeedbackSlots,
+            CanShiftPower = canShiftPower,
+            CanComeTogether = canComeTogether,
+            CanConnect = canConnect,
+            CanSetCourse = canSetCourse,
+            CanPrepare = canPrepare,
+            CanSteer = canSteer,
+            CanPass = canPass
+        };
+
+        _envisionPhasePanel.Configure(_currentEnvisionVm);
+    }
+
+    RefreshEnvisionAvailability(
+        canShiftPower: true,
+        canComeTogether: false,
+        canConnect: true,
+        canSetCourse: true,
+        canPrepare: false,
+        canSteer: true,
+        canPass: true
+    );
 
     private static Vector2 Shift(Vector2 position)
     {
