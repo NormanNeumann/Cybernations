@@ -7,22 +7,24 @@ public partial class StatusBanner : Control
 
 	public override void _Ready()
 	{
-		_label = GetNode<Label>("Label");
+		_label = GetNode<Label>("BannerPanel/MarginContainer/Label");
 		_label.Text = "";
 	}
 
-	public void ShowMessage(string msg)
+	public void ShowMessage(string msg, Color? color = null)
 	{
 		_messageVersion++;
 		_label.Text = msg;
+		_label.Modulate = color ?? Colors.White;
 	}
 
-	public async void ShowTemporaryMessage(string msg, float seconds = 2.0f)
+	public async void ShowTemporaryMessage(string msg, float seconds = 2.0f, Color? color = null)
 	{
 		_messageVersion++;
 		int currentVersion = _messageVersion;
 
 		_label.Text = msg;
+		_label.Modulate = color ?? Colors.White;
 
 		await ToSignal(GetTree().CreateTimer(seconds), SceneTreeTimer.SignalName.Timeout);
 

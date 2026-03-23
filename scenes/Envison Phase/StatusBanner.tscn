@@ -7,7 +7,13 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_mcj7n")
 
-[node name="Label" type="Label" parent="." unique_id=879553505]
+[node name="BannerPanel" type="PanelContainer" parent="." unique_id=261766471]
 layout_mode = 0
 offset_right = 40.0
-offset_bottom = 23.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="BannerPanel" unique_id=1396937038]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="BannerPanel/MarginContainer" unique_id=879553505]
+layout_mode = 2

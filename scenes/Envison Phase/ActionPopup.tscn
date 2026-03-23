@@ -8,44 +8,59 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_2njpi")
 
-[node name="Panel" type="Panel" parent="." unique_id=1005610544]
+[node name="DimBackground" type="ColorRect" parent="." unique_id=607485300]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=960440321]
+[node name="PopupPanel" type="PanelContainer" parent="." unique_id=298977632]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer" unique_id=193621772]
+[node name="MarginContainer" type="MarginContainer" parent="PopupPanel" unique_id=1194880378]
+layout_mode = 2
+
+[node name="RootVBox" type="VBoxContainer" parent="PopupPanel/MarginContainer" unique_id=960440321]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="PopupPanel/MarginContainer/RootVBox" unique_id=193621772]
 layout_mode = 2
 text = "Choose Action"
 
-[node name="ShiftPower" type="Button" parent="Panel/VBoxContainer" unique_id=1548633887]
+[node name="SubtitleLabel" type="Label" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1931898205]
+layout_mode = 2
+
+[node name="ButtonsGrid" type="GridContainer" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1701106394]
+layout_mode = 2
+
+[node name="ShiftPower" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=1548633887]
 layout_mode = 2
 text = "Shift Power"
 
-[node name="ComeTogether" type="Button" parent="Panel/VBoxContainer" unique_id=91239822]
+[node name="ComeTogether" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=91239822]
 layout_mode = 2
 text = "Come Together"
 
-[node name="Connect" type="Button" parent="Panel/VBoxContainer" unique_id=736697416]
+[node name="Connect" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=736697416]
 layout_mode = 2
 text = "Connect"
 
-[node name="SetCourse" type="Button" parent="Panel/VBoxContainer" unique_id=2101378663]
+[node name="SetCourse" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=2101378663]
 layout_mode = 2
 text = "Set Course"
 
-[node name="Prepare" type="Button" parent="Panel/VBoxContainer" unique_id=284823876]
+[node name="Prepare" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=284823876]
 layout_mode = 2
 text = "Prepare"
 
-[node name="Steer" type="Button" parent="Panel/VBoxContainer" unique_id=1416202209]
+[node name="Steer" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=1416202209]
 layout_mode = 2
 text = "Steer"
 
-[node name="Pass" type="Button" parent="Panel/VBoxContainer" unique_id=1408731475]
+[node name="Pass" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=1408731475]
 layout_mode = 2
 text = "Pass"
+
+[node name="ActionDescription" type="Label" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1499431801]
+layout_mode = 2

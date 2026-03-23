@@ -80,33 +80,32 @@ public partial class EnvisionController : Node
 {
 	var player = players[currentPlayer];
 
-	GD.Print($"StartTurn -> currentPlayer={currentPlayer}, localPlayerId={localPlayerId}");
+	banner.ClearMessage();
 
 	if (currentPlayer == localPlayerId)
 	{
 		popup.Show();
 		popup.UpdateButtons(player);
-		banner.ShowMessage("Your turn. Choose an action.");
+		banner.ShowMessage("Your turn. Choose an action.", new Color("86EFAC"));
 	}
 	else
 	{
 		popup.Hide();
-		banner.ShowMessage($"Player {currentPlayer + 1} is choosing an action...");
+		banner.ShowMessage($"Player {currentPlayer + 1} is choosing an action...", new Color("FDE68A"));
 	}
 }
 
-	private async void OnActionChosen(EnvisionAction action)
-	{
-		var player = players[currentPlayer];
+	private void OnActionChosen(EnvisionAction action)
+{
+	var player = players[currentPlayer];
 
-		ApplyAction(player, action);
+	ApplyAction(player, action);
 
-		banner.ShowTemporaryMessage($"Player {currentPlayer + 1} chose: {action}", 2.0f);
+	popup.Hide();
+	banner.ShowTemporaryMessage($"Player {currentPlayer + 1} chose: {action}", 2.0f, new Color("7DD3FC"));
 
-		await ToSignal(GetTree().CreateTimer(2.0f), SceneTreeTimer.SignalName.Timeout);
-
-		//NextPlayer();
-	}
+	// NextPlayer();
+}
 
 	private void NextPlayer()
 	{
