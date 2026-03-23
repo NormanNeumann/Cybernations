@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bhdlqf462da0b"]
+
+[ext_resource type="Script" uid="uid://bshty1ttilrhh" path="res://scripts/Envision Phase/StatusBanner.cs" id="1_mcj7n"]
+
+[node name="StatusBanner" type="Control" unique_id=1519244184]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_mcj7n")
+
+[node name="Label" type="Label" parent="." unique_id=879553505]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
