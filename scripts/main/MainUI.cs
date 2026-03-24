@@ -3,6 +3,7 @@ using Godot;
 //using Cybernations.Application.ViewModels;
 using Cybernations.Scripts.Main.Components;
 
+
 public partial class MainUI : Control
 {
 	private static readonly Vector2 LayoutShift = new Vector2(40.0f, 0.0f);
@@ -17,6 +18,8 @@ public partial class MainUI : Control
 
 	//private EnvisionPhasePanelView _envisionPhasePanel = null!;
 	//private EnvisionPhaseVm _currentEnvisionVm = new();
+	private Control _chatPanel;
+	private EnvisionController _envisionController = null!;
 
 	private readonly PlayerData[] _players =
 	{
@@ -48,12 +51,17 @@ public partial class MainUI : Control
 		var gameBoard = GetNode<Node2D>("World/GameBoard");
 		var teamGoalPanelView = GetNode<TeamGoalPanelView>("UIMain/TeamGoalPanel");
 		var chatPanelView = GetNode<ChatPanelView>("UIMain/ChatPanel");
+		_chatPanel = chatPanelView;
 		_playerDetailPopupView = GetNode<PlayerDetailPopupView>("UIMain/Popups/PlayerDetailPopup");
 
 		_gameGateway = new WebSocketGameGateway(ServerUrl);
 		_presenter = new MainUiPresenter(chatPanelView, teamGoalPanelView, _playerDetailPopupView, _gameGateway);
 		_presenter.Initialize();
 		PlayerCardSelected += _presenter.OnPlayerSelected;
+		
+		_envisionController = GetNode<EnvisionController>("EnvisionController");
+		_envisionController.PopupOpened += DimBackground;
+		_envisionController.PopupClosed += RestoreBackground;
 
 		 //_envisionPhasePanel = GetNode<EnvisionPhasePanelView>("UIMain/EnvisionPhasePanel");
 			//BindEnvisionPhaseSignals();
@@ -66,9 +74,26 @@ public partial class MainUI : Control
 		BuildPlayerColumn(playerPanel);
 		BuildHexCluster(gameBoard);
 	}
+	
+	private void DimBackground()
+{
+	if (_chatPanel != null)
+		_chatPanel.Modulate = new Color(1, 1, 1, 0.5f); 
+}
+
+private void RestoreBackground()
+{
+	if (_chatPanel != null)
+		_chatPanel.Modulate = new Color(1, 1, 1, 1f); 
+}
 
 	public override void _ExitTree()
 	{
+		if (_envisionController != null)
+		{
+		_envisionController.PopupOpened -= DimBackground;
+		_envisionController.PopupClosed -= RestoreBackground;
+		}
 		if (_presenter == null)
 		{
 			return;

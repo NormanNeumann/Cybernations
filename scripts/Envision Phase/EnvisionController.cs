@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System;
 
 public partial class EnvisionController : Node
 {
@@ -10,6 +11,9 @@ public partial class EnvisionController : Node
 
 	private ActionPopup popup = null!;
 	private StatusBanner banner = null!;
+	
+	public event Action? PopupOpened;
+	public event Action? PopupClosed;
 
 	public override void _Ready()
 	{
@@ -41,8 +45,11 @@ public partial class EnvisionController : Node
 				Cohesion = 5
 			}
 		};
+		
+		popup.Hide();
+		banner.Hide();
 
-		StartTurn();
+		//StartTurn();
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -86,11 +93,13 @@ public partial class EnvisionController : Node
 	{
 		popup.Show();
 		popup.UpdateButtons(player);
+		PopupOpened?.Invoke();
 		banner.ShowMessage("Your turn. Choose an action.", new Color("86EFAC"));
 	}
 	else
 	{
 		popup.Hide();
+		PopupClosed?.Invoke();
 		banner.ShowMessage($"Player {currentPlayer + 1} is choosing an action...", new Color("FDE68A"));
 	}
 }
@@ -102,6 +111,7 @@ public partial class EnvisionController : Node
 	ApplyAction(player, action);
 
 	popup.Hide();
+	PopupClosed?.Invoke();
 	banner.ShowTemporaryMessage($"Player {currentPlayer + 1} chose: {action}", 2.0f, new Color("7DD3FC"));
 
 	// NextPlayer();

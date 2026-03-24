@@ -14,6 +14,7 @@ public partial class StatusBanner : Control
 	public void ShowMessage(string msg, Color? color = null)
 	{
 		_messageVersion++;
+		Show(); 
 		_label.Text = msg;
 		_label.Modulate = color ?? Colors.White;
 	}
@@ -21,6 +22,7 @@ public partial class StatusBanner : Control
 	public async void ShowTemporaryMessage(string msg, float seconds = 2.0f, Color? color = null)
 	{
 		_messageVersion++;
+		Show(); 
 		int currentVersion = _messageVersion;
 
 		_label.Text = msg;
@@ -32,6 +34,7 @@ public partial class StatusBanner : Control
 		{
 			_label.Text = "";
 		}
+		Hide();
 	}
 
 	public void ClearMessage()
