@@ -20,6 +20,8 @@ public partial class MainUI : Control
 	//private EnvisionPhaseVm _currentEnvisionVm = new();
 	private Control _chatPanel;
 	private EnvisionController _envisionController = null!;
+	private Button _colorblindToggleButton = null!;
+	private CanvasLayer _colorblindOverlay = null!;
 
 	private readonly PlayerData[] _players =
 	{
@@ -51,6 +53,16 @@ public partial class MainUI : Control
 		var gameBoard = GetNode<Node2D>("World/GameBoard");
 		var teamGoalPanelView = GetNode<TeamGoalPanelView>("UIMain/TeamGoalPanel");
 		var chatPanelView = GetNode<ChatPanelView>("UIMain/ChatPanel");
+		
+		_colorblindOverlay = GetNode<CanvasLayer>("ColorblindOverlay");
+		_colorblindOverlay.Visible = false;
+		
+		_colorblindToggleButton = GetNode<Button>("UIMain/ColorblindToggleButton");
+		_colorblindToggleButton.Pressed += OnColorblindTogglePressed;
+
+		AccessibilityManager.OnAccessibilityChanged += UpdateAccessibilityUi;
+		UpdateAccessibilityUi();
+		
 		_chatPanel = chatPanelView;
 		_playerDetailPopupView = GetNode<PlayerDetailPopupView>("UIMain/Popups/PlayerDetailPopup");
 
@@ -91,6 +103,7 @@ private void RestoreBackground()
 	{
 		if (_envisionController != null)
 		{
+		AccessibilityManager.OnAccessibilityChanged -= UpdateAccessibilityUi;
 		_envisionController.PopupOpened -= DimBackground;
 		_envisionController.PopupClosed -= RestoreBackground;
 		}
@@ -113,6 +126,26 @@ private void RestoreBackground()
 
 		_gameGateway.Poll();
 	}
+	
+	private void OnColorblindTogglePressed()
+{
+	AccessibilityManager.ToggleColorblindMode();
+}
+
+private void UpdateAccessibilityUi()
+{
+	if (_colorblindToggleButton == null)
+		return;
+
+	bool enabled = AccessibilityManager.IsColorblindMode;
+
+	_colorblindToggleButton.Text = enabled
+		? "Colorblind Mode: On"
+		: "Colorblind Mode: Off";
+
+	if (_colorblindOverlay != null)
+		_colorblindOverlay.Visible = enabled;
+}
 
 	//private void BindEnvisionPhaseSignals()
 	//{
