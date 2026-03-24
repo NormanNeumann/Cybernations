@@ -24,14 +24,31 @@ public partial class StackView : Node2D
     private readonly Color _highlightInnerColor = Color.FromHtml("#E2C54D");
     private readonly Color _highlightConflictColor = Color.FromHtml("#F82D23");
 
-    public StackBaseKind BaseKind { get; private set; } = StackBaseKind.Wilds;
-    public StackOverlayKind OverlayKind { get; private set; } = StackOverlayKind.None;
-    public bool ConflictHighlight { get; private set; }
+    [Export]
+    public StackBaseKind BaseKind { get; set; } = StackBaseKind.Wilds;
 
-    public float OuterSide { get; private set; } = 112.0f;
-    public float InnerSide { get; private set; } = 108.0f;
-    public float OverlayOuterSide { get; private set; } = 84.0f;
-    public float OverlayInnerSide { get; private set; } = 80.0f;
+    [Export]
+    public StackOverlayKind OverlayKind { get; set; } = StackOverlayKind.None;
+
+    [Export]
+    public bool ConflictHighlight { get; set; }
+
+    [Export]
+    public float OuterSide { get; set; } = 112.0f;
+
+    [Export]
+    public float InnerSide { get; set; } = 108.0f;
+
+    [Export]
+    public float OverlayOuterSide { get; set; } = 84.0f;
+
+    [Export]
+    public float OverlayInnerSide { get; set; } = 80.0f;
+
+    public override void _Ready()
+    {
+        QueueRedraw();
+    }
 
     public void Configure(
         StackBaseKind baseKind,
