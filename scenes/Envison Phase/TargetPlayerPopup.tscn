@@ -109,7 +109,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_y2cqv")
 
-[node name="DimBackground" type="ColorRect" parent="." unique_id=1516755873]
+[node name="DimBackground" type="ColorRect" parent="." unique_id=522265136]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

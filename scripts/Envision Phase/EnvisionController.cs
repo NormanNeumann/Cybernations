@@ -17,6 +17,7 @@ public partial class EnvisionController : Node
 	
 	private ConnectPopup connectPopup = null!;
 	private SetCoursePopup setCoursePopup = null!;
+	private SteerPopup steerPopup = null!;
 	
 	public event Action? PopupOpened;
 	public event Action? PopupClosed;
@@ -51,12 +52,18 @@ public partial class EnvisionController : Node
 
 	setCoursePopup.OnSetCourseConfirmed += OnSetCourseConfirmed;
 	setCoursePopup.OnCancelled += OnSetCourseCancelled;
+	
+	steerPopup = GetNode<SteerPopup>("../UIMain/Popups/SteerPopup");
+
+	steerPopup.OnSteerConfirmed += OnSteerConfirmed;
+	steerPopup.OnCancelled += OnSteerCancelled;
 
 	popup.Hide();
 	banner.Hide();
 	targetPlayerPopup.Hide();
 	connectPopup.Hide();
 	setCoursePopup.Hide();
+	steerPopup.Hide();
 }
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -160,7 +167,16 @@ public partial class EnvisionController : Node
 			return;
 			
 		case EnvisionAction.Prepare:
+		
 		case EnvisionAction.Steer:
+			pendingAction = action;
+
+			popup.Hide();
+			steerPopup.Open();
+
+			banner.ShowMessage("Choose how to use Steer.", new Color("FDE68A"));
+			return;
+			
 		case EnvisionAction.Pass:
 			ApplyAction(player, action);
 			popup.Hide();
@@ -281,6 +297,49 @@ private void OnSetCourseCancelled()
 	popup.UpdateButtons(players[currentPlayer]);
 
 	banner.ShowMessage("Set Course cancelled. Choose an action.", new Color("86EFAC"));
+}
+
+private void OnSteerConfirmed(string mode)
+{
+	var player = players[currentPlayer];
+
+	// 扣除 Steer 的费用
+	ApplyAction(player, EnvisionAction.Steer);
+
+	pendingAction = null;
+
+	PopupClosed?.Invoke();
+
+	if (mode == "AddReserveToken")
+	{
+		banner.ShowTemporaryMessage(
+			$"Player {currentPlayer + 1} chose: Steer -> Add Reserve Token",
+			2.0f,
+			new Color("7DD3FC")
+		);
+
+		GD.Print("Steer selected: Add Reserve Token");
+	}
+	else if (mode == "ManipulateTokens")
+	{
+		banner.ShowTemporaryMessage(
+			$"Player {currentPlayer + 1} chose: Steer -> Manipulate Tokens",
+			2.0f,
+			new Color("7DD3FC")
+		);
+
+		GD.Print("Steer selected: Manipulate Tokens");
+	}
+}
+
+private void OnSteerCancelled()
+{
+	pendingAction = null;
+
+	popup.Show();
+	popup.UpdateButtons(players[currentPlayer]);
+
+	banner.ShowMessage("Steer cancelled. Choose an action.", new Color("86EFAC"));
 }
 
 	private void NextPlayer()
