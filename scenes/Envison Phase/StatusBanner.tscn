@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://bhdlqf462da0b"]
+
+[ext_resource type="Script" uid="uid://bshty1ttilrhh" path="res://scripts/Envision Phase/StatusBanner.cs" id="1_mcj7n"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mcj7n"]
+bg_color = Color(0.12156863, 0.14117648, 0.1882353, 0.39215687)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.30588236, 0.65882355, 0.87058824, 0.39215687)
+corner_detail = 14
+
+[node name="StatusBanner" type="Control" unique_id=1519244184]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1920.0
+offset_bottom = -1080.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mcj7n")
+
+[node name="BannerPanel" type="PanelContainer" parent="." unique_id=261766471]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mcj7n")
+
+[node name="MarginContainer" type="MarginContainer" parent="BannerPanel" unique_id=1396937038]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="BannerPanel/MarginContainer" unique_id=879553505]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3

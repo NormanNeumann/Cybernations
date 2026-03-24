@@ -1,0 +1,246 @@
+[gd_scene format=3 uid="uid://dk0xkvsyc2i24"]
+
+[ext_resource type="StyleBox" uid="uid://l31nahsw02wk" path="res://theme/normal.tres" id="1_xtlh6"]
+[ext_resource type="Script" uid="uid://cg3asww6dtdma" path="res://scripts/Envision Phase/TargetPlayerPopup.cs" id="1_y2cqv"]
+[ext_resource type="StyleBox" uid="uid://e8g53r5qtwj5" path="res://theme/presse.tres" id="2_y2cqv"]
+[ext_resource type="StyleBox" uid="uid://tyma63kw6hll" path="res://theme/hover.tres" id="3_ote36"]
+[ext_resource type="StyleBox" uid="uid://cofyuo7j3w7ap" path="res://theme/disable.tres" id="4_qk6fx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1sub7"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.12156863, 0.14117648, 0.1882353, 0.78431374)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3019608, 0.6392157, 1, 1)
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y2cqv"]
+bg_color = Color(0.1764706, 0.21568628, 0.28235295, 0.78431374)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.30588236, 0.65882355, 0.87058824, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ote36"]
+bg_color = Color(0.12156863, 0.37254903, 0.54509807, 0.78431374)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qk6fx"]
+bg_color = Color(0.12156863, 0.37254903, 0.54509807, 0.78431374)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4gam5"]
+bg_color = Color(0.23137255, 0.2901961, 0.3882353, 0.78431374)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jjjme"]
+bg_color = Color(0.29411766, 0.33333334, 0.3882353, 0.78431374)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41960785, 0.44705883, 0.5019608, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_whiou"]
+bg_color = Color(0.1764706, 0.21568628, 0.28235295, 0.78431374)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.30588236, 0.65882355, 0.87058824, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wmqnw"]
+bg_color = Color(0.12156863, 0.37254903, 0.54509807, 0.78431374)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rryg2"]
+bg_color = Color(0.23137255, 0.2901961, 0.3882353, 0.78431374)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c75i6"]
+bg_color = Color(0.29411766, 0.33333334, 0.3882353, 0.78431374)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41960785, 0.44705883, 0.5019608, 1)
+corner_detail = 10
+
+[node name="TargetPlayerPopup" type="Control" unique_id=1956891871]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y2cqv")
+
+[node name="DimBackground" type="ColorRect" parent="." unique_id=522265136]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="PopupPanel" type="PanelContainer" parent="." unique_id=1804842350]
+custom_minimum_size = Vector2(460, 320)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -160.0
+offset_right = 230.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1sub7")
+
+[node name="MarginContainer" type="MarginContainer" parent="PopupPanel" unique_id=976232860]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="RootVBox" type="VBoxContainer" parent="PopupPanel/MarginContainer" unique_id=2012643621]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1901157185]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "Choose Target Player"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="SubtitleLabel" type="Label" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1142553902]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72156864, 0.75686276, 0.8, 1)
+theme_override_font_sizes/font_size = 15
+text = "Select the player who will receive the First Player token."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="PlayerButtonsVBox" type="GridContainer" parent="PopupPanel/MarginContainer/RootVBox" unique_id=404927533]
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="Player1Button" type="Button" parent="PopupPanel/MarginContainer/RootVBox/PlayerButtonsVBox" unique_id=1641661013]
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = ExtResource("1_xtlh6")
+theme_override_styles/pressed = ExtResource("2_y2cqv")
+theme_override_styles/hover = ExtResource("3_ote36")
+theme_override_styles/disabled = ExtResource("4_qk6fx")
+text = "	Player 1"
+
+[node name="Player2Button" type="Button" parent="PopupPanel/MarginContainer/RootVBox/PlayerButtonsVBox" unique_id=1448669384]
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_y2cqv")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ote36")
+theme_override_styles/pressed_mirrored = SubResource("StyleBoxFlat_qk6fx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4gam5")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_jjjme")
+text = "	Player 2"
+
+[node name="Player3Button" type="Button" parent="PopupPanel/MarginContainer/RootVBox/PlayerButtonsVBox" unique_id=1139731701]
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_whiou")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_wmqnw")
+theme_override_styles/hover = SubResource("StyleBoxFlat_rryg2")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_c75i6")
+text = "	Player 3"
+
+[node name="Player4Button" type="Button" parent="PopupPanel/MarginContainer/RootVBox/PlayerButtonsVBox" unique_id=1485540371]
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_whiou")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_wmqnw")
+theme_override_styles/hover = SubResource("StyleBoxFlat_rryg2")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_c75i6")
+text = "	Player 4"
+
+[node name="Player5Button" type="Button" parent="PopupPanel/MarginContainer/RootVBox/PlayerButtonsVBox" unique_id=935682505]
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_whiou")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_wmqnw")
+theme_override_styles/hover = SubResource("StyleBoxFlat_c75i6")
+text = "	Player 5"
+
+[node name="CancelButton" type="Button" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1412366738]
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_whiou")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_wmqnw")
+theme_override_styles/hover = SubResource("StyleBoxFlat_rryg2")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_c75i6")
+text = "Cancel"
