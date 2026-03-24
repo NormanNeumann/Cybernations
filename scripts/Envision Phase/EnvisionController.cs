@@ -18,6 +18,7 @@ public partial class EnvisionController : Node
 	private ConnectPopup connectPopup = null!;
 	private SetCoursePopup setCoursePopup = null!;
 	private SteerPopup steerPopup = null!;
+	private FeedbackTokenPopup feedbackTokenPopup = null!;
 	
 	public event Action? PopupOpened;
 	public event Action? PopupClosed;
@@ -57,6 +58,11 @@ public partial class EnvisionController : Node
 
 	steerPopup.OnSteerConfirmed += OnSteerConfirmed;
 	steerPopup.OnCancelled += OnSteerCancelled;
+	
+	feedbackTokenPopup = GetNode<FeedbackTokenPopup>("../UIMain/Popups/FeedbackTokenPopup");
+
+	feedbackTokenPopup.OnTokenConfirmed += OnFeedbackTokenConfirmed;
+	feedbackTokenPopup.OnCancelled += OnFeedbackTokenCancelled;
 
 	popup.Hide();
 	banner.Hide();
@@ -64,6 +70,7 @@ public partial class EnvisionController : Node
 	connectPopup.Hide();
 	setCoursePopup.Hide();
 	steerPopup.Hide();
+	feedbackTokenPopup.Hide();
 }
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -301,27 +308,25 @@ private void OnSetCourseCancelled()
 
 private void OnSteerConfirmed(string mode)
 {
-	var player = players[currentPlayer];
-
-	// 扣除 Steer 的费用
-	ApplyAction(player, EnvisionAction.Steer);
-
-	pendingAction = null;
-
-	PopupClosed?.Invoke();
+	pendingAction = EnvisionAction.Steer;
 
 	if (mode == "AddReserveToken")
 	{
-		banner.ShowTemporaryMessage(
-			$"Player {currentPlayer + 1} chose: Steer -> Add Reserve Token",
-			2.0f,
-			new Color("7DD3FC")
-		);
+		feedbackTokenPopup.Open();
 
-		GD.Print("Steer selected: Add Reserve Token");
+		banner.ShowMessage("Choose a feedback token to add from Reserve to Bag.", new Color("FDE68A"));
+		return;
 	}
-	else if (mode == "ManipulateTokens")
+
+	if (mode == "ManipulateTokens")
 	{
+		var player = players[currentPlayer];
+
+		ApplyAction(player, EnvisionAction.Steer);
+		pendingAction = null;
+
+		PopupClosed?.Invoke();
+
 		banner.ShowTemporaryMessage(
 			$"Player {currentPlayer + 1} chose: Steer -> Manipulate Tokens",
 			2.0f,
@@ -340,6 +345,32 @@ private void OnSteerCancelled()
 	popup.UpdateButtons(players[currentPlayer]);
 
 	banner.ShowMessage("Steer cancelled. Choose an action.", new Color("86EFAC"));
+}
+
+private void OnFeedbackTokenConfirmed(string tokenType)
+{
+	var player = players[currentPlayer];
+
+	ApplyAction(player, EnvisionAction.Steer);
+
+	pendingAction = null;
+
+	PopupClosed?.Invoke();
+
+	banner.ShowTemporaryMessage(
+		$"Player {currentPlayer + 1} chose: Steer -> Add {tokenType} Feedback",
+		2.0f,
+		new Color("7DD3FC")
+	);
+
+	GD.Print($"Steer reserve token selected: {tokenType}");
+}
+
+private void OnFeedbackTokenCancelled()
+{
+	steerPopup.Open();
+
+	banner.ShowMessage("Feedback token selection cancelled. Choose how to use Steer.", new Color("86EFAC"));
 }
 
 	private void NextPlayer()
