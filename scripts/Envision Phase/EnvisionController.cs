@@ -12,6 +12,9 @@ public partial class EnvisionController : Node
 	private ActionPopup popup = null!;
 	private StatusBanner banner = null!;
 	
+	private TargetPlayerPopup targetPlayerPopup = null!;
+	private EnvisionAction? pendingAction = null;
+	
 	public event Action? PopupOpened;
 	public event Action? PopupClosed;
 
@@ -48,6 +51,11 @@ public partial class EnvisionController : Node
 		
 		popup.Hide();
 		banner.Hide();
+		
+		targetPlayerPopup = GetNode<TargetPlayerPopup>("../UIMain/Popups/TargetPlayerPopup");
+
+		targetPlayerPopup.OnTargetPlayerSelected += OnShiftPowerTargetSelected;
+		targetPlayerPopup.OnCancelled += OnTargetSelectionCancelled;
 
 		//StartTurn();
 	}
@@ -108,14 +116,61 @@ public partial class EnvisionController : Node
 {
 	var player = players[currentPlayer];
 
-	ApplyAction(player, action);
+	switch (action)
+	{
+		case EnvisionAction.ShiftPower:
+			pendingAction = action;
 
-	popup.Hide();
-	PopupClosed?.Invoke();
-	banner.ShowTemporaryMessage($"Player {currentPlayer + 1} chose: {action}", 2.0f, new Color("7DD3FC"));
+			popup.Hide();
+			targetPlayerPopup.Configure(players.Count, currentPlayer);
+			banner.ShowMessage("Choose a target player for Shift Power.", new Color("FDE68A"));
+			return;
 
-	// NextPlayer();
+		case EnvisionAction.ComeTogether:
+		case EnvisionAction.Connect:
+		case EnvisionAction.SetCourse:
+		case EnvisionAction.Prepare:
+		case EnvisionAction.Steer:
+		case EnvisionAction.Pass:
+			ApplyAction(player, action);
+			popup.Hide();
+			PopupClosed?.Invoke();
+			banner.ShowTemporaryMessage($"Player {currentPlayer + 1} chose: {action}", 2.0f, new Color("7DD3FC"));
+			return;
+	}
 }
+
+	private void OnShiftPowerTargetSelected(int targetPlayerId)
+	{
+		if (pendingAction != EnvisionAction.ShiftPower)
+			return;
+
+		var player = players[currentPlayer];
+
+		ApplyAction(player, EnvisionAction.ShiftPower);
+
+		pendingAction = null;
+
+		PopupClosed?.Invoke();
+
+		banner.ShowTemporaryMessage(
+			$"Player {currentPlayer + 1} chose: Shift Power -> Player {targetPlayerId + 1}",
+			2.0f,
+			new Color("7DD3FC")
+		);
+
+		GD.Print($"Shift Power target selected: Player {targetPlayerId + 1}");
+	}
+	
+		private void OnTargetSelectionCancelled()
+	{
+		pendingAction = null;
+
+		popup.Show();
+		popup.UpdateButtons(players[currentPlayer]);
+
+		banner.ShowMessage("Shift Power cancelled. Choose an action.", new Color("86EFAC"));
+	}
 
 	private void NextPlayer()
 	{
