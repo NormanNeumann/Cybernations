@@ -6,7 +6,12 @@ public readonly record struct ChatMessageVm(string Sender, string Content);
 
 public readonly record struct PlayerDetailVm(int Slot, string Progress, string Description);
 
-public interface IChatPanelView
+public interface IPopupHostAwareView
+{
+    void SetPopupHost(Control popupHost);
+}
+
+public interface IChatPanelView : IPopupHostAwareView
 {
     event Action? ExpandRequested;
     event Action? CollapseRequested;
@@ -17,7 +22,7 @@ public interface IChatPanelView
     void SetMessages(IReadOnlyList<ChatMessageVm> messages);
 }
 
-public interface ITeamGoalPanelView
+public interface ITeamGoalPanelView : IPopupHostAwareView
 {
     event Action? ToggleRequested;
     event Action? CloseRequested;

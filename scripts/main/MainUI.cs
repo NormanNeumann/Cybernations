@@ -14,8 +14,16 @@ public partial class MainUI : Control
     {
         _playerPanelView = GetNode<PlayerPanelView>("UIMain/PlayerPanel");
         var teamGoalPanelView = GetNode<TeamGoalPanelView>("UIMain/TeamGoalPanel");
+        var infoSummaryPanelView = GetNode<InfoSummaryPanelView>("UIMain/InfoSummaryPanel");
         var chatPanelView = GetNode<ChatPanelView>("UIMain/ChatPanel");
+        var teamGoalPopupHost = GetNode<Control>("UIMain/Popups/TeamGoalPopupHost");
+        var infoSummaryPopupHost = GetNode<Control>("UIMain/Popups/InfoSummaryPopupHost");
+        var chatPopupHost = GetNode<Control>("UIMain/Popups/ChatPopupHost");
         _playerDetailPopupView = GetNode<PlayerDetailPopupView>("UIMain/Popups/PlayerDetailPopup");
+
+        teamGoalPanelView.SetPopupHost(teamGoalPopupHost);
+        infoSummaryPanelView.SetPopupHost(infoSummaryPopupHost);
+        chatPanelView.SetPopupHost(chatPopupHost);
 
         _gameGateway = new WebSocketGameGateway(ServerUrl);
         _presenter = new MainUiPresenter(chatPanelView, teamGoalPanelView, _playerDetailPopupView, _gameGateway);

@@ -6,8 +6,7 @@
 script = ExtResource("1_script")
 
 [node name="PreviewPanel" type="Panel" parent="."]
-offset_left = 260.0
-offset_right = 760.0
+offset_right = 500.0
 offset_bottom = 232.0
 clip_contents = true
 
@@ -30,8 +29,7 @@ theme_override_font_sizes/font_size = 14
 autowrap_mode = 3
 
 [node name="PreviewHitArea" type="Button" parent="."]
-offset_left = 260.0
-offset_right = 760.0
+offset_right = 500.0
 offset_bottom = 232.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
@@ -41,7 +39,8 @@ modulate = Color(1, 1, 1, 0)
 
 [node name="DropdownPanel" type="Panel" parent="."]
 visible = false
-offset_right = 760.0
+offset_left = -260.0
+offset_right = 500.0
 offset_bottom = 900.0
 clip_contents = false
 

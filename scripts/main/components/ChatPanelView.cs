@@ -4,10 +4,8 @@ using Godot;
 
 public partial class ChatPanelView : Control, IChatPanelView
 {
-    private static readonly Vector2 LayoutShift = new Vector2(40.0f, 0.0f);
-    private static readonly Vector2 RootPosition = Shift(new Vector2(1305, 34));
-    private static readonly Vector2 CollapsedLogPosition = new Vector2(0.0f, 584.0f);
-    private static readonly Vector2 ExpandedLogPosition = Vector2.Zero;
+    private static readonly Vector2 CollapsedLogPosition = Vector2.Zero;
+    private static readonly Vector2 ExpandedLogPosition = new Vector2(0.0f, -568.0f);
 
     private readonly Color _textColor = Color.FromHtml("#16222B");
 
@@ -16,6 +14,7 @@ public partial class ChatPanelView : Control, IChatPanelView
     private Panel _chatInputPanel = null!;
     private Label _chatBodyLabel = null!;
     private LineEdit _chatInputLineEdit = null!;
+    private Control? _popupHost;
     private bool _isExpanded;
 
     private readonly List<string> _chatMessages = [];
@@ -29,10 +28,6 @@ public partial class ChatPanelView : Control, IChatPanelView
     public override void _Ready()
     {
         MouseFilter = MouseFilterEnum.Ignore;
-        SetAnchorsPreset(LayoutPreset.TopLeft);
-        Position = RootPosition;
-        Size = new Vector2(500, 1008);
-        CustomMinimumSize = Size;
 
         _chatLogPanel = GetNode<Panel>("ChatLogPanel");
         _chatLogHitArea = GetNode<Button>("ChatLogHitArea");
@@ -58,12 +53,49 @@ public partial class ChatPanelView : Control, IChatPanelView
         }
 
         _isExpanded = expanded;
-        _chatLogPanel.Position = expanded ? ExpandedLogPosition : CollapsedLogPosition;
-        _chatLogPanel.Size = expanded ? new Vector2(500, 934) : new Vector2(500, 350);
-        _chatLogHitArea.Position = _chatLogPanel.Position;
-        _chatLogHitArea.Size = _chatLogPanel.Size;
+        if (expanded)
+        {
+            MoveExpandedElementsToPopupHost();
+            _chatLogPanel.Size = new Vector2(500, 934);
+            _chatLogHitArea.Size = _chatLogPanel.Size;
+
+            if (_popupHost == null)
+            {
+                _chatLogPanel.Position = ExpandedLogPosition;
+                _chatLogHitArea.Position = _chatLogPanel.Position;
+            }
+            else
+            {
+                var expandedGlobalPosition = GlobalPosition + ExpandedLogPosition;
+                _chatLogPanel.GlobalPosition = expandedGlobalPosition;
+                _chatLogHitArea.GlobalPosition = expandedGlobalPosition;
+            }
+        }
+        else
+        {
+            RestoreExpandedElementsToLocalParent();
+            _chatLogPanel.Position = CollapsedLogPosition;
+            _chatLogPanel.Size = new Vector2(500, 350);
+            _chatLogHitArea.Position = _chatLogPanel.Position;
+            _chatLogHitArea.Size = _chatLogPanel.Size;
+        }
+
         _chatBodyLabel.Size = expanded ? new Vector2(464, 864) : new Vector2(464, 280);
         RefreshChatLogDisplay();
+    }
+
+    public void SetPopupHost(Control popupHost)
+    {
+        _popupHost = popupHost;
+        if (!_isExpanded)
+        {
+            return;
+        }
+
+        MoveExpandedElementsToPopupHost();
+        var expandedGlobalPosition = GlobalPosition + ExpandedLogPosition;
+        _chatLogPanel.GlobalPosition = expandedGlobalPosition;
+        _chatLogHitArea.GlobalPosition = expandedGlobalPosition;
     }
 
     public void SetMessages(IReadOnlyList<ChatMessageVm> messages)
@@ -288,9 +320,38 @@ public partial class ChatPanelView : Control, IChatPanelView
         return new Rect2(control.GlobalPosition, control.Size);
     }
 
-    private static Vector2 Shift(Vector2 position)
+    private void MoveExpandedElementsToPopupHost()
     {
-        return position + LayoutShift;
+        if (_popupHost == null)
+        {
+            return;
+        }
+
+        if (_chatLogPanel.GetParent() != _popupHost)
+        {
+            _chatLogPanel.Reparent(_popupHost, true);
+        }
+
+        if (_chatLogHitArea.GetParent() != _popupHost)
+        {
+            _chatLogHitArea.Reparent(_popupHost, true);
+        }
+
+        _chatLogPanel.MoveToFront();
+        _chatLogHitArea.MoveToFront();
+    }
+
+    private void RestoreExpandedElementsToLocalParent()
+    {
+        if (_chatLogPanel.GetParent() != this)
+        {
+            _chatLogPanel.Reparent(this, true);
+        }
+
+        if (_chatLogHitArea.GetParent() != this)
+        {
+            _chatLogHitArea.Reparent(this, true);
+        }
     }
 
     private static void ApplyRoundedStyle(Panel panel, Color fillColor, int radius)

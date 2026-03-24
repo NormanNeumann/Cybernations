@@ -77,21 +77,56 @@ offset_right = 1255.0
 offset_bottom = 1040.0
 
 [node name="TeamGoalPanel" parent="UIMain" unique_id=320128135 instance=ExtResource("5_team_goal")]
-layout_mode = 1
+anchors_preset = 0
+offset_left = 1345.0
+offset_top = 34.0
+offset_right = 1845.0
+offset_bottom = 266.0
 mouse_filter = 2
 
 [node name="InfoSummaryPanel" parent="UIMain" unique_id=1982279745 instance=ExtResource("6_info")]
 anchors_preset = 0
 offset_left = 1345.0
-offset_top = 296.0
+offset_top = 288.0
 offset_right = 1845.0
-offset_bottom = 588.0
+offset_bottom = 580.0
 
 [node name="ChatPanel" parent="UIMain" unique_id=498945969 instance=ExtResource("7_chat")]
-layout_mode = 1
+anchors_preset = 0
+offset_left = 1345.0
+offset_top = 602.0
+offset_right = 1845.0
+offset_bottom = 1026.0
 mouse_filter = 2
 
 [node name="Popups" type="Control" parent="UIMain" unique_id=2112855846]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TeamGoalPopupHost" type="Control" parent="UIMain/Popups"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="InfoSummaryPopupHost" type="Control" parent="UIMain/Popups"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ChatPopupHost" type="Control" parent="UIMain/Popups"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

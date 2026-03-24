@@ -3,9 +3,6 @@ using Godot;
 
 public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
 {
-    private static readonly Vector2 LayoutShift = new Vector2(40.0f, 0.0f);
-    private static readonly Vector2 RootPosition = Shift(new Vector2(1045, 34));
-
     private readonly Color _inkColor = Color.FromHtml("#2B2726");
     private readonly Color _textColor = Color.FromHtml("#16222B");
     private readonly Color _wildsColor = Color.FromHtml("#6CE575");
@@ -19,6 +16,10 @@ public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
     private Button _hitArea = null!;
     private Panel _dropdownPanel = null!;
     private VBoxContainer _sections = null!;
+    private Control? _popupHost;
+    private Node? _dropdownOriginalParent;
+    private int _dropdownOriginalIndex;
+    private Vector2 _dropdownLocalPosition = Vector2.Zero;
 
     public event Action? ToggleRequested;
     public event Action? CloseRequested;
@@ -43,10 +44,6 @@ public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
     public override void _Ready()
     {
         MouseFilter = MouseFilterEnum.Ignore;
-        SetAnchorsPreset(LayoutPreset.TopLeft);
-        Position = RootPosition;
-        Size = new Vector2(760, 900);
-        CustomMinimumSize = Size;
 
         _previewPanel = GetNode<Panel>("PreviewPanel");
         _previewTitleLabel = GetNode<Label>("PreviewPanel/Layout/TitleLabel");
@@ -54,6 +51,9 @@ public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
         _hitArea = GetNode<Button>("PreviewHitArea");
         _dropdownPanel = GetNode<Panel>("DropdownPanel");
         _sections = GetNode<VBoxContainer>("DropdownPanel/Sections");
+        _dropdownOriginalParent = _dropdownPanel.GetParent();
+        _dropdownOriginalIndex = _dropdownPanel.GetIndex();
+        _dropdownLocalPosition = _dropdownPanel.Position;
 
         _hitArea.Pressed += () => ToggleRequested?.Invoke();
 
@@ -64,7 +64,31 @@ public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
 
     public void SetDropdownVisible(bool visible)
     {
+        if (visible)
+        {
+            MoveDropdownToPopupHost();
+            var popupPosition = GetDropdownPopupPosition();
+            _dropdownPanel.GlobalPosition = popupPosition;
+        }
+        else
+        {
+            RestoreDropdownToOriginalParent();
+            _dropdownPanel.Position = _dropdownLocalPosition;
+        }
+
         _dropdownPanel.Visible = visible;
+    }
+
+    public void SetPopupHost(Control popupHost)
+    {
+        _popupHost = popupHost;
+        if (!_dropdownPanel.Visible)
+        {
+            return;
+        }
+
+        MoveDropdownToPopupHost();
+        _dropdownPanel.GlobalPosition = GetDropdownPopupPosition();
     }
 
     public override void _Input(InputEvent @event)
@@ -428,9 +452,46 @@ public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
         return new Rect2(control.GlobalPosition, control.Size);
     }
 
-    private static Vector2 Shift(Vector2 position)
+    private void MoveDropdownToPopupHost()
     {
-        return position + LayoutShift;
+        if (_popupHost == null)
+        {
+            return;
+        }
+
+        if (_dropdownPanel.GetParent() == _popupHost)
+        {
+            return;
+        }
+
+        _dropdownPanel.Reparent(_popupHost, true);
+        _dropdownPanel.MoveToFront();
+    }
+
+    private void RestoreDropdownToOriginalParent()
+    {
+        if (_dropdownOriginalParent == null)
+        {
+            return;
+        }
+
+        if (_dropdownPanel.GetParent() == _dropdownOriginalParent)
+        {
+            return;
+        }
+
+        _dropdownPanel.Reparent(_dropdownOriginalParent, true);
+        _dropdownOriginalParent.MoveChild(_dropdownPanel, _dropdownOriginalIndex);
+    }
+
+    private Vector2 GetDropdownPopupPosition()
+    {
+        if (_dropdownOriginalParent is not Control originalParentControl)
+        {
+            return _dropdownPanel.GlobalPosition;
+        }
+
+        return originalParentControl.GlobalPosition + _dropdownLocalPosition;
     }
 
     private readonly struct HexTileData(Vector2 position, HexBase @base, OverlayType overlay)

@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class InfoSummaryPanelView : Control
+public partial class InfoSummaryPanelView : Control, IPopupHostAwareView
 {
     private readonly Color _textColor = Color.FromHtml("#16222B");
 
@@ -57,5 +57,10 @@ public partial class InfoSummaryPanelView : Control
         style.CornerRadiusBottomRight = radius;
         panel.AddThemeStyleboxOverride("panel", style);
         return panel;
+    }
+
+    public void SetPopupHost(Control popupHost)
+    {
+        // Reserved for the future expanded popup variant of this panel.
     }
 }
