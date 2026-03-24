@@ -38,26 +38,13 @@ public partial class EnvisionController : Node
 	connectPopup.OnCancelled += OnConnectCancelled;
 
 	players = new List<PlayerState>
-	{
-		new PlayerState
-		{
-			Id = 0,
-			People = 2,
-			Environment = 2,
-			Technology = 1,
-			Cybernation = 0,
-			Cohesion = 5
-		},
-		new PlayerState
-		{
-			Id = 1,
-			People = 0,
-			Environment = 0,
-			Technology = 2,
-			Cybernation = 0,
-			Cohesion = 5
-		}
-	};
+{
+	new PlayerState { Id = 0, People = 2, Environment = 2, Technology = 1, Cybernation = 0, Cohesion = 5 },
+	new PlayerState { Id = 1, People = 0, Environment = 0, Technology = 2, Cybernation = 0, Cohesion = 5 },
+	new PlayerState { Id = 2, People = 1, Environment = 1, Technology = 1, Cybernation = 0, Cohesion = 5 },
+	new PlayerState { Id = 3, People = 3, Environment = 1, Technology = 0, Cybernation = 0, Cohesion = 5 },
+	new PlayerState { Id = 4, People = 1, Environment = 2, Technology = 2, Cybernation = 0, Cohesion = 5 }
+};
 
 	popup.Hide();
 	banner.Hide();
