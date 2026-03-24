@@ -145,6 +145,7 @@ grow_vertical = 1
 script = ExtResource("14_rikml")
 
 [node name="FeedbackTokenPopup" parent="UIMain/Popups" unique_id=505049240 instance=ExtResource("15_vc03v")]
+layout_mode = 1
 script = ExtResource("16_grv7h")
 
 [node name="ActionPopup" parent="UIMain" unique_id=104429918 instance=ExtResource("9_p5fgu")]
@@ -170,5 +171,25 @@ offset_right = 0.0
 offset_bottom = 26.0
 grow_vertical = 1
 
+[node name="ColorblindToggleButton" type="Button" parent="UIMain" unique_id=73986387]
+layout_mode = 0
+offset_left = 1751.0
+offset_top = 1049.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+text = "Colorblind Mode: Off"
+
 [node name="EnvisionController" type="Node" parent="." unique_id=512416016]
 script = ExtResource("12_p5fgu")
+
+[node name="ColorblindOverlay" type="CanvasLayer" parent="." unique_id=790410494]
+layer = 100
+
+[node name="Filter" type="ColorRect" parent="ColorblindOverlay" unique_id=668878607]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 1, 0, 0.39215687)
