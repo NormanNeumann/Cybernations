@@ -105,10 +105,23 @@ layout_mode = 1
 mouse_filter = 2
 
 [node name="ActionPopup" parent="UIMain" unique_id=104429918 instance=ExtResource("9_p5fgu")]
-layout_mode = 0
+visible = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="StatusBanner" parent="UIMain" unique_id=1519244184 instance=ExtResource("11_jsdfw")]
-layout_mode = 0
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 1
+anchors_preset = 10
+anchor_bottom = 0.0
+offset_top = 26.0
+offset_right = 0.0
+offset_bottom = 26.0
+grow_vertical = 1
 
 [node name="EnvisionController" type="Node" parent="." unique_id=512416016]
 script = ExtResource("12_p5fgu")

@@ -2,6 +2,271 @@
 
 [ext_resource type="Script" uid="uid://b48irq3p8nu5v" path="res://scripts/Envision Phase/ActionPopup.cs" id="1_2njpi"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2njpi"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.12156863, 0.14117648, 0.1882353, 0.78431374)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.30588236, 0.65882355, 0.87058824, 1)
+corner_detail = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bb6w6"]
+bg_color = Color(0.1764706, 0.21568628, 0.28235295, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.30588236, 0.65882355, 0.87058824, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hn1df"]
+bg_color = Color(0.12156863, 0.37254903, 0.54509807, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q1kxy"]
+bg_color = Color(0.23137255, 0.2901961, 0.3882353, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sdh16"]
+bg_color = Color(0.29411766, 0.33333334, 0.3882353, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41960785, 0.44705883, 0.5019608, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j4ryj"]
+bg_color = Color(0.1764706, 0.21568628, 0.28235295, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.30588236, 0.65882355, 0.87058824, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iw3b0"]
+bg_color = Color(0.12156863, 0.37254903, 0.54509807, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g7wq1"]
+bg_color = Color(0.23137255, 0.2901961, 0.3882353, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mlxsy"]
+bg_color = Color(0.29411766, 0.33333334, 0.3882353, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41960785, 0.44705883, 0.5019608, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8cacx"]
+bg_color = Color(0.1764706, 0.21568628, 0.28235295, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.30588236, 0.65882355, 0.87058824, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8r7tm"]
+bg_color = Color(0.12156863, 0.37254903, 0.54509807, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u7j7y"]
+bg_color = Color(0.23137255, 0.2901961, 0.3882353, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fxv4y"]
+bg_color = Color(0.29411766, 0.33333334, 0.3882353, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41960785, 0.44705883, 0.5019608, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gm4jt"]
+bg_color = Color(0.1764706, 0.21568628, 0.28235295, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.30588236, 0.65882355, 0.87058824, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_17uyn"]
+bg_color = Color(0.12156863, 0.37254903, 0.54509807, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aij4n"]
+bg_color = Color(0.23137255, 0.2901961, 0.3882353, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4d75n"]
+bg_color = Color(0.29411766, 0.33333334, 0.3882353, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41960785, 0.44705883, 0.5019608, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xa61d"]
+bg_color = Color(0.1764706, 0.21568628, 0.28235295, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.30588236, 0.65882355, 0.87058824, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g245c"]
+bg_color = Color(0.12156863, 0.37254903, 0.54509807, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0y6sk"]
+bg_color = Color(0.23137255, 0.2901961, 0.3882353, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p1be4"]
+bg_color = Color(0.29411766, 0.33333334, 0.3882353, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41960785, 0.44705883, 0.5019608, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hox15"]
+bg_color = Color(0.1764706, 0.21568628, 0.28235295, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.30588236, 0.65882355, 0.87058824, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8a6r3"]
+bg_color = Color(0.12156863, 0.37254903, 0.54509807, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ybq5g"]
+bg_color = Color(0.23137255, 0.2901961, 0.3882353, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j4ncg"]
+bg_color = Color(0.29411766, 0.33333334, 0.3882353, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41960785, 0.44705883, 0.5019608, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w8ard"]
+bg_color = Color(0.1764706, 0.21568628, 0.28235295, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.30588236, 0.65882355, 0.87058824, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nsv65"]
+bg_color = Color(0.12156863, 0.37254903, 0.54509807, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c3v6a"]
+bg_color = Color(0.23137255, 0.2901961, 0.3882353, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4hfsc"]
+bg_color = Color(0.29411766, 0.33333334, 0.3882353, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41960785, 0.44705883, 0.5019608, 1)
+corner_detail = 10
+
 [node name="ActionPopup" type="Control" unique_id=1379592691]
 visible = false
 layout_mode = 3
@@ -9,58 +274,159 @@ anchors_preset = 0
 script = ExtResource("1_2njpi")
 
 [node name="DimBackground" type="ColorRect" parent="." unique_id=607485300]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
 
 [node name="PopupPanel" type="PanelContainer" parent="." unique_id=298977632]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+custom_minimum_size = Vector2(520, 420)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -63.5
+offset_top = -161.0
+offset_right = 63.5
+offset_bottom = 161.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2njpi")
 
 [node name="MarginContainer" type="MarginContainer" parent="PopupPanel" unique_id=1194880378]
 layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 
 [node name="RootVBox" type="VBoxContainer" parent="PopupPanel/MarginContainer" unique_id=960440321]
 layout_mode = 2
+theme_override_constants/separation = 14
 
 [node name="TitleLabel" type="Label" parent="PopupPanel/MarginContainer/RootVBox" unique_id=193621772]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
 text = "Choose Action"
+horizontal_alignment = 1
 
 [node name="SubtitleLabel" type="Label" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1931898205]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.72156864, 0.75686276, 0.8, 1)
+theme_override_font_sizes/font_size = 15
+text = "Select one action for this Envision turn."
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="ButtonsGrid" type="GridContainer" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1701106394]
 layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 2
 
 [node name="ShiftPower" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=1548633887]
+custom_minimum_size = Vector2(220, 52)
 layout_mode = 2
-text = "Shift Power"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_bb6w6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hn1df")
+theme_override_styles/hover = SubResource("StyleBoxFlat_q1kxy")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_sdh16")
+text = "Shift Power (1 People)"
 
 [node name="ComeTogether" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=91239822]
+custom_minimum_size = Vector2(220, 52)
 layout_mode = 2
-text = "Come Together"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_j4ryj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_iw3b0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_g7wq1")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_mlxsy")
+text = "Come Together (1 Environment)"
 
 [node name="Connect" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=736697416]
+custom_minimum_size = Vector2(220, 52)
 layout_mode = 2
-text = "Connect"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_8cacx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8r7tm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_u7j7y")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_fxv4y")
+text = "Connect (2 Same)"
 
 [node name="SetCourse" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=2101378663]
+custom_minimum_size = Vector2(220, 52)
 layout_mode = 2
-text = "Set Course"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_gm4jt")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_17uyn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_aij4n")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_4d75n")
+text = "Set Course (2 Tech)"
 
 [node name="Prepare" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=284823876]
+custom_minimum_size = Vector2(220, 52)
 layout_mode = 2
-text = "Prepare"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_xa61d")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_g245c")
+theme_override_styles/hover = SubResource("StyleBoxFlat_0y6sk")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_p1be4")
+text = "Prepare (2 People)"
 
 [node name="Steer" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=1416202209]
+custom_minimum_size = Vector2(220, 52)
 layout_mode = 2
-text = "Steer"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_hox15")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8a6r3")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ybq5g")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_j4ncg")
+text = "Steer (2 Environment)"
 
 [node name="Pass" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=1408731475]
+custom_minimum_size = Vector2(220, 52)
 layout_mode = 2
-text = "Pass"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_w8ard")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_nsv65")
+theme_override_styles/hover = SubResource("StyleBoxFlat_c3v6a")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_4hfsc")
+text = "Pass (Free)"
 
 [node name="ActionDescription" type="Label" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1499431801]
+custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.81960785, 0.8352941, 0.85882354, 1)
+theme_override_font_sizes/font_size = 14
+text = "Hover or click an action to view its effect."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
