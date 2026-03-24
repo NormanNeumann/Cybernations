@@ -12,6 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://b2o8revucbudw" path="res://scenes/Envison Phase/ActionPopup.tscn" id="9_p5fgu"]
 [ext_resource type="PackedScene" uid="uid://bhdlqf462da0b" path="res://scenes/Envison Phase/StatusBanner.tscn" id="11_jsdfw"]
 [ext_resource type="PackedScene" uid="uid://dae2frs82vddc" path="res://scenes/Envison Phase/ConnectPopup.tscn" id="11_tck0d"]
+[ext_resource type="PackedScene" uid="uid://dnh63ucfqebif" path="res://scenes/Envison Phase/SetCoursePopup.tscn" id="11_u8lgh"]
+[ext_resource type="Script" uid="uid://clbkw0ahke5k6" path="res://scripts/Envision Phase/SetCoursePopup.cs" id="12_hjnkw"]
 [ext_resource type="Script" uid="uid://cm1cjxdsog62k" path="res://scripts/Envision Phase/EnvisionController.cs" id="12_p5fgu"]
 
 [node name="Main" type="Control" unique_id=683993586]
@@ -108,13 +110,21 @@ mouse_filter = 2
 
 [node name="TargetPlayerPopup" parent="UIMain/Popups" unique_id=1956891871 instance=ExtResource("9_2tpxt")]
 layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
 offset_left = 959.0
 offset_top = 535.0
 offset_right = 959.0
 offset_bottom = 535.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="ConnectPopup" parent="UIMain/Popups" unique_id=601047054 instance=ExtResource("11_tck0d")]
 layout_mode = 1
+
+[node name="SetCoursePopup" parent="UIMain/Popups" unique_id=1840727800 instance=ExtResource("11_u8lgh")]
+script = ExtResource("12_hjnkw")
 
 [node name="ActionPopup" parent="UIMain" unique_id=104429918 instance=ExtResource("9_p5fgu")]
 visible = true

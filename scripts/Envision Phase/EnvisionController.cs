@@ -16,6 +16,7 @@ public partial class EnvisionController : Node
 	private EnvisionAction? pendingAction = null;
 	
 	private ConnectPopup connectPopup = null!;
+	private SetCoursePopup setCoursePopup = null!;
 	
 	public event Action? PopupOpened;
 	public event Action? PopupClosed;
@@ -39,17 +40,23 @@ public partial class EnvisionController : Node
 
 	players = new List<PlayerState>
 {
-	new PlayerState { Id = 0, People = 2, Environment = 2, Technology = 1, Cybernation = 0, Cohesion = 5 },
+	new PlayerState { Id = 0, People = 2, Environment = 2, Technology = 2, Cybernation = 0, Cohesion = 5 },
 	new PlayerState { Id = 1, People = 0, Environment = 0, Technology = 2, Cybernation = 0, Cohesion = 5 },
 	new PlayerState { Id = 2, People = 1, Environment = 1, Technology = 1, Cybernation = 0, Cohesion = 5 },
 	new PlayerState { Id = 3, People = 3, Environment = 1, Technology = 0, Cybernation = 0, Cohesion = 5 },
 	new PlayerState { Id = 4, People = 1, Environment = 2, Technology = 2, Cybernation = 0, Cohesion = 5 }
 };
 
+	setCoursePopup = GetNode<SetCoursePopup>("../UIMain/Popups/SetCoursePopup");
+
+	setCoursePopup.OnSetCourseConfirmed += OnSetCourseConfirmed;
+	setCoursePopup.OnCancelled += OnSetCourseCancelled;
+
 	popup.Hide();
 	banner.Hide();
 	targetPlayerPopup.Hide();
 	connectPopup.Hide();
+	setCoursePopup.Hide();
 }
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -143,6 +150,15 @@ public partial class EnvisionController : Node
 			return;
 
 		case EnvisionAction.SetCourse:
+			pendingAction = action;
+
+			popup.Hide();
+			setCoursePopup.Open();
+			PopupOpened?.Invoke();
+
+			banner.ShowMessage("Choose how to use Set Course.", new Color("FDE68A"));
+			return;
+			
 		case EnvisionAction.Prepare:
 		case EnvisionAction.Steer:
 		case EnvisionAction.Pass:
@@ -222,6 +238,49 @@ private void OnConnectCancelled()
 	popup.UpdateButtons(players[currentPlayer]);
 
 	banner.ShowMessage("Connect cancelled. Choose an action.", new Color("86EFAC"));
+}
+
+private void OnSetCourseConfirmed(string mode)
+{
+	var player = players[currentPlayer];
+
+	// 扣除 Set Course 的费用
+	ApplyAction(player, EnvisionAction.SetCourse);
+
+	pendingAction = null;
+
+	PopupClosed?.Invoke();
+
+	if (mode == "MovePeople")
+	{
+		banner.ShowTemporaryMessage(
+			$"Player {currentPlayer + 1} chose: Set Course -> Move People Token",
+			2.0f,
+			new Color("7DD3FC")
+		);
+
+		GD.Print("Set Course selected: Move People Token");
+	}
+	else if (mode == "RotateStack")
+	{
+		banner.ShowTemporaryMessage(
+			$"Player {currentPlayer + 1} chose: Set Course -> Rotate Stack",
+			2.0f,
+			new Color("7DD3FC")
+		);
+
+		GD.Print("Set Course selected: Rotate Stack");
+	}
+}
+
+private void OnSetCourseCancelled()
+{
+	pendingAction = null;
+
+	popup.Show();
+	popup.UpdateButtons(players[currentPlayer]);
+
+	banner.ShowMessage("Set Course cancelled. Choose an action.", new Color("86EFAC"));
 }
 
 	private void NextPlayer()
