@@ -15,50 +15,55 @@ public partial class EnvisionController : Node
 	private TargetPlayerPopup targetPlayerPopup = null!;
 	private EnvisionAction? pendingAction = null;
 	
+	private ConnectPopup connectPopup = null!;
+	
 	public event Action? PopupOpened;
 	public event Action? PopupClosed;
 
 	public override void _Ready()
+{
+	GD.Print("EnvisionController Ready");
+
+	popup = GetNode<ActionPopup>("../UIMain/ActionPopup");
+	banner = GetNode<StatusBanner>("../UIMain/StatusBanner");
+	targetPlayerPopup = GetNode<TargetPlayerPopup>("../UIMain/Popups/TargetPlayerPopup");
+	connectPopup = GetNode<ConnectPopup>("../UIMain/Popups/ConnectPopup");
+
+	popup.OnActionSelected += OnActionChosen;
+
+	targetPlayerPopup.OnTargetPlayerSelected += OnShiftPowerTargetSelected;
+	targetPlayerPopup.OnCancelled += OnTargetSelectionCancelled;
+
+	connectPopup.OnConnectConfirmed += OnConnectConfirmed;
+	connectPopup.OnCancelled += OnConnectCancelled;
+
+	players = new List<PlayerState>
 	{
-		GD.Print("EnvisionController Ready");
-
-		popup = GetNode<ActionPopup>("../UIMain/ActionPopup");
-		banner = GetNode<StatusBanner>("../UIMain/StatusBanner");
-
-		popup.OnActionSelected += OnActionChosen;
-
-		players = new List<PlayerState>
+		new PlayerState
 		{
-			new PlayerState
-			{
-				Id = 0,
-				People = 2,
-				Environment = 2,
-				Technology = 1,
-				Cybernation = 0,
-				Cohesion = 5
-			},
-			new PlayerState
-			{
-				Id = 1,
-				People = 0,
-				Environment = 0,
-				Technology = 2,
-				Cybernation = 0,
-				Cohesion = 5
-			}
-		};
-		
-		popup.Hide();
-		banner.Hide();
-		
-		targetPlayerPopup = GetNode<TargetPlayerPopup>("../UIMain/Popups/TargetPlayerPopup");
+			Id = 0,
+			People = 2,
+			Environment = 2,
+			Technology = 1,
+			Cybernation = 0,
+			Cohesion = 5
+		},
+		new PlayerState
+		{
+			Id = 1,
+			People = 0,
+			Environment = 0,
+			Technology = 2,
+			Cybernation = 0,
+			Cohesion = 5
+		}
+	};
 
-		targetPlayerPopup.OnTargetPlayerSelected += OnShiftPowerTargetSelected;
-		targetPlayerPopup.OnCancelled += OnTargetSelectionCancelled;
-
-		//StartTurn();
-	}
+	popup.Hide();
+	banner.Hide();
+	targetPlayerPopup.Hide();
+	connectPopup.Hide();
+}
 
 	public override void _UnhandledInput(InputEvent @event)
 {
@@ -123,11 +128,33 @@ public partial class EnvisionController : Node
 
 			popup.Hide();
 			targetPlayerPopup.Configure(players.Count, currentPlayer);
+			PopupOpened?.Invoke();
+
 			banner.ShowMessage("Choose a target player for Shift Power.", new Color("FDE68A"));
 			return;
 
 		case EnvisionAction.ComeTogether:
+			ApplyAction(player, action);
+			popup.Hide();
+			PopupClosed?.Invoke();
+
+			banner.ShowTemporaryMessage(
+				$"Player {currentPlayer + 1} chose: {action}",
+				2.0f,
+				new Color("7DD3FC")
+			);
+			return;
+
 		case EnvisionAction.Connect:
+			pendingAction = action;
+
+			popup.Hide();
+			connectPopup.Open(player);
+			PopupOpened?.Invoke();
+
+			banner.ShowMessage("Choose relationships for Connect.", new Color("FDE68A"));
+			return;
+
 		case EnvisionAction.SetCourse:
 		case EnvisionAction.Prepare:
 		case EnvisionAction.Steer:
@@ -135,7 +162,12 @@ public partial class EnvisionController : Node
 			ApplyAction(player, action);
 			popup.Hide();
 			PopupClosed?.Invoke();
-			banner.ShowTemporaryMessage($"Player {currentPlayer + 1} chose: {action}", 2.0f, new Color("7DD3FC"));
+
+			banner.ShowTemporaryMessage(
+				$"Player {currentPlayer + 1} chose: {action}",
+				2.0f,
+				new Color("7DD3FC")
+			);
 			return;
 	}
 }
@@ -171,6 +203,39 @@ public partial class EnvisionController : Node
 
 		banner.ShowMessage("Shift Power cancelled. Choose an action.", new Color("86EFAC"));
 	}
+	
+	private void OnConnectConfirmed(string spendType, string gainType)
+{
+	var player = players[currentPlayer];
+
+	if (spendType == "People") player.People -= 2;
+	if (spendType == "Environment") player.Environment -= 2;
+	if (spendType == "Technology") player.Technology -= 2;
+
+	if (gainType == "People") player.People += 1;
+	if (gainType == "Environment") player.Environment += 1;
+	if (gainType == "Technology") player.Technology += 1;
+
+	pendingAction = null;
+
+	PopupClosed?.Invoke();
+
+	banner.ShowTemporaryMessage(
+		$"Player {currentPlayer + 1} chose: Connect ({spendType} → {gainType})",
+		2.0f,
+		new Color("7DD3FC")
+	);
+}
+
+private void OnConnectCancelled()
+{
+	pendingAction = null;
+
+	popup.Show();
+	popup.UpdateButtons(players[currentPlayer]);
+
+	banner.ShowMessage("Connect cancelled. Choose an action.", new Color("86EFAC"));
+}
 
 	private void NextPlayer()
 	{

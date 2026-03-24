@@ -10,8 +10,8 @@
 [ext_resource type="PackedScene" path="res://scenes/main/components/PlayerDetailPopup.tscn" id="8_popup"]
 [ext_resource type="PackedScene" uid="uid://dk0xkvsyc2i24" path="res://scenes/Envison Phase/TargetPlayerPopup.tscn" id="9_2tpxt"]
 [ext_resource type="PackedScene" uid="uid://b2o8revucbudw" path="res://scenes/Envison Phase/ActionPopup.tscn" id="9_p5fgu"]
-[ext_resource type="Script" uid="uid://cg3asww6dtdma" path="res://scripts/Envision Phase/TargetPlayerPopup.cs" id="10_jsdfw"]
 [ext_resource type="PackedScene" uid="uid://bhdlqf462da0b" path="res://scenes/Envison Phase/StatusBanner.tscn" id="11_jsdfw"]
+[ext_resource type="PackedScene" uid="uid://dae2frs82vddc" path="res://scenes/Envison Phase/ConnectPopup.tscn" id="11_tck0d"]
 [ext_resource type="Script" uid="uid://cm1cjxdsog62k" path="res://scripts/Envision Phase/EnvisionController.cs" id="12_p5fgu"]
 
 [node name="Main" type="Control" unique_id=683993586]
@@ -112,7 +112,9 @@ offset_left = 959.0
 offset_top = 535.0
 offset_right = 959.0
 offset_bottom = 535.0
-script = ExtResource("10_jsdfw")
+
+[node name="ConnectPopup" parent="UIMain/Popups" unique_id=601047054 instance=ExtResource("11_tck0d")]
+layout_mode = 1
 
 [node name="ActionPopup" parent="UIMain" unique_id=104429918 instance=ExtResource("9_p5fgu")]
 visible = true

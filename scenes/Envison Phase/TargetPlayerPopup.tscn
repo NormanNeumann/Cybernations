@@ -1,5 +1,11 @@
 [gd_scene format=3 uid="uid://dk0xkvsyc2i24"]
 
+[ext_resource type="StyleBox" uid="uid://l31nahsw02wk" path="res://theme/normal.tres" id="1_xtlh6"]
+[ext_resource type="Script" uid="uid://cg3asww6dtdma" path="res://scripts/Envision Phase/TargetPlayerPopup.cs" id="1_y2cqv"]
+[ext_resource type="StyleBox" uid="uid://e8g53r5qtwj5" path="res://theme/presse.tres" id="2_y2cqv"]
+[ext_resource type="StyleBox" uid="uid://tyma63kw6hll" path="res://theme/hover.tres" id="3_ote36"]
+[ext_resource type="StyleBox" uid="uid://cofyuo7j3w7ap" path="res://theme/disable.tres" id="4_qk6fx"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1sub7"]
 content_margin_left = 8.0
 content_margin_top = 8.0
@@ -12,42 +18,6 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.3019608, 0.6392157, 1, 1)
 corner_detail = 16
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_43mp2"]
-bg_color = Color(0.1764706, 0.21568628, 0.28235295, 0.78431374)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.30588236, 0.65882355, 0.87058824, 1)
-corner_detail = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cvn43"]
-bg_color = Color(0.12156863, 0.37254903, 0.54509807, 0.78431374)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
-corner_detail = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ha6so"]
-bg_color = Color(0.23137255, 0.2901961, 0.3882353, 0.78431374)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.49019608, 0.827451, 0.9882353, 1)
-corner_detail = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xtlh6"]
-bg_color = Color(0.29411766, 0.33333334, 0.3882353, 0.78431374)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.41960785, 0.44705883, 0.5019608, 1)
-corner_detail = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y2cqv"]
 bg_color = Color(0.1764706, 0.21568628, 0.28235295, 0.78431374)
@@ -133,6 +103,7 @@ corner_detail = 10
 [node name="TargetPlayerPopup" type="Control" unique_id=1956891871]
 layout_mode = 3
 anchors_preset = 0
+script = ExtResource("1_y2cqv")
 
 [node name="DimBackground" type="ColorRect" parent="." unique_id=1516755873]
 layout_mode = 1
@@ -199,10 +170,10 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_43mp2")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_cvn43")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ha6so")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_xtlh6")
+theme_override_styles/normal = ExtResource("1_xtlh6")
+theme_override_styles/pressed = ExtResource("2_y2cqv")
+theme_override_styles/hover = ExtResource("3_ote36")
+theme_override_styles/disabled = ExtResource("4_qk6fx")
 text = "	Player 1"
 
 [node name="Player2Button" type="Button" parent="PopupPanel/MarginContainer/RootVBox/PlayerButtonsVBox" unique_id=1448669384]
