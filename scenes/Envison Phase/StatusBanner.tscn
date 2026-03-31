@@ -21,6 +21,7 @@ offset_right = -1920.0
 offset_bottom = -1080.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(1.5, 1.5)
 script = ExtResource("1_mcj7n")
 
 [node name="BannerPanel" type="PanelContainer" parent="." unique_id=261766471]
