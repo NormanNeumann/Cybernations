@@ -296,6 +296,8 @@ offset_right = 63.5
 offset_bottom = 161.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(1.5, 1.5)
+pivot_offset = Vector2(260, 210)
 theme_override_styles/panel = SubResource("StyleBoxFlat_2njpi")
 
 [node name="MarginContainer" type="MarginContainer" parent="PopupPanel" unique_id=1194880378]
@@ -341,7 +343,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_bb6w6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hn1df")
 theme_override_styles/hover = SubResource("StyleBoxFlat_q1kxy")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_sdh16")
-text = "Shift Power (1 People)"
+text = "Shift Power"
 
 [node name="ComeTogether" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=91239822]
 custom_minimum_size = Vector2(220, 52)
@@ -354,7 +356,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_j4ryj")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_iw3b0")
 theme_override_styles/hover = SubResource("StyleBoxFlat_g7wq1")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_mlxsy")
-text = "Come Together (1 Environment)"
+text = "Come Together"
 
 [node name="Connect" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=736697416]
 custom_minimum_size = Vector2(220, 52)
@@ -367,7 +369,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_8cacx")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8r7tm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_u7j7y")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_fxv4y")
-text = "Connect (2 Same)"
+text = "Connect"
 
 [node name="SetCourse" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=2101378663]
 custom_minimum_size = Vector2(220, 52)
@@ -380,7 +382,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_gm4jt")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_17uyn")
 theme_override_styles/hover = SubResource("StyleBoxFlat_aij4n")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_4d75n")
-text = "Set Course (2 Tech)"
+text = "Set Course"
 
 [node name="Prepare" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=284823876]
 custom_minimum_size = Vector2(220, 52)
@@ -393,7 +395,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_xa61d")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_g245c")
 theme_override_styles/hover = SubResource("StyleBoxFlat_0y6sk")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_p1be4")
-text = "Prepare (2 People)"
+text = "Prepare"
 
 [node name="Steer" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=1416202209]
 custom_minimum_size = Vector2(220, 52)
@@ -406,7 +408,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hox15")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8a6r3")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ybq5g")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_j4ncg")
-text = "Steer (2 Environment)"
+text = "Steer"
 
 [node name="Pass" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ButtonsGrid" unique_id=1408731475]
 custom_minimum_size = Vector2(220, 52)
@@ -419,7 +421,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_w8ard")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_nsv65")
 theme_override_styles/hover = SubResource("StyleBoxFlat_c3v6a")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_4hfsc")
-text = "Pass (Free)"
+text = "Pass"
 
 [node name="ActionDescription" type="Label" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1499431801]
 custom_minimum_size = Vector2(0, 56)

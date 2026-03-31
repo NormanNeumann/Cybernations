@@ -49,6 +49,8 @@ offset_right = 234.0
 offset_bottom = 210.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(1.5, 1.5)
+pivot_offset = Vector2(230, 210)
 theme_override_styles/panel = SubResource("StyleBoxFlat_urddg")
 
 [node name="MarginContainer" type="MarginContainer" parent="PopupPanel" unique_id=770850754]

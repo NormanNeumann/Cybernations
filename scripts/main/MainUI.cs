@@ -22,6 +22,7 @@ public partial class MainUI : Control
 	private EnvisionController _envisionController = null!;
 	private Button _colorblindToggleButton = null!;
 	private CanvasLayer _colorblindOverlay = null!;
+	private readonly List<StackView> _stackViews = new();
 
 	private readonly PlayerData[] _players =
 	{
@@ -85,6 +86,7 @@ public partial class MainUI : Control
 
 		BuildPlayerColumn(playerPanel);
 		BuildHexCluster(gameBoard);
+		UpdateBoardColors();
 	}
 	
 	private void DimBackground()
@@ -129,7 +131,7 @@ private void RestoreBackground()
 	
 	private void OnColorblindTogglePressed()
 {
-	AccessibilityManager.ToggleColorblindMode();
+	AccessibilityManager.CycleMode();
 }
 
 private void UpdateAccessibilityUi()
@@ -137,16 +139,64 @@ private void UpdateAccessibilityUi()
 	if (_colorblindToggleButton == null)
 		return;
 
-	bool enabled = AccessibilityManager.IsColorblindMode;
+	_colorblindToggleButton.Text = AccessibilityManager.CurrentMode switch
+	{
+		AccessibilityMode.Off => "Accessibility: Off",
+		AccessibilityMode.GlobalFilter => "Accessibility: Global Filter",
+		AccessibilityMode.BoardRecolor => "Accessibility: Board Recolor",
+		_ => "Accessibility: Off"
+	};
 
-	_colorblindToggleButton.Text = enabled
-		? "Colorblind Mode: On"
-		: "Colorblind Mode: Off";
-
-	if (_colorblindOverlay != null)
-		_colorblindOverlay.Visible = enabled;
+	UpdateGlobalFilter();
+	UpdateBoardColors();
 }
 
+private void UpdateGlobalFilter()
+{
+	if (_colorblindOverlay == null)
+		return;
+
+	_colorblindOverlay.Visible = AccessibilityManager.IsGlobalFilterEnabled;
+}
+
+private void UpdateBoardColors()
+{
+	foreach (var stackView in _stackViews)
+	{
+		if (stackView == null)
+			continue;
+
+		if (!stackView.HasMeta("base_type"))
+			continue;
+
+		string baseType = stackView.GetMeta("base_type").AsString();
+		string overlayType = stackView.HasMeta("overlay_type")
+			? stackView.GetMeta("overlay_type").AsString()
+			: "None";
+
+		if (!AccessibilityManager.IsBoardRecolorEnabled)
+		{
+			stackView.ApplyAccessibilityColor(null, null);
+			continue;
+		}
+
+		Color? baseOverride = baseType switch
+		{
+			"Wilds" => GameColors.ColorblindWilds,
+			"Wasted" => GameColors.ColorblindWastes,
+			_ => null
+		};
+
+		Color? overlayOverride = overlayType switch
+		{
+			"Human" => GameColors.ColorblindHuman,
+			"Tech" => GameColors.ColorblindTech,
+			_ => null
+		};
+
+		stackView.ApplyAccessibilityColor(baseOverride, overlayOverride);
+	}
+}
 	//private void BindEnvisionPhaseSignals()
 	//{
 		//_envisionPhasePanel.ShiftPowerPressed += OnShiftPowerPressed;

@@ -2,13 +2,25 @@ using System;
 
 public static class AccessibilityManager
 {
-	public static bool IsColorblindMode { get; private set; } = false;
+	public static AccessibilityMode CurrentMode { get; private set; } = AccessibilityMode.Off;
 
 	public static event Action? OnAccessibilityChanged;
 
-	public static void ToggleColorblindMode()
+	public static void CycleMode()
 	{
-		IsColorblindMode = !IsColorblindMode;
+		CurrentMode = CurrentMode switch
+		{
+			AccessibilityMode.Off => AccessibilityMode.GlobalFilter,
+			AccessibilityMode.GlobalFilter => AccessibilityMode.BoardRecolor,
+			_ => AccessibilityMode.Off
+		};
+
 		OnAccessibilityChanged?.Invoke();
 	}
+
+	public static bool IsGlobalFilterEnabled =>
+		CurrentMode == AccessibilityMode.GlobalFilter;
+
+	public static bool IsBoardRecolorEnabled =>
+		CurrentMode == AccessibilityMode.BoardRecolor;
 }

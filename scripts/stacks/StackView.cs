@@ -23,6 +23,8 @@ public partial class StackView : Node2D
 	private readonly Color _highlightOuterColor = Color.FromHtml("#EEF55D");
 	private readonly Color _highlightInnerColor = Color.FromHtml("#E2C54D");
 	private readonly Color _highlightConflictColor = Color.FromHtml("#F82D23");
+	private Color? _accessibilityBaseColorOverride = null;
+	private Color? _accessibilityOverlayColorOverride = null;
 
 	public StackBaseKind BaseKind { get; private set; } = StackBaseKind.Wilds;
 	public StackOverlayKind OverlayKind { get; private set; } = StackOverlayKind.None;
@@ -66,7 +68,8 @@ public partial class StackView : Node2D
 			return;
 		}
 
-		var baseColor = BaseKind == StackBaseKind.Wilds ? _wildsColor : _wastedColor;
+		var defaultBaseColor = BaseKind == StackBaseKind.Wilds ? _wildsColor : _wastedColor;
+		var baseColor = _accessibilityBaseColorOverride ?? defaultBaseColor;
 		DrawPolygon(BuildRegularHexPolygon(OuterSide, center), new[] { _inkColor });
 		DrawPolygon(BuildRegularHexPolygon(InnerSide, center), new[] { baseColor });
 
@@ -75,7 +78,9 @@ public partial class StackView : Node2D
 			return;
 		}
 
-		var overlayColor = OverlayKind == StackOverlayKind.Human ? _humanColor : _techColor;
+		var defaultOverlayColor = OverlayKind == StackOverlayKind.Human ? _humanColor : _techColor;
+		var overlayColor = _accessibilityOverlayColorOverride ?? defaultOverlayColor;
+
 		DrawPolygon(BuildRegularHexPolygon(OverlayOuterSide, center), new[] { _inkColor });
 		DrawPolygon(BuildRegularHexPolygon(OverlayInnerSide, center), new[] { overlayColor });
 	}
@@ -100,4 +105,11 @@ public partial class StackView : Node2D
 			new Vector2(center.X + halfSide, center.Y - halfHeight),
 		};
 	}
+	
+	public void ApplyAccessibilityColor(Color? baseColorOverride, Color? overlayColorOverride = null)
+{
+	_accessibilityBaseColorOverride = baseColorOverride;
+	_accessibilityOverlayColorOverride = overlayColorOverride;
+	QueueRedraw();
+}
 }
