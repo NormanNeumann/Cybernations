@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
 
 public interface IGameGateway
 {
-    event Action<IReadOnlyList<ChatMessageVm>>? ChatLogSynced;
+    event Action<string>? ServerPacketReceived;
 
     void Initialize();
     void Poll();
-    void SendChatMessage(string sender, string content);
-    void NotifyPlayerDetailOpened(int slot);
+    void SendPacket(string packetJson);
     void Shutdown();
 }
