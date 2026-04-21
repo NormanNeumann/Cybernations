@@ -11,50 +11,19 @@ public partial class PlayerView : Control
     private readonly Color _passBubbleColor = Color.FromHtml("#D8D3CB");
     private readonly Color _passTextColor = Color.FromHtml("#61F41E");
 
-    [Export]
-    public int Slot { get; set; } = 1;
+    private int _slot;
+    private string _progress = "0.0%";
+    private bool _isPassing;
 
-    [Export]
-    public string Progress { get; set; } = "0.0%";
-
-    [Export]
-    public bool IsPassing { get; set; }
-
-    private Panel _avatarPanel = null!;
     private Label _slotLabel = null!;
-    private Button _clickArea = null!;
-    private Panel _passBubble = null!;
-    private Label _passLabel = null!;
     private Label _progressLabel = null!;
-
-    public override void _Ready()
-    {
-        MouseFilter = MouseFilterEnum.Pass;
-
-        _avatarPanel = GetNode<Panel>("AvatarPanel");
-        _slotLabel = GetNode<Label>("SlotLabel");
-        _clickArea = GetNode<Button>("ClickArea");
-        _passBubble = GetNode<Panel>("PassBubble");
-        _passLabel = GetNode<Label>("PassBubble/PassLabel");
-        _progressLabel = GetNode<Label>("ProgressLabel");
-
-        ApplyRoundedStyle(_avatarPanel, _avatarFillColor, 44, _inkColor, 2);
-        ApplyRoundedStyle(_passBubble, _passBubbleColor, 18);
-
-        _slotLabel.AddThemeColorOverride("font_color", _textColor);
-        _passLabel.AddThemeColorOverride("font_color", _passTextColor);
-        _progressLabel.AddThemeColorOverride("font_color", _textColor);
-
-        _clickArea.Pressed += () => EmitSignal(SignalName.PlayerSelected);
-
-        ApplyState();
-    }
+    private Panel _passBubble = null!;
 
     public void Configure(int slot, string progress, bool isPassing)
     {
-        Slot = slot;
-        Progress = progress;
-        IsPassing = isPassing;
+        _slot = slot;
+        _progress = progress;
+        _isPassing = isPassing;
 
         if (IsNodeReady())
         {
@@ -62,21 +31,59 @@ public partial class PlayerView : Control
         }
     }
 
-    private void ApplyState()
+    public override void _Ready()
     {
-        _slotLabel.Text = $"P{Slot}";
-        _progressLabel.Text = Progress;
-        _passBubble.Visible = IsPassing;
+        MouseFilter = MouseFilterEnum.Pass;
+        Size = new Vector2(180, 122);
+        CustomMinimumSize = Size;
+
+        var avatar = CreateRoundedPanel(new Vector2(0, 0), new Vector2(88, 88), _avatarFillColor, 44, _inkColor, 2);
+        AddChild(avatar);
+
+        _slotLabel = CreateTextLabel("P1", 22, _textColor, new Vector2(0, 26), new Vector2(88, 30), HorizontalAlignment.Center);
+        AddChild(_slotLabel);
+
+        var clickArea = new Button();
+        clickArea.Position = Vector2.Zero;
+        clickArea.Size = new Vector2(88, 88);
+        clickArea.Flat = true;
+        clickArea.Text = string.Empty;
+        clickArea.Modulate = new Color(1, 1, 1, 0);
+        clickArea.FocusMode = FocusModeEnum.None;
+        clickArea.MouseDefaultCursorShape = CursorShape.PointingHand;
+        clickArea.Pressed += () => EmitSignal(SignalName.PlayerSelected);
+        AddChild(clickArea);
+
+        _passBubble = CreateRoundedPanel(new Vector2(96, 2), new Vector2(76, 40), _passBubbleColor, 18);
+        _passBubble.AddChild(CreateTextLabel("PASS", 16, _passTextColor, new Vector2(0, 8), new Vector2(76, 22), HorizontalAlignment.Center));
+        AddChild(_passBubble);
+
+        _progressLabel = CreateTextLabel("0.0%", 16, _textColor, new Vector2(0, 92), new Vector2(88, 22), HorizontalAlignment.Center);
+        AddChild(_progressLabel);
+
+        ApplyState();
     }
 
-    private static void ApplyRoundedStyle(
-        Panel panel,
+    private void ApplyState()
+    {
+        _slotLabel.Text = $"P{_slot}";
+        _progressLabel.Text = _progress;
+        _passBubble.Visible = _isPassing;
+    }
+
+    private static Panel CreateRoundedPanel(
+        Vector2 position,
+        Vector2 size,
         Color fillColor,
         int radius,
         Color? borderColor = null,
         int borderWidth = 0
     )
     {
+        var panel = new Panel();
+        panel.Position = position;
+        panel.Size = size;
+
         var style = new StyleBoxFlat();
         style.BgColor = fillColor;
         style.CornerRadiusTopLeft = radius;
@@ -94,5 +101,26 @@ public partial class PlayerView : Control
         }
 
         panel.AddThemeStyleboxOverride("panel", style);
+        return panel;
+    }
+
+    private static Label CreateTextLabel(
+        string text,
+        int fontSize,
+        Color fontColor,
+        Vector2 position,
+        Vector2 size,
+        HorizontalAlignment alignment
+    )
+    {
+        var label = new Label();
+        label.Text = text;
+        label.Position = position;
+        label.Size = size;
+        label.HorizontalAlignment = alignment;
+        label.VerticalAlignment = VerticalAlignment.Center;
+        label.AddThemeFontSizeOverride("font_size", fontSize);
+        label.AddThemeColorOverride("font_color", fontColor);
+        return label;
     }
 }
