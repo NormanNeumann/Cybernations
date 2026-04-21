@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene format=3 uid="uid://dxl5r2i0steve"]
 
 [ext_resource type="Script" uid="uid://skhsps5q0fnf" path="res://scripts/main/MainUI.cs" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/main/components/NationLevelBadge.tscn" id="2_nation"]
@@ -8,8 +8,19 @@
 [ext_resource type="PackedScene" path="res://scenes/main/components/InfoSummaryPanel.tscn" id="6_info"]
 [ext_resource type="PackedScene" path="res://scenes/main/components/ChatPanel.tscn" id="7_chat"]
 [ext_resource type="PackedScene" path="res://scenes/main/components/PlayerDetailPopup.tscn" id="8_popup"]
+[ext_resource type="PackedScene" uid="uid://dk0xkvsyc2i24" path="res://scenes/Envison Phase/TargetPlayerPopup.tscn" id="9_2tpxt"]
+[ext_resource type="PackedScene" uid="uid://b2o8revucbudw" path="res://scenes/Envison Phase/ActionPopup.tscn" id="9_p5fgu"]
+[ext_resource type="PackedScene" uid="uid://bhdlqf462da0b" path="res://scenes/Envison Phase/StatusBanner.tscn" id="11_jsdfw"]
+[ext_resource type="PackedScene" uid="uid://dae2frs82vddc" path="res://scenes/Envison Phase/ConnectPopup.tscn" id="11_tck0d"]
+[ext_resource type="PackedScene" uid="uid://dnh63ucfqebif" path="res://scenes/Envison Phase/SetCoursePopup.tscn" id="11_u8lgh"]
+[ext_resource type="Script" uid="uid://clbkw0ahke5k6" path="res://scripts/Envision Phase/SetCoursePopup.cs" id="12_hjnkw"]
+[ext_resource type="Script" uid="uid://cm1cjxdsog62k" path="res://scripts/Envision Phase/EnvisionController.cs" id="12_p5fgu"]
+[ext_resource type="PackedScene" uid="uid://bbs20auwumjko" path="res://scenes/Envison Phase/SteerPopup.tscn" id="13_hjnkw"]
+[ext_resource type="Script" uid="uid://fq4144myvkcr" path="res://scripts/Envision Phase/SteerPopup.cs" id="14_rikml"]
+[ext_resource type="PackedScene" uid="uid://mov4atk5umi5" path="res://scenes/Envison Phase/FeedbackTokenPopup.tscn" id="15_vc03v"]
+[ext_resource type="Script" uid="uid://cxmu7y1wveyx6" path="res://scripts/Envision Phase/FeedbackTokenPopup.cs" id="16_grv7h"]
 
-[node name="Main" type="Control"]
+[node name="Main" type="Control" unique_id=683993586]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,7 +29,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1958621144]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,13 +38,13 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.77, 0.89, 0.93, 1)
 
-[node name="World" type="Node2D" parent="."]
+[node name="World" type="Node2D" parent="." unique_id=855437380]
 
-[node name="GameBoard" type="Node2D" parent="World"]
+[node name="GameBoard" type="Node2D" parent="World" unique_id=299022632]
 
-[node name="PeopleTokenLayer" type="Node2D" parent="World"]
+[node name="PeopleTokenLayer" type="Node2D" parent="World" unique_id=596154261]
 
-[node name="UIMain" type="Control" parent="."]
+[node name="UIMain" type="Control" parent="." unique_id=716203711]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -41,49 +52,53 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PlayerPanel" type="VBoxContainer" parent="UIMain"]
+[node name="PlayerPanel" type="VBoxContainer" parent="UIMain" unique_id=477650712]
 layout_mode = 0
 offset_right = 180.0
 offset_bottom = 760.0
 
-[node name="GlobalButtons" type="Control" parent="UIMain"]
-layout_mode = 0
+[node name="GlobalButtons" type="Control" parent="UIMain" unique_id=605907766]
+anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="NationLevelBadge" parent="UIMain" instance=ExtResource("2_nation")]
-layout_mode = 0
+[node name="NationLevelBadge" parent="UIMain" unique_id=1312492918 instance=ExtResource("2_nation")]
+anchors_preset = 0
 offset_left = 92.0
 offset_top = 784.0
 offset_right = 204.0
 offset_bottom = 924.0
 
-[node name="TurnDots" parent="UIMain" instance=ExtResource("3_turn")]
-layout_mode = 0
+[node name="TurnDots" parent="UIMain" unique_id=480346844 instance=ExtResource("3_turn")]
+anchors_preset = 0
 offset_left = 76.0
 offset_top = 952.0
 offset_right = 226.0
 offset_bottom = 1050.0
 
-[node name="ResourceTracks" parent="UIMain" instance=ExtResource("4_tracks")]
-layout_mode = 0
+[node name="ResourceTracks" parent="UIMain" unique_id=1378119161 instance=ExtResource("4_tracks")]
+anchors_preset = 0
 offset_left = 245.0
 offset_top = 800.0
 offset_right = 1255.0
 offset_bottom = 1040.0
 
-[node name="TeamGoalPanel" parent="UIMain" instance=ExtResource("5_team_goal")]
+[node name="TeamGoalPanel" parent="UIMain" unique_id=1407225040 instance=ExtResource("5_team_goal")]
 layout_mode = 1
 mouse_filter = 2
 
-[node name="InfoSummaryPanel" parent="UIMain" instance=ExtResource("6_info")]
-layout_mode = 0
+[node name="InfoSummaryPanel" parent="UIMain" unique_id=1750846276 instance=ExtResource("6_info")]
+anchors_preset = 0
 offset_left = 1345.0
 offset_top = 296.0
 offset_right = 1845.0
 offset_bottom = 588.0
 
-[node name="ChatPanel" parent="UIMain" instance=ExtResource("7_chat")]
+[node name="ChatPanel" parent="UIMain" unique_id=95349037 instance=ExtResource("7_chat")]
+layout_mode = 1
+mouse_filter = 2
+
+[node name="Popups" type="Control" parent="UIMain" unique_id=116314278]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -92,7 +107,48 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Popups" type="Control" parent="UIMain"]
+[node name="PlayerDetailPopup" parent="UIMain/Popups" unique_id=852932254 instance=ExtResource("8_popup")]
+layout_mode = 1
+mouse_filter = 2
+
+[node name="TargetPlayerPopup" parent="UIMain/Popups" unique_id=1956891871 instance=ExtResource("9_2tpxt")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 959.0
+offset_top = 535.0
+offset_right = 959.0
+offset_bottom = 535.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="ConnectPopup" parent="UIMain/Popups" unique_id=601047054 instance=ExtResource("11_tck0d")]
+layout_mode = 1
+
+[node name="SetCoursePopup" parent="UIMain/Popups" unique_id=1840727800 instance=ExtResource("11_u8lgh")]
+layout_mode = 1
+script = ExtResource("12_hjnkw")
+
+[node name="SteerPopup" parent="UIMain/Popups" unique_id=364253347 instance=ExtResource("13_hjnkw")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 964.0
+offset_top = 539.0
+offset_right = 964.0
+offset_bottom = 539.0
+grow_horizontal = 1
+grow_vertical = 1
+script = ExtResource("14_rikml")
+
+[node name="FeedbackTokenPopup" parent="UIMain/Popups" unique_id=505049240 instance=ExtResource("15_vc03v")]
+layout_mode = 1
+script = ExtResource("16_grv7h")
+
+[node name="ActionPopup" parent="UIMain" unique_id=104429918 instance=ExtResource("9_p5fgu")]
+visible = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -104,7 +160,8 @@ offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PlayerDetailPopup" parent="UIMain/Popups" instance=ExtResource("8_popup")]
+[node name="StatusBanner" parent="UIMain" unique_id=1519244184 instance=ExtResource("11_jsdfw")]
+custom_minimum_size = Vector2(0, 0)
 layout_mode = 1
 anchors_preset = 10
 anchor_bottom = 0.0
@@ -135,4 +192,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-visible = false
+color = Color(0.45181078, 0.78882223, 0.99069196, 0.39215687)
