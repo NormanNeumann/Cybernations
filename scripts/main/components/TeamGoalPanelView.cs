@@ -79,6 +79,12 @@ public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
         _dropdownPanel.Visible = visible;
     }
 
+    public void SetPreview(string title, string description)
+    {
+        _previewTitleLabel.Text = title;
+        _previewBodyLabel.Text = description;
+    }
+
     public void SetPopupHost(Control popupHost)
     {
         _popupHost = popupHost;
@@ -117,14 +123,13 @@ public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
     {
         ApplyRoundedStyle(_previewPanel, Color.FromHtml("#D7D7D7"), 0);
         _previewPanel.ClipContents = true;
-
-        _previewTitleLabel.Text = "Team Goal";
         _previewTitleLabel.AddThemeColorOverride("font_color", _textColor);
-
-        _previewBodyLabel.Text =
-            "Shared objective for every player:\n" +
-            "Stabilize the board, raise nation level, and stop conflict from shrinking the usable tracks.";
         _previewBodyLabel.AddThemeColorOverride("font_color", _textColor);
+        SetPreview(
+            "Team Goal",
+            "Shared objective for every player:\n" +
+            "Stabilize the board, raise nation level, and stop conflict from shrinking the usable tracks."
+        );
     }
 
     private void BuildDropdownSections()

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 
-public partial class HiveBoardView : Node2D
+public partial class HiveBoardView : Node2D, IHiveBoardView
 {
     [Export]
     public PackedScene? TileScene { get; set; }
@@ -142,6 +142,47 @@ public partial class HiveBoardView : Node2D
         return _tileViews.Count;
     }
 
+    public void ApplyTiles(IReadOnlyList<BoardTileVm> tiles)
+    {
+        foreach (var tile in tiles)
+        {
+            if (!TryConfigureTile(
+                    tile.TileIndex,
+                    ToStackTileKind(tile.DownType),
+                    tile.UpType.HasValue ? ToStackTileKind(tile.UpType.Value) : null,
+                    tile.ConflictHighlight))
+            {
+                continue;
+            }
+
+            if (!TryGetTile(tile.TileIndex, out var tileView))
+            {
+                continue;
+            }
+
+            tileView.ClearAllEdgeObjects();
+            if (tile.Edges == null)
+            {
+                continue;
+            }
+
+            foreach (var edge in tile.Edges)
+            {
+                var relationTexture = LoadTextureFromPath(edge.RelationTexturePath);
+                TrySetRelationTexture(tile.TileIndex, edge.EdgeIndex, relationTexture);
+
+                var pathTexture = LoadTextureFromPath(edge.PathTexturePath);
+                TrySetPath(
+                    tile.TileIndex,
+                    edge.EdgeIndex,
+                    ToStackPathKind(edge.PathKind),
+                    edge.RotationSteps,
+                    pathTexture
+                );
+            }
+        }
+    }
+
     private void BuildFixedBoard()
     {
         ClearTiles();
@@ -191,6 +232,45 @@ public partial class HiveBoardView : Node2D
         }
 
         return TileScene;
+    }
+
+    private static StackView.TileKind ToStackTileKind(BoardTileKind kind)
+    {
+        return kind switch
+        {
+            BoardTileKind.Wasted => StackView.TileKind.Wasted,
+            BoardTileKind.Human => StackView.TileKind.Human,
+            BoardTileKind.Technology => StackView.TileKind.Technology,
+            _ => StackView.TileKind.Wilds,
+        };
+    }
+
+    private static StackView.PathKind ToStackPathKind(BoardPathKind kind)
+    {
+        return kind switch
+        {
+            BoardPathKind.TypeA => StackView.PathKind.TypeA,
+            BoardPathKind.TypeB => StackView.PathKind.TypeB,
+            BoardPathKind.TypeC => StackView.PathKind.TypeC,
+            BoardPathKind.TypeD => StackView.PathKind.TypeD,
+            BoardPathKind.TypeE => StackView.PathKind.TypeE,
+            _ => StackView.PathKind.None,
+        };
+    }
+
+    private static Texture2D? LoadTextureFromPath(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return null;
+        }
+
+        if (!ResourceLoader.Exists(path))
+        {
+            return null;
+        }
+
+        return GD.Load<Texture2D>(path);
     }
 
     public readonly struct TilePlacement

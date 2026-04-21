@@ -16,6 +16,7 @@ public partial class MainUI : Control
         var teamGoalPanelView = GetNode<TeamGoalPanelView>("UIMain/TeamGoalPanel");
         var infoSummaryPanelView = GetNode<InfoSummaryPanelView>("UIMain/InfoSummaryPanel");
         var chatPanelView = GetNode<ChatPanelView>("UIMain/ChatPanel");
+        var hiveBoardView = GetNode<HiveBoardView>("World/GameBoard");
         var teamGoalPopupHost = GetNode<Control>("UIMain/Popups/TeamGoalPopupHost");
         var infoSummaryPopupHost = GetNode<Control>("UIMain/Popups/InfoSummaryPopupHost");
         var chatPopupHost = GetNode<Control>("UIMain/Popups/ChatPopupHost");
@@ -25,8 +26,17 @@ public partial class MainUI : Control
         infoSummaryPanelView.SetPopupHost(infoSummaryPopupHost);
         chatPanelView.SetPopupHost(chatPopupHost);
 
-        _gameGateway = new WebSocketGameGateway(ServerUrl);
-        _presenter = new MainUiPresenter(chatPanelView, teamGoalPanelView, _playerDetailPopupView, _gameGateway);
+        _gameGateway = ServerUrl.Trim().Length == 0
+            ? new LoopbackGameGateway()
+            : new WebSocketGameGateway(ServerUrl);
+        _presenter = new MainUiPresenter(
+            chatPanelView,
+            teamGoalPanelView,
+            infoSummaryPanelView,
+            hiveBoardView,
+            _playerDetailPopupView,
+            _gameGateway
+        );
         _presenter.Initialize();
         _playerPanelView.PlayerSelected += _presenter.OnPlayerSelected;
     }
