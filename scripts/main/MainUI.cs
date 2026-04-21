@@ -9,12 +9,24 @@ public partial class MainUI : Control
     private PlayerPanelView _playerPanelView = null!;
     private MainUiPresenter _presenter = null!;
     private IGameGateway _gameGateway = null!;
+    private EnvisionController? _envisionController;
+    private ColorRect _background = null!;
+    private ColorRect _colorblindFilter = null!;
+    private Button _colorblindToggleButton = null!;
+    private Color _backgroundBaseColor = Colors.White;
+    private bool _isDimmed;
 
     [Export]
     public string ServerUrl { get; set; } = "";
 
     public override void _Ready()
     {
+        _background = GetNode<ColorRect>("Background");
+        _backgroundBaseColor = _background.Color;
+        _colorblindFilter = GetNode<ColorRect>("ColorblindOverlay/Filter");
+        _colorblindToggleButton = GetNode<Button>("UIMain/ColorblindToggleButton");
+        _envisionController = GetNodeOrNull<EnvisionController>("EnvisionController");
+
         _playerPanelView = GetNode<PlayerPanelView>("UIMain/PlayerPanel");
         var teamGoalPanelView = GetNode<TeamGoalPanelView>("UIMain/TeamGoalPanel");
         var infoSummaryPanelView = GetNode<InfoSummaryPanelView>("UIMain/InfoSummaryPanel");
@@ -42,16 +54,30 @@ public partial class MainUI : Control
         );
         _presenter.Initialize();
         _playerPanelView.PlayerSelected += _presenter.OnPlayerSelected;
+
+        _colorblindToggleButton.Pressed += AccessibilityManager.CycleMode;
+        AccessibilityManager.OnAccessibilityChanged += UpdateAccessibilityUi;
+        UpdateAccessibilityUi();
+
+        if (_envisionController != null)
+        {
+            _envisionController.PopupOpened += DimBackground;
+            _envisionController.PopupClosed += RestoreBackground;
+        }
     }
 
 	public override void _ExitTree()
 	{
 		if (_envisionController != null)
 		{
-		AccessibilityManager.OnAccessibilityChanged -= UpdateAccessibilityUi;
-		_envisionController.PopupOpened -= DimBackground;
-		_envisionController.PopupClosed -= RestoreBackground;
+            _envisionController.PopupOpened -= DimBackground;
+            _envisionController.PopupClosed -= RestoreBackground;
 		}
+        AccessibilityManager.OnAccessibilityChanged -= UpdateAccessibilityUi;
+        if (_colorblindToggleButton != null)
+        {
+            _colorblindToggleButton.Pressed -= AccessibilityManager.CycleMode;
+        }
 		if (_presenter == null)
 		{
 			return;
@@ -73,5 +99,39 @@ public partial class MainUI : Control
 		}
 
         _gameGateway.Poll();
+    }
+
+    private void UpdateAccessibilityUi()
+    {
+        var modeText = AccessibilityManager.CurrentMode switch
+        {
+            AccessibilityMode.Off => "Off",
+            AccessibilityMode.GlobalFilter => "Global Filter",
+            AccessibilityMode.BoardRecolor => "Board Recolor",
+            _ => "Off"
+        };
+        _colorblindToggleButton.Text = $"Colorblind Mode: {modeText}";
+
+        if (AccessibilityManager.IsGlobalFilterEnabled)
+        {
+            _colorblindFilter.Visible = true;
+            _colorblindFilter.Color = new Color(1.0f, 0.9f, 0.75f, 0.22f);
+        }
+        else
+        {
+            _colorblindFilter.Visible = false;
+        }
+    }
+
+    private void DimBackground()
+    {
+        _isDimmed = true;
+        _background.Color = _backgroundBaseColor.Darkened(0.35f);
+    }
+
+    private void RestoreBackground()
+    {
+        _isDimmed = false;
+        _background.Color = _backgroundBaseColor;
     }
 }

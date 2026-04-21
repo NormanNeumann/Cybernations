@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://beo15r6nuffmp"]
 
 [ext_resource type="Script" uid="uid://skhsps5q0fnf" path="res://scripts/main/MainUI.cs" id="1_script"]
-[ext_resource type="Script" uid="uid://skhsps5q0fnf" path="res://scripts/main/MainUI.cs" id="1_script"]
+[ext_resource type="Script" path="res://scripts/Envision Phase/EnvisionController.cs" id="12_p5fgu"]
 [ext_resource type="PackedScene" path="res://scenes/main/components/NationLevelBadge.tscn" id="2_nation"]
 [ext_resource type="PackedScene" path="res://scenes/main/components/TurnDots.tscn" id="3_turn"]
 [ext_resource type="PackedScene" path="res://scenes/main/components/ResourceTracks.tscn" id="4_tracks"]
