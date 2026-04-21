@@ -1,4 +1,7 @@
 using Godot;
+//using Cybernations.Application.ViewModels;
+using Cybernations.Scripts.Main.Components;
+
 
 public partial class MainUI : Control
 {
@@ -41,12 +44,18 @@ public partial class MainUI : Control
         _playerPanelView.PlayerSelected += _presenter.OnPlayerSelected;
     }
 
-    public override void _ExitTree()
-    {
-        if (_presenter == null)
-        {
-            return;
-        }
+	public override void _ExitTree()
+	{
+		if (_envisionController != null)
+		{
+		AccessibilityManager.OnAccessibilityChanged -= UpdateAccessibilityUi;
+		_envisionController.PopupOpened -= DimBackground;
+		_envisionController.PopupClosed -= RestoreBackground;
+		}
+		if (_presenter == null)
+		{
+			return;
+		}
 
         if (_playerPanelView != null)
         {
@@ -56,12 +65,12 @@ public partial class MainUI : Control
         _gameGateway.Shutdown();
     }
 
-    public override void _Process(double delta)
-    {
-        if (_gameGateway == null)
-        {
-            return;
-        }
+	public override void _Process(double delta)
+	{
+		if (_gameGateway == null)
+		{
+			return;
+		}
 
         _gameGateway.Poll();
     }

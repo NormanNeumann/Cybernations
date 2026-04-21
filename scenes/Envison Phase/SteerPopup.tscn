@@ -1,0 +1,129 @@
+[gd_scene format=3 uid="uid://bbs20auwumjko"]
+
+[ext_resource type="StyleBox" uid="uid://jsp8g85n3qtn" path="res://theme/popup_panel.tres" id="1_6lfn5"]
+[ext_resource type="StyleBox" uid="uid://l31nahsw02wk" path="res://theme/normal.tres" id="2_o6sp4"]
+[ext_resource type="StyleBox" uid="uid://e8g53r5qtwj5" path="res://theme/presse.tres" id="3_jj7yn"]
+[ext_resource type="StyleBox" uid="uid://tyma63kw6hll" path="res://theme/hover.tres" id="4_w8ghx"]
+[ext_resource type="StyleBox" uid="uid://cofyuo7j3w7ap" path="res://theme/disable.tres" id="5_p3l4s"]
+
+[node name="SteerPopup" type="Control" unique_id=364253347]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DimBackground" type="ColorRect" parent="." unique_id=286436197]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="PopupPanel" type="PanelContainer" parent="." unique_id=530961083]
+custom_minimum_size = Vector2(460, 320)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -160.0
+offset_right = 230.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.5, 1.5)
+pivot_offset = Vector2(230, 160)
+theme_override_styles/panel = ExtResource("1_6lfn5")
+
+[node name="MarginContainer" type="MarginContainer" parent="PopupPanel" unique_id=224812157]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="RootVBox" type="VBoxContainer" parent="PopupPanel/MarginContainer" unique_id=120857821]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1299697680]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "Steer"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="SubtitleLabel" type="Label" parent="PopupPanel/MarginContainer/RootVBox" unique_id=662138379]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72156864, 0.75686276, 0.8, 1)
+theme_override_font_sizes/font_size = 15
+text = "Choose how to use Steer."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="OptionsVBox" type="VBoxContainer" parent="PopupPanel/MarginContainer/RootVBox" unique_id=273640947]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="AddReserveTokenButton" type="Button" parent="PopupPanel/MarginContainer/RootVBox/OptionsVBox" unique_id=1341218704]
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = ExtResource("2_o6sp4")
+theme_override_styles/pressed = ExtResource("3_jj7yn")
+theme_override_styles/hover = ExtResource("4_w8ghx")
+theme_override_styles/disabled = ExtResource("5_p3l4s")
+text = "Add 1 Feedback Token from Reserve to Bag"
+
+[node name="ManipulateTokensButton" type="Button" parent="PopupPanel/MarginContainer/RootVBox/OptionsVBox" unique_id=2138651698]
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = ExtResource("2_o6sp4")
+theme_override_styles/pressed = ExtResource("3_jj7yn")
+theme_override_styles/hover = ExtResource("4_w8ghx")
+theme_override_styles/disabled = ExtResource("5_p3l4s")
+text = "Manipulate Track and Bag Tokens"
+
+[node name="ActionsRow" type="HBoxContainer" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1312409986]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ConfirmButton" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ActionsRow" unique_id=1643425107]
+custom_minimum_size = Vector2(200, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = ExtResource("2_o6sp4")
+theme_override_styles/pressed = ExtResource("3_jj7yn")
+theme_override_styles/hover = ExtResource("4_w8ghx")
+theme_override_styles/disabled = ExtResource("5_p3l4s")
+text = "Confirm"
+
+[node name="CancelButton" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ActionsRow" unique_id=1564043054]
+custom_minimum_size = Vector2(200, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = ExtResource("2_o6sp4")
+theme_override_styles/pressed = ExtResource("3_jj7yn")
+theme_override_styles/hover = ExtResource("4_w8ghx")
+theme_override_styles/disabled = ExtResource("5_p3l4s")
+text = "Cancel"

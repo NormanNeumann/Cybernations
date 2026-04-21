@@ -1,0 +1,145 @@
+[gd_scene format=3 uid="uid://dnh63ucfqebif"]
+
+[ext_resource type="StyleBox" uid="uid://l31nahsw02wk" path="res://theme/normal.tres" id="1_3l4ka"]
+[ext_resource type="StyleBox" uid="uid://e8g53r5qtwj5" path="res://theme/presse.tres" id="2_lbqsv"]
+[ext_resource type="StyleBox" uid="uid://tyma63kw6hll" path="res://theme/hover.tres" id="3_yrxr1"]
+[ext_resource type="StyleBox" uid="uid://cofyuo7j3w7ap" path="res://theme/disable.tres" id="4_pffko"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_urddg"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.12156863, 0.14117648, 0.1882353, 0.78431374)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.30588236, 0.65882355, 0.87058824, 1)
+corner_detail = 16
+
+[node name="SetCoursePopup" type="Control" unique_id=1709417994]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DimBackground" type="ColorRect" parent="." unique_id=2024597896]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="PopupPanel" type="PanelContainer" parent="." unique_id=1873456431]
+custom_minimum_size = Vector2(460, 420)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -234.0
+offset_top = -210.0
+offset_right = 234.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.5, 1.5)
+pivot_offset = Vector2(230, 210)
+theme_override_styles/panel = SubResource("StyleBoxFlat_urddg")
+
+[node name="MarginContainer" type="MarginContainer" parent="PopupPanel" unique_id=770850754]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="RootVBox" type="VBoxContainer" parent="PopupPanel/MarginContainer" unique_id=673984692]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1468621342]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "Set Course"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="SubtitleLabel" type="Label" parent="PopupPanel/MarginContainer/RootVBox" unique_id=166363746]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72156864, 0.75686276, 0.8, 1)
+theme_override_font_sizes/font_size = 15
+text = "Choose how to use Set Course."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="OptionsVBox" type="VBoxContainer" parent="PopupPanel/MarginContainer/RootVBox" unique_id=123712453]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MovePeopleButton" type="Button" parent="PopupPanel/MarginContainer/RootVBox/OptionsVBox" unique_id=515239458]
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = ExtResource("1_3l4ka")
+theme_override_styles/pressed = ExtResource("2_lbqsv")
+theme_override_styles/hover = ExtResource("3_yrxr1")
+theme_override_styles/disabled = ExtResource("4_pffko")
+text = "Move People Token"
+
+[node name="RotateStackButton" type="Button" parent="PopupPanel/MarginContainer/RootVBox/OptionsVBox" unique_id=1639841068]
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = ExtResource("1_3l4ka")
+theme_override_styles/pressed = ExtResource("2_lbqsv")
+theme_override_styles/hover = ExtResource("3_yrxr1")
+theme_override_styles/disabled = ExtResource("4_pffko")
+text = "Rotate Stack"
+
+[node name="Control" type="Control" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1725939811]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+
+[node name="ActionsRow" type="HBoxContainer" parent="PopupPanel/MarginContainer/RootVBox" unique_id=1790771374]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ConfirmButton" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ActionsRow" unique_id=1841390463]
+custom_minimum_size = Vector2(200, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = ExtResource("1_3l4ka")
+theme_override_styles/pressed = ExtResource("2_lbqsv")
+theme_override_styles/hover = ExtResource("3_yrxr1")
+theme_override_styles/disabled = ExtResource("4_pffko")
+text = "Confirm"
+
+[node name="CancelButton" type="Button" parent="PopupPanel/MarginContainer/RootVBox/ActionsRow" unique_id=1566639092]
+custom_minimum_size = Vector2(200, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.627451, 0.627451, 0.627451, 1)
+theme_override_styles/normal = ExtResource("1_3l4ka")
+theme_override_styles/pressed = ExtResource("2_lbqsv")
+theme_override_styles/hover = ExtResource("3_yrxr1")
+theme_override_styles/disabled = ExtResource("4_pffko")
+text = "Cancel"

@@ -27,18 +27,18 @@ public partial class StackView : Node2D
     }
 
     // Compatibility aliases for existing callers.
-    public enum StackBaseKind
-    {
-        Wilds,
-        Wasted,
-    }
+	public enum StackBaseKind
+	{
+		Wilds,
+		Wasted,
+	}
 
-    public enum StackOverlayKind
-    {
-        None,
-        Human,
-        Tech,
-    }
+	public enum StackOverlayKind
+	{
+		None,
+		Human,
+		Tech,
+	}
 
     private readonly Color _inkColor = Color.FromHtml("#2B2726");
     private readonly Color _wildsColor = Color.FromHtml("#6CE575");
@@ -395,15 +395,15 @@ public partial class StackView : Node2D
         };
     }
 
-    private static Vector2 GetHexBounds(float sideLength)
-    {
-        return new Vector2(sideLength * 2.0f, Mathf.Sqrt(3.0f) * sideLength);
-    }
+	private static Vector2 GetHexBounds(float sideLength)
+	{
+		return new Vector2(sideLength * 2.0f, Mathf.Sqrt(3.0f) * sideLength);
+	}
 
-    private static Vector2[] BuildRegularHexPolygon(float sideLength, Vector2 center)
-    {
-        var halfHeight = Mathf.Sqrt(3.0f) * sideLength * 0.5f;
-        var halfSide = sideLength * 0.5f;
+	private static Vector2[] BuildRegularHexPolygon(float sideLength, Vector2 center)
+	{
+		var halfHeight = Mathf.Sqrt(3.0f) * sideLength * 0.5f;
+		var halfSide = sideLength * 0.5f;
 
         return
         [
