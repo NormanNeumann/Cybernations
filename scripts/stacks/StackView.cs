@@ -27,27 +27,29 @@ public partial class StackView : Node2D
     }
 
     // Compatibility aliases for existing callers.
-    public enum StackBaseKind
-    {
-        Wilds,
-        Wasted,
-    }
+	public enum StackBaseKind
+	{
+		Wilds,
+		Wasted,
+	}
 
-    public enum StackOverlayKind
-    {
-        None,
-        Human,
-        Tech,
-    }
+	public enum StackOverlayKind
+	{
+		None,
+		Human,
+		Tech,
+	}
 
-    private readonly Color _inkColor = Color.FromHtml("#2B2726");
-    private readonly Color _wildsColor = Color.FromHtml("#6CE575");
-    private readonly Color _wastedColor = Color.FromHtml("#D07D29");
-    private readonly Color _humanColor = Color.FromHtml("#C92CC1");
-    private readonly Color _technologyColor = Color.FromHtml("#3D29ED");
-    private readonly Color _highlightOuterColor = Color.FromHtml("#EEF55D");
-    private readonly Color _highlightInnerColor = Color.FromHtml("#E2C54D");
-    private readonly Color _highlightConflictColor = Color.FromHtml("#F82D23");
+	private readonly Color _inkColor = Color.FromHtml("#2B2726");
+	private readonly Color _wildsColor = Color.FromHtml("#6CE575");
+	private readonly Color _wastedColor = Color.FromHtml("#D07D29");
+	private readonly Color _humanColor = Color.FromHtml("#C92CC1");
+	private readonly Color _technologyColor = Color.FromHtml("#3D29ED");
+	private readonly Color _highlightOuterColor = Color.FromHtml("#EEF55D");
+	private readonly Color _highlightInnerColor = Color.FromHtml("#E2C54D");
+	private readonly Color _highlightConflictColor = Color.FromHtml("#F82D23");
+	private Color? _accessibilityBaseColorOverride = null;
+	private Color? _accessibilityOverlayColorOverride = null;
 
     [ExportGroup("Tile Stack")]
     [Export]
@@ -395,15 +397,15 @@ public partial class StackView : Node2D
         };
     }
 
-    private static Vector2 GetHexBounds(float sideLength)
-    {
-        return new Vector2(sideLength * 2.0f, Mathf.Sqrt(3.0f) * sideLength);
-    }
+	private static Vector2 GetHexBounds(float sideLength)
+	{
+		return new Vector2(sideLength * 2.0f, Mathf.Sqrt(3.0f) * sideLength);
+	}
 
-    private static Vector2[] BuildRegularHexPolygon(float sideLength, Vector2 center)
-    {
-        var halfHeight = Mathf.Sqrt(3.0f) * sideLength * 0.5f;
-        var halfSide = sideLength * 0.5f;
+	private static Vector2[] BuildRegularHexPolygon(float sideLength, Vector2 center)
+	{
+		var halfHeight = Mathf.Sqrt(3.0f) * sideLength * 0.5f;
+		var halfSide = sideLength * 0.5f;
 
         return
         [

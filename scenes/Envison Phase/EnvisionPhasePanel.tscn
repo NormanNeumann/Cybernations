@@ -1,0 +1,172 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://nnej20q84xhv" path="res://scripts/Envision Phase/EnvisionPhasePanelView.cs" id="1"]
+
+[node name="EnvisionPhasePanel" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="RootVBox" type="VBoxContainer" parent="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HeaderRow" type="HBoxContainer" parent="MarginContainer/RootVBox"]
+
+[node name="PhaseTitleLabel" type="Label" parent="MarginContainer/RootVBox/HeaderRow"]
+text = "Envision Phase"
+
+[node name="HeaderSpacer" type="Control" parent="MarginContainer/RootVBox/HeaderRow"]
+size_flags_horizontal = 3
+
+[node name="ActivePlayerLabel" type="Label" parent="MarginContainer/RootVBox/HeaderRow"]
+text = "Current Player: P1"
+
+[node name="PhaseHintLabel" type="Label" parent="MarginContainer/RootVBox/HeaderRow"]
+text = "Choose an action."
+
+[node name="ActionCostPanel" type="PanelContainer" parent="MarginContainer/RootVBox"]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/RootVBox/ActionCostPanel"]
+
+[node name="ActionCostTitleLabel" type="Label" parent="MarginContainer/RootVBox/ActionCostPanel/HBoxContainer"]
+text = "Action Cost"
+
+[node name="ActionCostValueLabel" type="Label" parent="MarginContainer/RootVBox/ActionCostPanel/HBoxContainer"]
+text = "None"
+
+[node name="FeedbackTrackPanel" type="PanelContainer" parent="MarginContainer/RootVBox"]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/RootVBox/FeedbackTrackPanel"]
+
+[node name="FeedbackTrackTitleLabel" type="Label" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer"]
+text = "Feedback Track"
+
+[node name="FeedbackSlotsRow" type="HBoxContainer" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer"]
+
+[node name="FeedbackSlot1" type="PanelContainer" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow"]
+custom_minimum_size = Vector2(48, 48)
+
+[node name="FeedbackSlot1Label" type="Label" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow/FeedbackSlot1"]
+text = "-"
+
+[node name="FeedbackSlot2" type="PanelContainer" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow"]
+custom_minimum_size = Vector2(48, 48)
+
+[node name="FeedbackSlot2Label" type="Label" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow/FeedbackSlot2"]
+text = "-"
+
+[node name="FeedbackSlot3" type="PanelContainer" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow"]
+custom_minimum_size = Vector2(48, 48)
+
+[node name="FeedbackSlot3Label" type="Label" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow/FeedbackSlot3"]
+text = "-"
+
+[node name="FeedbackSlot4" type="PanelContainer" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow"]
+custom_minimum_size = Vector2(48, 48)
+
+[node name="FeedbackSlot4Label" type="Label" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow/FeedbackSlot4"]
+text = "-"
+
+[node name="FeedbackSlot5" type="PanelContainer" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow"]
+custom_minimum_size = Vector2(48, 48)
+
+[node name="FeedbackSlot5Label" type="Label" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow/FeedbackSlot5"]
+text = "-"
+
+[node name="FeedbackSlot6" type="PanelContainer" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow"]
+custom_minimum_size = Vector2(48, 48)
+
+[node name="FeedbackSlot6Label" type="Label" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow/FeedbackSlot6"]
+text = "-"
+
+[node name="FeedbackSlot7" type="PanelContainer" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow"]
+custom_minimum_size = Vector2(48, 48)
+
+[node name="FeedbackSlot7Label" type="Label" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow/FeedbackSlot7"]
+text = "-"
+
+[node name="FeedbackSlot8" type="PanelContainer" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow"]
+custom_minimum_size = Vector2(48, 48)
+
+[node name="FeedbackSlot8Label" type="Label" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow/FeedbackSlot8"]
+text = "-"
+
+[node name="FeedbackSlot9" type="PanelContainer" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow"]
+custom_minimum_size = Vector2(48, 48)
+
+[node name="FeedbackSlot9Label" type="Label" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow/FeedbackSlot9"]
+text = "-"
+
+[node name="FeedbackSlot10" type="PanelContainer" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow"]
+custom_minimum_size = Vector2(48, 48)
+
+[node name="FeedbackSlot10Label" type="Label" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow/FeedbackSlot10"]
+text = "-"
+
+[node name="FeedbackSlot11" type="PanelContainer" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow"]
+custom_minimum_size = Vector2(48, 48)
+
+[node name="FeedbackSlot11Label" type="Label" parent="MarginContainer/RootVBox/FeedbackTrackPanel/VBoxContainer/FeedbackSlotsRow/FeedbackSlot11"]
+text = "-"
+
+[node name="ActionsPanel" type="PanelContainer" parent="MarginContainer/RootVBox"]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/RootVBox/ActionsPanel"]
+
+[node name="ActionsTitleLabel" type="Label" parent="MarginContainer/RootVBox/ActionsPanel/VBoxContainer"]
+text = "Actions"
+
+[node name="ActionButtonsGrid" type="GridContainer" parent="MarginContainer/RootVBox/ActionsPanel/VBoxContainer"]
+columns = 2
+
+[node name="ShiftPowerButton" type="Button" parent="MarginContainer/RootVBox/ActionsPanel/VBoxContainer/ActionButtonsGrid"]
+text = "Shift Power"
+
+[node name="ComeTogetherButton" type="Button" parent="MarginContainer/RootVBox/ActionsPanel/VBoxContainer/ActionButtonsGrid"]
+text = "Come Together"
+
+[node name="ConnectButton" type="Button" parent="MarginContainer/RootVBox/ActionsPanel/VBoxContainer/ActionButtonsGrid"]
+text = "Connect"
+
+[node name="SetCourseButton" type="Button" parent="MarginContainer/RootVBox/ActionsPanel/VBoxContainer/ActionButtonsGrid"]
+text = "Set Course"
+
+[node name="PrepareButton" type="Button" parent="MarginContainer/RootVBox/ActionsPanel/VBoxContainer/ActionButtonsGrid"]
+text = "Prepare"
+
+[node name="SteerButton" type="Button" parent="MarginContainer/RootVBox/ActionsPanel/VBoxContainer/ActionButtonsGrid"]
+text = "Steer"
+
+[node name="PassButton" type="Button" parent="MarginContainer/RootVBox/ActionsPanel/VBoxContainer/ActionButtonsGrid"]
+text = "Pass"
+
+[node name="ActionDescriptionLabel" type="Label" parent="MarginContainer/RootVBox/ActionsPanel/VBoxContainer"]
+text = "Hover or click an action to see details."
+
+[node name="StatusPanel" type="PanelContainer" parent="MarginContainer/RootVBox"]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/RootVBox/StatusPanel"]
+
+[node name="StatusTitleLabel" type="Label" parent="MarginContainer/RootVBox/StatusPanel/VBoxContainer"]
+text = "Status"
+
+[node name="StatusMessageLabel" type="Label" parent="MarginContainer/RootVBox/StatusPanel/VBoxContainer"]
+text = "Waiting for player action..."
