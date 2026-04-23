@@ -85,7 +85,14 @@ offset_bottom = 1040.0
 
 [node name="TeamGoalPanel" parent="UIMain" unique_id=1728275833 instance=ExtResource("5_team_goal")]
 layout_mode = 1
-anchors_preset = 0
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -576.0
+offset_top = 53.0
+offset_right = -576.0
+offset_bottom = 53.0
+grow_horizontal = 0
 mouse_filter = 2
 
 [node name="InfoSummaryPanel" parent="UIMain" unique_id=1551659619 instance=ExtResource("6_info")]
@@ -97,10 +104,16 @@ offset_bottom = 588.0
 
 [node name="ChatPanel" parent="UIMain" unique_id=1533829034 instance=ExtResource("7_chat")]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
+anchor_bottom = 0.5
+offset_left = -572.0
+offset_top = 60.0
+offset_right = -572.0
+offset_bottom = 60.0
+grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 2
 
