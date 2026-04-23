@@ -1,15 +1,11 @@
 using System;
-using Godot;
 using System.Collections.Generic;
+using Godot;
 
 public partial class ChatPanelView : Control, IChatPanelView
 {
-    private static readonly Vector2 LayoutShift = new Vector2(40.0f, 0.0f);
-    private static readonly Vector2 RootPosition = Shift(new Vector2(1305, 34));
-    private static readonly Vector2 CollapsedLogPosition = new Vector2(0.0f, 584.0f);
-    private static readonly Vector2 ExpandedLogPosition = Vector2.Zero;
-    private static readonly Vector2 InputPanelPosition = new Vector2(0.0f, 952.0f);
-    private static readonly Vector2 InputLinePosition = new Vector2(18.0f, 965.0f);
+    private static readonly Vector2 CollapsedLogPosition = Vector2.Zero;
+    private static readonly Vector2 ExpandedLogPosition = new Vector2(0.0f, -568.0f);
 
     private readonly Color _textColor = Color.FromHtml("#16222B");
 
@@ -18,6 +14,7 @@ public partial class ChatPanelView : Control, IChatPanelView
     private Panel _chatInputPanel = null!;
     private Label _chatBodyLabel = null!;
     private LineEdit _chatInputLineEdit = null!;
+    private Control? _popupHost;
     private bool _isExpanded;
 
     private readonly List<string> _chatMessages = [];
@@ -31,62 +28,21 @@ public partial class ChatPanelView : Control, IChatPanelView
     public override void _Ready()
     {
         MouseFilter = MouseFilterEnum.Ignore;
-        SetAnchorsPreset(LayoutPreset.TopLeft);
-        Position = RootPosition;
-        Size = new Vector2(500, 1008);
-        CustomMinimumSize = Size;
 
-        BuildChatLogPanel();
-        BuildInputPanel();
-        SetExpanded(false);
-    }
+        _chatLogPanel = GetNode<Panel>("ChatLogPanel");
+        _chatLogHitArea = GetNode<Button>("ChatLogHitArea");
+        _chatInputPanel = GetNode<Panel>("ChatInputPanel");
+        _chatBodyLabel = GetNode<Label>("ChatLogPanel/ChatBodyLabel");
+        _chatInputLineEdit = GetNode<LineEdit>("ChatInputLineEdit");
 
-    private void BuildChatLogPanel()
-    {
-        _chatLogPanel = CreateRoundedPanel(CollapsedLogPosition, new Vector2(500, 350), Color.FromHtml("#F1F1F1"), 0);
-        _chatLogPanel.ClipContents = true;
-        _chatLogPanel.ZIndex = 84;
-        AddChild(_chatLogPanel);
+        ApplyRoundedStyle(_chatLogPanel, Color.FromHtml("#F1F1F1"), 0);
+        ApplyRoundedStyle(_chatInputPanel, Color.FromHtml("#F1F1F1"), 16);
 
-        _chatLogPanel.AddChild(CreateTextLabel("Chat Log", 22, _textColor, new Vector2(18, 14), new Vector2(460, 32), HorizontalAlignment.Left));
-
-        _chatBodyLabel = new Label();
-        _chatBodyLabel.Position = new Vector2(18, 52);
-        _chatBodyLabel.Size = new Vector2(464, 280);
-        _chatBodyLabel.HorizontalAlignment = HorizontalAlignment.Left;
-        _chatBodyLabel.VerticalAlignment = VerticalAlignment.Top;
-        _chatBodyLabel.AutowrapMode = TextServer.AutowrapMode.WordSmart;
-        _chatBodyLabel.ClipText = false;
-        _chatBodyLabel.AddThemeFontSizeOverride("font_size", 14);
         _chatBodyLabel.AddThemeColorOverride("font_color", _textColor);
-        _chatLogPanel.AddChild(_chatBodyLabel);
-
-        _chatLogHitArea = new Button();
-        _chatLogHitArea.Position = _chatLogPanel.Position;
-        _chatLogHitArea.Size = _chatLogPanel.Size;
-        _chatLogHitArea.Flat = true;
-        _chatLogHitArea.Text = string.Empty;
-        _chatLogHitArea.Modulate = new Color(1, 1, 1, 0);
-        _chatLogHitArea.FocusMode = FocusModeEnum.None;
-        _chatLogHitArea.MouseDefaultCursorShape = CursorShape.PointingHand;
-        _chatLogHitArea.ZIndex = 85;
-        _chatLogHitArea.Pressed += () => ExpandRequested?.Invoke();
-        AddChild(_chatLogHitArea);
-
-        RefreshChatLogDisplay();
-    }
-
-    private void BuildInputPanel()
-    {
-        _chatInputPanel = CreateRoundedPanel(InputPanelPosition, new Vector2(500, 56), Color.FromHtml("#F1F1F1"), 16);
-        AddChild(_chatInputPanel);
-
-        _chatInputLineEdit = new LineEdit();
-        _chatInputLineEdit.Position = InputLinePosition;
-        _chatInputLineEdit.Size = new Vector2(464, 30);
-        _chatInputLineEdit.PlaceholderText = "Type a message...";
         _chatInputLineEdit.TextSubmitted += OnChatInputSubmitted;
-        AddChild(_chatInputLineEdit);
+        _chatLogHitArea.Pressed += () => ExpandRequested?.Invoke();
+
+        SetExpanded(false);
     }
 
     public void SetExpanded(bool expanded)
@@ -97,12 +53,49 @@ public partial class ChatPanelView : Control, IChatPanelView
         }
 
         _isExpanded = expanded;
-        _chatLogPanel.Position = expanded ? ExpandedLogPosition : CollapsedLogPosition;
-        _chatLogPanel.Size = expanded ? new Vector2(500, 934) : new Vector2(500, 350);
-        _chatLogHitArea.Position = _chatLogPanel.Position;
-        _chatLogHitArea.Size = _chatLogPanel.Size;
+        if (expanded)
+        {
+            MoveExpandedElementsToPopupHost();
+            _chatLogPanel.Size = new Vector2(500, 934);
+            _chatLogHitArea.Size = _chatLogPanel.Size;
+
+            if (_popupHost == null)
+            {
+                _chatLogPanel.Position = ExpandedLogPosition;
+                _chatLogHitArea.Position = _chatLogPanel.Position;
+            }
+            else
+            {
+                var expandedGlobalPosition = GlobalPosition + ExpandedLogPosition;
+                _chatLogPanel.GlobalPosition = expandedGlobalPosition;
+                _chatLogHitArea.GlobalPosition = expandedGlobalPosition;
+            }
+        }
+        else
+        {
+            RestoreExpandedElementsToLocalParent();
+            _chatLogPanel.Position = CollapsedLogPosition;
+            _chatLogPanel.Size = new Vector2(500, 350);
+            _chatLogHitArea.Position = _chatLogPanel.Position;
+            _chatLogHitArea.Size = _chatLogPanel.Size;
+        }
+
         _chatBodyLabel.Size = expanded ? new Vector2(464, 864) : new Vector2(464, 280);
         RefreshChatLogDisplay();
+    }
+
+    public void SetPopupHost(Control popupHost)
+    {
+        _popupHost = popupHost;
+        if (!_isExpanded)
+        {
+            return;
+        }
+
+        MoveExpandedElementsToPopupHost();
+        var expandedGlobalPosition = GlobalPosition + ExpandedLogPosition;
+        _chatLogPanel.GlobalPosition = expandedGlobalPosition;
+        _chatLogHitArea.GlobalPosition = expandedGlobalPosition;
     }
 
     public void SetMessages(IReadOnlyList<ChatMessageVm> messages)
@@ -327,17 +320,42 @@ public partial class ChatPanelView : Control, IChatPanelView
         return new Rect2(control.GlobalPosition, control.Size);
     }
 
-    private static Panel CreateRoundedPanel(
-        Vector2 position,
-        Vector2 size,
-        Color fillColor,
-        int radius
-    )
+    private void MoveExpandedElementsToPopupHost()
     {
-        var panel = new Panel();
-        panel.Position = position;
-        panel.Size = size;
+        if (_popupHost == null)
+        {
+            return;
+        }
 
+        if (_chatLogPanel.GetParent() != _popupHost)
+        {
+            _chatLogPanel.Reparent(_popupHost, true);
+        }
+
+        if (_chatLogHitArea.GetParent() != _popupHost)
+        {
+            _chatLogHitArea.Reparent(_popupHost, true);
+        }
+
+        _chatLogPanel.MoveToFront();
+        _chatLogHitArea.MoveToFront();
+    }
+
+    private void RestoreExpandedElementsToLocalParent()
+    {
+        if (_chatLogPanel.GetParent() != this)
+        {
+            _chatLogPanel.Reparent(this, true);
+        }
+
+        if (_chatLogHitArea.GetParent() != this)
+        {
+            _chatLogHitArea.Reparent(this, true);
+        }
+    }
+
+    private static void ApplyRoundedStyle(Panel panel, Color fillColor, int radius)
+    {
         var style = new StyleBoxFlat();
         style.BgColor = fillColor;
         style.CornerRadiusTopLeft = radius;
@@ -345,31 +363,5 @@ public partial class ChatPanelView : Control, IChatPanelView
         style.CornerRadiusBottomLeft = radius;
         style.CornerRadiusBottomRight = radius;
         panel.AddThemeStyleboxOverride("panel", style);
-        return panel;
-    }
-
-    private static Label CreateTextLabel(
-        string text,
-        int fontSize,
-        Color fontColor,
-        Vector2 position,
-        Vector2 size,
-        HorizontalAlignment alignment
-    )
-    {
-        var label = new Label();
-        label.Text = text;
-        label.Position = position;
-        label.Size = size;
-        label.HorizontalAlignment = alignment;
-        label.VerticalAlignment = VerticalAlignment.Center;
-        label.AddThemeFontSizeOverride("font_size", fontSize);
-        label.AddThemeColorOverride("font_color", fontColor);
-        return label;
-    }
-
-    private static Vector2 Shift(Vector2 position)
-    {
-        return position + LayoutShift;
     }
 }

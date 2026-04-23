@@ -3,11 +3,6 @@ using Godot;
 
 public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
 {
-    private static readonly Vector2 LayoutShift = new Vector2(40.0f, 0.0f);
-    private static readonly Vector2 RootPosition = Shift(new Vector2(1045, 34));
-    private static readonly Vector2 PreviewPosition = new Vector2(260.0f, 0.0f);
-    private static readonly Vector2 DropdownPosition = Vector2.Zero;
-
     private readonly Color _inkColor = Color.FromHtml("#2B2726");
     private readonly Color _textColor = Color.FromHtml("#16222B");
     private readonly Color _wildsColor = Color.FromHtml("#6CE575");
@@ -16,8 +11,15 @@ public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
     private readonly Color _techOverlayColor = Color.FromHtml("#3D29ED");
 
     private Panel _previewPanel = null!;
+    private Label _previewTitleLabel = null!;
+    private Label _previewBodyLabel = null!;
     private Button _hitArea = null!;
     private Panel _dropdownPanel = null!;
+    private VBoxContainer _sections = null!;
+    private Control? _popupHost;
+    private Node? _dropdownOriginalParent;
+    private int _dropdownOriginalIndex;
+    private Vector2 _dropdownLocalPosition = Vector2.Zero;
 
     public event Action? ToggleRequested;
     public event Action? CloseRequested;
@@ -42,70 +44,57 @@ public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
     public override void _Ready()
     {
         MouseFilter = MouseFilterEnum.Ignore;
-        SetAnchorsPreset(LayoutPreset.TopLeft);
-        Position = RootPosition;
-        Size = new Vector2(760, 900);
-        CustomMinimumSize = Size;
 
-        BuildPreviewPanel();
-        BuildDropdown();
-        SetDropdownVisible(false);
-    }
+        _previewPanel = GetNode<Panel>("PreviewPanel");
+        _previewTitleLabel = GetNode<Label>("PreviewPanel/Layout/TitleLabel");
+        _previewBodyLabel = GetNode<Label>("PreviewPanel/Layout/BodyLabel");
+        _hitArea = GetNode<Button>("PreviewHitArea");
+        _dropdownPanel = GetNode<Panel>("DropdownPanel");
+        _sections = GetNode<VBoxContainer>("DropdownPanel/Sections");
+        _dropdownOriginalParent = _dropdownPanel.GetParent();
+        _dropdownOriginalIndex = _dropdownPanel.GetIndex();
+        _dropdownLocalPosition = _dropdownPanel.Position;
 
-    private void BuildPreviewPanel()
-    {
-        _previewPanel = CreateInfoPanel(
-            PreviewPosition,
-            new Vector2(500, 232),
-            "Team Goal",
-            "Shared objective for every player:\nStabilize the board, raise nation level, and stop conflict from shrinking the usable tracks.",
-            Color.FromHtml("#D7D7D7"),
-            0
-        );
-        AddChild(_previewPanel);
-
-        _hitArea = new Button();
-        _hitArea.Position = _previewPanel.Position;
-        _hitArea.Size = _previewPanel.Size;
-        _hitArea.Flat = true;
-        _hitArea.Text = string.Empty;
-        _hitArea.Modulate = new Color(1, 1, 1, 0);
-        _hitArea.FocusMode = FocusModeEnum.None;
-        _hitArea.MouseDefaultCursorShape = CursorShape.PointingHand;
-        _hitArea.ZIndex = 82;
         _hitArea.Pressed += () => ToggleRequested?.Invoke();
-        AddChild(_hitArea);
-    }
 
-    private void BuildDropdown()
-    {
-        _dropdownPanel = CreateRoundedPanel(
-            DropdownPosition,
-            new Vector2(760, 900),
-            Colors.Transparent,
-            0
-        );
-        _dropdownPanel.Visible = false;
-        _dropdownPanel.ZIndex = 90;
-        _dropdownPanel.ClipContents = false;
-        AddChild(_dropdownPanel);
-
-        var sections = new VBoxContainer();
-        sections.AnchorRight = 1.0f;
-        sections.AnchorBottom = 1.0f;
-        sections.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-        sections.SizeFlagsVertical = SizeFlags.ExpandFill;
-        sections.AddThemeConstantOverride("separation", 14);
-        _dropdownPanel.AddChild(sections);
-
-        sections.AddChild(CreateDescriptionSection(new Vector2(760, 300)));
-        sections.AddChild(CreateMiniGridSection(new Vector2(760, 360)));
-        sections.AddChild(CreateConditionSection(new Vector2(760, 170)));
+        ConfigurePreview();
+        BuildDropdownSections();
+        SetDropdownVisible(false);
     }
 
     public void SetDropdownVisible(bool visible)
     {
+        if (visible)
+        {
+            MoveDropdownToPopupHost();
+            var popupPosition = GetDropdownPopupPosition();
+            _dropdownPanel.GlobalPosition = popupPosition;
+        }
+        else
+        {
+            RestoreDropdownToOriginalParent();
+            _dropdownPanel.Position = _dropdownLocalPosition;
+        }
+
         _dropdownPanel.Visible = visible;
+    }
+
+    public void SetPreview(string title, string description)
+    {
+        _previewTitleLabel.Text = title;
+        _previewBodyLabel.Text = description;
+    }
+
+    public void SetPopupHost(Control popupHost)
+    {
+        _popupHost = popupHost;
+        if (!_dropdownPanel.Visible)
+        {
+            return;
+        }
+
+        MoveDropdownToPopupHost();
+        _dropdownPanel.GlobalPosition = GetDropdownPopupPosition();
     }
 
     public override void _Input(InputEvent @event)
@@ -128,6 +117,31 @@ public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
 
         CloseRequested?.Invoke();
         GetViewport().SetInputAsHandled();
+    }
+
+    private void ConfigurePreview()
+    {
+        ApplyRoundedStyle(_previewPanel, Color.FromHtml("#D7D7D7"), 0);
+        _previewPanel.ClipContents = true;
+        _previewTitleLabel.AddThemeColorOverride("font_color", _textColor);
+        _previewBodyLabel.AddThemeColorOverride("font_color", _textColor);
+        SetPreview(
+            "Team Goal",
+            "Shared objective for every player:\n" +
+            "Stabilize the board, raise nation level, and stop conflict from shrinking the usable tracks."
+        );
+    }
+
+    private void BuildDropdownSections()
+    {
+        foreach (Node child in _sections.GetChildren())
+        {
+            child.QueueFree();
+        }
+
+        _sections.AddChild(CreateDescriptionSection(new Vector2(760, 300)));
+        _sections.AddChild(CreateMiniGridSection(new Vector2(760, 360)));
+        _sections.AddChild(CreateConditionSection(new Vector2(760, 170)));
     }
 
     private Panel CreateDescriptionSection(Vector2 size)
@@ -345,44 +359,6 @@ public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
         return wrapper;
     }
 
-    private static Panel CreateInfoPanel(
-        Vector2 position,
-        Vector2 size,
-        string title,
-        string body,
-        Color fillColor,
-        int radius
-    )
-    {
-        var panel = CreateRoundedPanel(position, size, fillColor, radius);
-        panel.ClipContents = true;
-
-        var layout = new VBoxContainer();
-        layout.Position = new Vector2(18, 14);
-        layout.Size = new Vector2(size.X - 36, size.Y - 28);
-        layout.AddThemeConstantOverride("separation", 10);
-        layout.ClipContents = true;
-        panel.AddChild(layout);
-
-        var titleLabel = new Label();
-        titleLabel.Text = title;
-        titleLabel.CustomMinimumSize = new Vector2(0, 30);
-        titleLabel.AddThemeFontSizeOverride("font_size", 22);
-        titleLabel.AddThemeColorOverride("font_color", Color.FromHtml("#16222B"));
-        layout.AddChild(titleLabel);
-
-        var bodyLabel = new Label();
-        bodyLabel.Text = body;
-        bodyLabel.AutowrapMode = TextServer.AutowrapMode.WordSmart;
-        bodyLabel.ClipText = true;
-        bodyLabel.SizeFlagsVertical = SizeFlags.ExpandFill;
-        bodyLabel.AddThemeFontSizeOverride("font_size", 14);
-        bodyLabel.AddThemeColorOverride("font_color", Color.FromHtml("#16222B"));
-        layout.AddChild(bodyLabel);
-
-        return panel;
-    }
-
     private static Panel CreateRoundedPanel(
         Vector2 position,
         Vector2 size,
@@ -465,14 +441,62 @@ public partial class TeamGoalPanelView : Control, ITeamGoalPanelView
         ];
     }
 
-    private static Vector2 Shift(Vector2 position)
+    private static void ApplyRoundedStyle(Panel panel, Color fillColor, int radius)
     {
-        return position + LayoutShift;
+        var style = new StyleBoxFlat();
+        style.BgColor = fillColor;
+        style.CornerRadiusTopLeft = radius;
+        style.CornerRadiusTopRight = radius;
+        style.CornerRadiusBottomLeft = radius;
+        style.CornerRadiusBottomRight = radius;
+        panel.AddThemeStyleboxOverride("panel", style);
     }
 
     private static Rect2 GetGlobalRect(Control control)
     {
         return new Rect2(control.GlobalPosition, control.Size);
+    }
+
+    private void MoveDropdownToPopupHost()
+    {
+        if (_popupHost == null)
+        {
+            return;
+        }
+
+        if (_dropdownPanel.GetParent() == _popupHost)
+        {
+            return;
+        }
+
+        _dropdownPanel.Reparent(_popupHost, true);
+        _dropdownPanel.MoveToFront();
+    }
+
+    private void RestoreDropdownToOriginalParent()
+    {
+        if (_dropdownOriginalParent == null)
+        {
+            return;
+        }
+
+        if (_dropdownPanel.GetParent() == _dropdownOriginalParent)
+        {
+            return;
+        }
+
+        _dropdownPanel.Reparent(_dropdownOriginalParent, true);
+        _dropdownOriginalParent.MoveChild(_dropdownPanel, _dropdownOriginalIndex);
+    }
+
+    private Vector2 GetDropdownPopupPosition()
+    {
+        if (_dropdownOriginalParent is not Control originalParentControl)
+        {
+            return _dropdownPanel.GlobalPosition;
+        }
+
+        return originalParentControl.GlobalPosition + _dropdownLocalPosition;
     }
 
     private readonly struct HexTileData(Vector2 position, HexBase @base, OverlayType overlay)
