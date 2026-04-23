@@ -1,6 +1,436 @@
+//using Godot;
+//using System.Collections.Generic;
+//using System;
+//
+//public partial class EnvisionController : Node
+//{
+	//private int currentPlayer = 0;
+	//private int localPlayerId = 0;
+//
+	//private List<PlayerState> players = new();
+//
+	//private ActionPopup popup = null!;
+	//private StatusBanner banner = null!;
+	//
+	//private TargetPlayerPopup targetPlayerPopup = null!;
+	//private EnvisionAction? pendingAction = null;
+	//
+	//private ConnectPopup connectPopup = null!;
+	//private SetCoursePopup setCoursePopup = null!;
+	//private SteerPopup steerPopup = null!;
+	//private FeedbackTokenPopup feedbackTokenPopup = null!;
+	//
+	//public event Action? PopupOpened;
+	//public event Action? PopupClosed;
+//
+	//public override void _Ready()
+//{
+	//GD.Print("EnvisionController Ready");
+//
+	//popup = GetNode<ActionPopup>("../UIMain/Popups/ActionPopup");
+	//banner = GetNode<StatusBanner>("../UIMain/Popups/StatusBanner");
+	//targetPlayerPopup = GetNode<TargetPlayerPopup>("../UIMain/Popups/TargetPlayerPopup");
+	//connectPopup = GetNode<ConnectPopup>("../UIMain/Popups/ConnectPopup");
+//
+	//popup.OnActionSelected += OnActionChosen;
+//
+	//targetPlayerPopup.OnTargetPlayerSelected += OnShiftPowerTargetSelected;
+	//targetPlayerPopup.OnCancelled += OnTargetSelectionCancelled;
+//
+	//connectPopup.OnConnectConfirmed += OnConnectConfirmed;
+	//connectPopup.OnCancelled += OnConnectCancelled;
+//
+	//players = new List<PlayerState>
+//{
+	//new PlayerState { Id = 0, People = 2, Environment = 2, Technology = 2, Cybernation = 0, Cohesion = 5 },
+	//new PlayerState { Id = 1, People = 0, Environment = 0, Technology = 2, Cybernation = 0, Cohesion = 5 },
+	//new PlayerState { Id = 2, People = 1, Environment = 1, Technology = 1, Cybernation = 0, Cohesion = 5 },
+	//new PlayerState { Id = 3, People = 3, Environment = 1, Technology = 0, Cybernation = 0, Cohesion = 5 },
+	//new PlayerState { Id = 4, People = 1, Environment = 2, Technology = 2, Cybernation = 0, Cohesion = 5 }
+//};
+//
+	//setCoursePopup = GetNode<SetCoursePopup>("../UIMain/Popups/SetCoursePopup");
+//
+	//setCoursePopup.OnSetCourseConfirmed += OnSetCourseConfirmed;
+	//setCoursePopup.OnCancelled += OnSetCourseCancelled;
+	//
+	//steerPopup = GetNode<SteerPopup>("../UIMain/Popups/SteerPopup");
+//
+	//steerPopup.OnSteerConfirmed += OnSteerConfirmed;
+	//steerPopup.OnCancelled += OnSteerCancelled;
+	//
+	//feedbackTokenPopup = GetNode<FeedbackTokenPopup>("../UIMain/Popups/FeedbackTokenPopup");
+//
+	//feedbackTokenPopup.OnTokenConfirmed += OnFeedbackTokenConfirmed;
+	//feedbackTokenPopup.OnCancelled += OnFeedbackTokenCancelled;
+//
+	//popup.Hide();
+	//banner.Hide();
+	//targetPlayerPopup.Hide();
+	//connectPopup.Hide();
+	//setCoursePopup.Hide();
+	//steerPopup.Hide();
+	//feedbackTokenPopup.Hide();
+//}
+//
+	//public override void _UnhandledInput(InputEvent @event)
+//{
+	//if (@event.IsActionPressed("test_player_1"))
+	//{
+		//localPlayerId = 0;
+		//GD.Print("Switched local view to Player 1");
+		//StartTurn();
+	//}
+//
+	//if (@event.IsActionPressed("test_player_2"))
+	//{
+		//localPlayerId = 1;
+		//GD.Print("Switched local view to Player 2");
+		//StartTurn();
+	//}
+	//
+	//if (@event.IsActionPressed("test_turn_player_1"))
+	//{
+		//currentPlayer = 0;
+		//GD.Print("Current turn set to Player 1");
+		//StartTurn();
+	//}
+//
+	//if (@event.IsActionPressed("test_turn_player_2"))
+	//{
+		//currentPlayer = 1;
+		//GD.Print("Current turn set to Player 2");
+		//StartTurn();
+	//}
+//}
+//
+	//private void StartTurn()
+//{
+	//var player = players[currentPlayer];
+//
+	//banner.ClearMessage();
+//
+	//if (currentPlayer == localPlayerId)
+	//{
+		//popup.Show();
+		//popup.UpdateButtons(player);
+		//PopupOpened?.Invoke();
+		//banner.ShowMessage("Your turn. Choose an action.", new Color("86EFAC"));
+	//}
+	//else
+	//{
+		//popup.Hide();
+		//PopupClosed?.Invoke();
+		//banner.ShowMessage($"Player {currentPlayer + 1} is choosing an action...", new Color("FDE68A"));
+	//}
+//}
+//
+	//private void OnActionChosen(EnvisionAction action)
+//{
+	//var player = players[currentPlayer];
+//
+	//switch (action)
+	//{
+		//case EnvisionAction.ShiftPower:
+			//pendingAction = action;
+//
+			//popup.Hide();
+			//targetPlayerPopup.Configure(players.Count, currentPlayer);
+			//PopupOpened?.Invoke();
+//
+			//banner.ShowMessage("Choose a target player for Shift Power.", new Color("FDE68A"));
+			//return;
+//
+		//case EnvisionAction.ComeTogether:
+			//ApplyAction(player, action);
+			//popup.Hide();
+			//PopupClosed?.Invoke();
+//
+			//banner.ShowTemporaryMessage(
+				//$"Player {currentPlayer + 1} chose: {action}",
+				//2.0f,
+				//new Color("7DD3FC")
+			//);
+			//return;
+//
+		//case EnvisionAction.Connect:
+			//pendingAction = action;
+//
+			//popup.Hide();
+			//connectPopup.Open(player);
+			//PopupOpened?.Invoke();
+//
+			//banner.ShowMessage("Choose relationships for Connect.", new Color("FDE68A"));
+			//return;
+//
+		//case EnvisionAction.SetCourse:
+			//pendingAction = action;
+//
+			//popup.Hide();
+			//setCoursePopup.Open();
+			//PopupOpened?.Invoke();
+//
+			//banner.ShowMessage("Choose how to use Set Course.", new Color("FDE68A"));
+			//return;
+			//
+		//case EnvisionAction.Prepare:
+		//
+		//case EnvisionAction.Steer:
+			//pendingAction = action;
+//
+			//popup.Hide();
+			//steerPopup.Open();
+//
+			//banner.ShowMessage("Choose how to use Steer.", new Color("FDE68A"));
+			//return;
+			//
+		//case EnvisionAction.Pass:
+			//ApplyAction(player, action);
+			//popup.Hide();
+			//PopupClosed?.Invoke();
+//
+			//banner.ShowTemporaryMessage(
+				//$"Player {currentPlayer + 1} chose: {action}",
+				//2.0f,
+				//new Color("7DD3FC")
+			//);
+			//return;
+	//}
+//}
+//
+	//private void OnShiftPowerTargetSelected(int targetPlayerId)
+	//{
+		//if (pendingAction != EnvisionAction.ShiftPower)
+			//return;
+//
+		//var player = players[currentPlayer];
+//
+		//ApplyAction(player, EnvisionAction.ShiftPower);
+//
+		//pendingAction = null;
+//
+		//PopupClosed?.Invoke();
+//
+		//banner.ShowTemporaryMessage(
+			//$"Player {currentPlayer + 1} chose: Shift Power -> Player {targetPlayerId + 1}",
+			//2.0f,
+			//new Color("7DD3FC")
+		//);
+//
+		//GD.Print($"Shift Power target selected: Player {targetPlayerId + 1}");
+	//}
+	//
+		//private void OnTargetSelectionCancelled()
+	//{
+		//pendingAction = null;
+//
+		//popup.Show();
+		//popup.UpdateButtons(players[currentPlayer]);
+//
+		//banner.ShowMessage("Shift Power cancelled. Choose an action.", new Color("86EFAC"));
+	//}
+	//
+	//private void OnConnectConfirmed(string spendType, string gainType)
+//{
+	//var player = players[currentPlayer];
+//
+	//if (spendType == "People") player.People -= 2;
+	//if (spendType == "Environment") player.Environment -= 2;
+	//if (spendType == "Technology") player.Technology -= 2;
+//
+	//if (gainType == "People") player.People += 1;
+	//if (gainType == "Environment") player.Environment += 1;
+	//if (gainType == "Technology") player.Technology += 1;
+//
+	//pendingAction = null;
+//
+	//PopupClosed?.Invoke();
+//
+	//banner.ShowTemporaryMessage(
+		//$"Player {currentPlayer + 1} chose: Connect ({spendType} → {gainType})",
+		//2.0f,
+		//new Color("7DD3FC")
+	//);
+//}
+//
+//private void OnConnectCancelled()
+//{
+	//pendingAction = null;
+//
+	//popup.Show();
+	//popup.UpdateButtons(players[currentPlayer]);
+//
+	//banner.ShowMessage("Connect cancelled. Choose an action.", new Color("86EFAC"));
+//}
+//
+//private void OnSetCourseConfirmed(string mode)
+//{
+	//var player = players[currentPlayer];
+//
+	//// 扣除 Set Course 的费用
+	//ApplyAction(player, EnvisionAction.SetCourse);
+//
+	//pendingAction = null;
+//
+	//PopupClosed?.Invoke();
+//
+	//if (mode == "MovePeople")
+	//{
+		//banner.ShowTemporaryMessage(
+			//$"Player {currentPlayer + 1} chose: Set Course -> Move People Token",
+			//2.0f,
+			//new Color("7DD3FC")
+		//);
+//
+		//GD.Print("Set Course selected: Move People Token");
+	//}
+	//else if (mode == "RotateStack")
+	//{
+		//banner.ShowTemporaryMessage(
+			//$"Player {currentPlayer + 1} chose: Set Course -> Rotate Stack",
+			//2.0f,
+			//new Color("7DD3FC")
+		//);
+//
+		//GD.Print("Set Course selected: Rotate Stack");
+	//}
+//}
+//
+//private void OnSetCourseCancelled()
+//{
+	//pendingAction = null;
+//
+	//popup.Show();
+	//popup.UpdateButtons(players[currentPlayer]);
+//
+	//banner.ShowMessage("Set Course cancelled. Choose an action.", new Color("86EFAC"));
+//}
+//
+//private void OnSteerConfirmed(string mode)
+//{
+	//pendingAction = EnvisionAction.Steer;
+//
+	//if (mode == "AddReserveToken")
+	//{
+		//feedbackTokenPopup.Open();
+//
+		//banner.ShowMessage("Choose a feedback token to add from Reserve to Bag.", new Color("FDE68A"));
+		//return;
+	//}
+//
+	//if (mode == "ManipulateTokens")
+	//{
+		//var player = players[currentPlayer];
+//
+		//ApplyAction(player, EnvisionAction.Steer);
+		//pendingAction = null;
+//
+		//PopupClosed?.Invoke();
+//
+		//banner.ShowTemporaryMessage(
+			//$"Player {currentPlayer + 1} chose: Steer -> Manipulate Tokens",
+			//2.0f,
+			//new Color("7DD3FC")
+		//);
+//
+		//GD.Print("Steer selected: Manipulate Tokens");
+	//}
+//}
+//
+//private void OnSteerCancelled()
+//{
+	//pendingAction = null;
+//
+	//popup.Show();
+	//popup.UpdateButtons(players[currentPlayer]);
+//
+	//banner.ShowMessage("Steer cancelled. Choose an action.", new Color("86EFAC"));
+//}
+//
+//private void OnFeedbackTokenConfirmed(string tokenType)
+//{
+	//var player = players[currentPlayer];
+//
+	//ApplyAction(player, EnvisionAction.Steer);
+//
+	//pendingAction = null;
+//
+	//PopupClosed?.Invoke();
+//
+	//banner.ShowTemporaryMessage(
+		//$"Player {currentPlayer + 1} chose: Steer -> Add {tokenType} Feedback",
+		//2.0f,
+		//new Color("7DD3FC")
+	//);
+//
+	//GD.Print($"Steer reserve token selected: {tokenType}");
+//}
+//
+//private void OnFeedbackTokenCancelled()
+//{
+	//steerPopup.Open();
+//
+	//banner.ShowMessage("Feedback token selection cancelled. Choose how to use Steer.", new Color("86EFAC"));
+//}
+//
+	//private void NextPlayer()
+	//{
+		//currentPlayer = (currentPlayer + 1) % players.Count;
+		//StartTurn();
+	//}
+//
+	//private void ApplyAction(PlayerState player, EnvisionAction action)
+	//{
+		//switch (action)
+		//{
+			//case EnvisionAction.ShiftPower:
+				//player.People -= 1;
+				//break;
+//
+			//case EnvisionAction.ComeTogether:
+				//player.Environment -= 1;
+				//player.Cohesion += 1;
+				//break;
+//
+			//case EnvisionAction.Connect:
+				//// 暂时占位，后面你可以补更细的关系扣除逻辑
+				//break;
+//
+			//case EnvisionAction.SetCourse:
+				//player.Technology -= 2;
+				//break;
+//
+			//case EnvisionAction.Prepare:
+				//ApplyAction(player, action);
+				//popup.Hide();
+				//PopupClosed?.Invoke();
+//
+	//banner.ShowTemporaryMessage(
+		//$"Player {currentPlayer + 1} chose: {action}",
+		//2.0f,
+		//new Color("7DD3FC")
+	//);
+	//return;
+//
+			//case EnvisionAction.Steer:
+				//pendingAction = action;
+//
+				//popup.Hide();
+   				//steerPopup.Open();
+				//PopupOpened?.Invoke();
+//
+	//banner.ShowMessage("Choose how to use Steer.", new Color("FDE68A"));
+	//return;
+//
+			//case EnvisionAction.Pass:
+				//break;
+		//}
+	//}
+//}
+
 using Godot;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 public partial class EnvisionController : Node
 {
@@ -11,204 +441,216 @@ public partial class EnvisionController : Node
 
 	private ActionPopup popup = null!;
 	private StatusBanner banner = null!;
-	
+
 	private TargetPlayerPopup targetPlayerPopup = null!;
-	private EnvisionAction? pendingAction = null;
-	
 	private ConnectPopup connectPopup = null!;
 	private SetCoursePopup setCoursePopup = null!;
 	private SteerPopup steerPopup = null!;
 	private FeedbackTokenPopup feedbackTokenPopup = null!;
-	
+
+	private EnvisionAction? pendingAction = null;
+
 	public event Action? PopupOpened;
 	public event Action? PopupClosed;
 
 	public override void _Ready()
-{
-	GD.Print("EnvisionController Ready");
+	{
+		GD.Print("EnvisionController Ready");
 
-	popup = GetNode<ActionPopup>("../UIMain/ActionPopup");
-	banner = GetNode<StatusBanner>("../UIMain/StatusBanner");
-	targetPlayerPopup = GetNode<TargetPlayerPopup>("../UIMain/Popups/TargetPlayerPopup");
-	connectPopup = GetNode<ConnectPopup>("../UIMain/Popups/ConnectPopup");
+		// 注意：按你现在的 Scene Tree，ActionPopup 和 StatusBanner 都在 UIMain/Popups 下面
+		popup = GetNode<ActionPopup>("../UIMain/Popups/ActionPopup");
+		banner = GetNode<StatusBanner>("../UIMain/Popups/StatusBanner");
 
-	popup.OnActionSelected += OnActionChosen;
+		targetPlayerPopup = GetNode<TargetPlayerPopup>("../UIMain/Popups/TargetPlayerPopup");
+		connectPopup = GetNode<ConnectPopup>("../UIMain/Popups/ConnectPopup");
+		setCoursePopup = GetNode<SetCoursePopup>("../UIMain/Popups/SetCoursePopup");
+		steerPopup = GetNode<SteerPopup>("../UIMain/Popups/SteerPopup");
+		feedbackTokenPopup = GetNode<FeedbackTokenPopup>("../UIMain/Popups/FeedbackTokenPopup");
 
-	targetPlayerPopup.OnTargetPlayerSelected += OnShiftPowerTargetSelected;
-	targetPlayerPopup.OnCancelled += OnTargetSelectionCancelled;
+		popup.OnActionSelected += OnActionChosen;
 
-	connectPopup.OnConnectConfirmed += OnConnectConfirmed;
-	connectPopup.OnCancelled += OnConnectCancelled;
+		targetPlayerPopup.OnTargetPlayerSelected += OnShiftPowerTargetSelected;
+		targetPlayerPopup.OnCancelled += OnTargetSelectionCancelled;
 
-	players = new List<PlayerState>
-{
-	new PlayerState { Id = 0, People = 2, Environment = 2, Technology = 2, Cybernation = 0, Cohesion = 5 },
-	new PlayerState { Id = 1, People = 0, Environment = 0, Technology = 2, Cybernation = 0, Cohesion = 5 },
-	new PlayerState { Id = 2, People = 1, Environment = 1, Technology = 1, Cybernation = 0, Cohesion = 5 },
-	new PlayerState { Id = 3, People = 3, Environment = 1, Technology = 0, Cybernation = 0, Cohesion = 5 },
-	new PlayerState { Id = 4, People = 1, Environment = 2, Technology = 2, Cybernation = 0, Cohesion = 5 }
-};
+		connectPopup.OnConnectConfirmed += OnConnectConfirmed;
+		connectPopup.OnCancelled += OnConnectCancelled;
 
-	setCoursePopup = GetNode<SetCoursePopup>("../UIMain/Popups/SetCoursePopup");
+		setCoursePopup.OnSetCourseConfirmed += OnSetCourseConfirmed;
+		setCoursePopup.OnCancelled += OnSetCourseCancelled;
 
-	setCoursePopup.OnSetCourseConfirmed += OnSetCourseConfirmed;
-	setCoursePopup.OnCancelled += OnSetCourseCancelled;
-	
-	steerPopup = GetNode<SteerPopup>("../UIMain/Popups/SteerPopup");
+		steerPopup.OnSteerConfirmed += OnSteerConfirmed;
+		steerPopup.OnCancelled += OnSteerCancelled;
 
-	steerPopup.OnSteerConfirmed += OnSteerConfirmed;
-	steerPopup.OnCancelled += OnSteerCancelled;
-	
-	feedbackTokenPopup = GetNode<FeedbackTokenPopup>("../UIMain/Popups/FeedbackTokenPopup");
+		feedbackTokenPopup.OnTokenConfirmed += OnFeedbackTokenConfirmed;
+		feedbackTokenPopup.OnCancelled += OnFeedbackTokenCancelled;
 
-	feedbackTokenPopup.OnTokenConfirmed += OnFeedbackTokenConfirmed;
-	feedbackTokenPopup.OnCancelled += OnFeedbackTokenCancelled;
+		players = new List<PlayerState>
+		{
+			new PlayerState { Id = 0, People = 2, Environment = 2, Technology = 2, Cybernation = 0, Cohesion = 5 },
+			new PlayerState { Id = 1, People = 0, Environment = 0, Technology = 2, Cybernation = 0, Cohesion = 5 },
+			new PlayerState { Id = 2, People = 1, Environment = 1, Technology = 1, Cybernation = 0, Cohesion = 5 },
+			new PlayerState { Id = 3, People = 3, Environment = 1, Technology = 0, Cybernation = 0, Cohesion = 5 },
+			new PlayerState { Id = 4, People = 1, Environment = 2, Technology = 2, Cybernation = 0, Cohesion = 5 }
+		};
 
-	popup.Hide();
-	banner.Hide();
-	targetPlayerPopup.Hide();
-	connectPopup.Hide();
-	setCoursePopup.Hide();
-	steerPopup.Hide();
-	feedbackTokenPopup.Hide();
-}
+		popup.Hide();
+		banner.Hide();
+		targetPlayerPopup.Hide();
+		connectPopup.Hide();
+		setCoursePopup.Hide();
+		steerPopup.Hide();
+		feedbackTokenPopup.Hide();
+	}
 
 	public override void _UnhandledInput(InputEvent @event)
-{
-	if (@event.IsActionPressed("test_player_1"))
 	{
-		localPlayerId = 0;
-		GD.Print("Switched local view to Player 1");
-		StartTurn();
-	}
+		GD.Print($"Input received: {@event.AsText()}");
 
-	if (@event.IsActionPressed("test_player_2"))
-	{
-		localPlayerId = 1;
-		GD.Print("Switched local view to Player 2");
-		StartTurn();
-	}
-	
-	if (@event.IsActionPressed("test_turn_player_1"))
-	{
-		currentPlayer = 0;
-		GD.Print("Current turn set to Player 1");
-		StartTurn();
-	}
+		if (@event.IsActionPressed("test_player_1"))
+		{
+			localPlayerId = 0;
+			GD.Print("Switched local view to Player 1");
+			StartTurn();
+		}
 
-	if (@event.IsActionPressed("test_turn_player_2"))
-	{
-		currentPlayer = 1;
-		GD.Print("Current turn set to Player 2");
-		StartTurn();
+		if (@event.IsActionPressed("test_player_2"))
+		{
+			localPlayerId = 1;
+			GD.Print("Switched local view to Player 2");
+			StartTurn();
+		}
+
+		if (@event.IsActionPressed("test_turn_player_1"))
+		{
+			currentPlayer = 0;
+			GD.Print("Current turn set to Player 1");
+			StartTurn();
+		}
+
+		if (@event.IsActionPressed("test_turn_player_2"))
+		{
+			currentPlayer = 1;
+			GD.Print("Current turn set to Player 2");
+			StartTurn();
+		}
 	}
-}
 
 	private void StartTurn()
-{
-	var player = players[currentPlayer];
-
-	banner.ClearMessage();
-
-	if (currentPlayer == localPlayerId)
 	{
-		popup.Show();
-		popup.UpdateButtons(player);
-		PopupOpened?.Invoke();
-		banner.ShowMessage("Your turn. Choose an action.", new Color("86EFAC"));
+		var player = players[currentPlayer];
+
+		banner.ClearMessage();
+
+		if (currentPlayer == localPlayerId)
+		{
+			popup.Show();
+			popup.UpdateButtons(player);
+			PopupOpened?.Invoke();
+			banner.ShowMessage("Your turn. Choose an action.", new Color("86EFAC"));
+		}
+		else
+		{
+			popup.Hide();
+			PopupClosed?.Invoke();
+			banner.ShowMessage($"Player {currentPlayer + 1} is choosing an action...", new Color("FDE68A"));
+		}
 	}
-	else
-	{
-		popup.Hide();
-		PopupClosed?.Invoke();
-		banner.ShowMessage($"Player {currentPlayer + 1} is choosing an action...", new Color("FDE68A"));
-	}
-}
 
 	private void OnActionChosen(EnvisionAction action)
-{
-	var player = players[currentPlayer];
-
-	switch (action)
 	{
-		case EnvisionAction.ShiftPower:
-			pendingAction = action;
+		var player = players[currentPlayer];
 
-			popup.Hide();
-			targetPlayerPopup.Configure(players.Count, currentPlayer);
-			PopupOpened?.Invoke();
+		switch (action)
+		{
+			case EnvisionAction.ShiftPower:
+				pendingAction = action;
 
-			banner.ShowMessage("Choose a target player for Shift Power.", new Color("FDE68A"));
-			return;
+				popup.Hide();
+				targetPlayerPopup.Configure(players.Count, currentPlayer);
+				PopupOpened?.Invoke();
 
-		case EnvisionAction.ComeTogether:
-			ApplyAction(player, action);
-			popup.Hide();
-			PopupClosed?.Invoke();
+				banner.ShowMessage("Choose a target player for Shift Power.", new Color("FDE68A"));
+				return;
 
-			banner.ShowTemporaryMessage(
-				$"Player {currentPlayer + 1} chose: {action}",
-				2.0f,
-				new Color("7DD3FC")
-			);
-			return;
+			case EnvisionAction.ComeTogether:
+				ApplyAction(player, action);
+				popup.Hide();
+				PopupClosed?.Invoke();
 
-		case EnvisionAction.Connect:
-			pendingAction = action;
+				banner.ShowTemporaryMessage(
+					$"Player {currentPlayer + 1} chose: {action}",
+					2.0f,
+					new Color("7DD3FC")
+				);
+				return;
 
-			popup.Hide();
-			connectPopup.Open(player);
-			PopupOpened?.Invoke();
+			case EnvisionAction.Connect:
+				pendingAction = action;
 
-			banner.ShowMessage("Choose relationships for Connect.", new Color("FDE68A"));
-			return;
+				popup.Hide();
+				connectPopup.Open(player);
+				PopupOpened?.Invoke();
 
-		case EnvisionAction.SetCourse:
-			pendingAction = action;
+				banner.ShowMessage("Choose relationships for Connect.", new Color("FDE68A"));
+				return;
 
-			popup.Hide();
-			setCoursePopup.Open();
-			PopupOpened?.Invoke();
+			case EnvisionAction.SetCourse:
+				pendingAction = action;
 
-			banner.ShowMessage("Choose how to use Set Course.", new Color("FDE68A"));
-			return;
-			
-		case EnvisionAction.Prepare:
-		
-		case EnvisionAction.Steer:
-			pendingAction = action;
+				popup.Hide();
+				setCoursePopup.Open();
+				PopupOpened?.Invoke();
 
-			popup.Hide();
-			steerPopup.Open();
+				banner.ShowMessage("Choose how to use Set Course.", new Color("FDE68A"));
+				return;
 
-			banner.ShowMessage("Choose how to use Steer.", new Color("FDE68A"));
-			return;
-			
-		case EnvisionAction.Pass:
-			ApplyAction(player, action);
-			popup.Hide();
-			PopupClosed?.Invoke();
+			case EnvisionAction.Prepare:
+				ApplyAction(player, action);
+				popup.Hide();
+				PopupClosed?.Invoke();
 
-			banner.ShowTemporaryMessage(
-				$"Player {currentPlayer + 1} chose: {action}",
-				2.0f,
-				new Color("7DD3FC")
-			);
-			return;
+				banner.ShowTemporaryMessage(
+					$"Player {currentPlayer + 1} chose: {action}",
+					2.0f,
+					new Color("7DD3FC")
+				);
+				return;
+
+			case EnvisionAction.Steer:
+				pendingAction = action;
+
+				popup.Hide();
+				steerPopup.Open();
+				PopupOpened?.Invoke();
+
+				banner.ShowMessage("Choose how to use Steer.", new Color("FDE68A"));
+				return;
+
+			case EnvisionAction.Pass:
+				ApplyAction(player, action);
+				popup.Hide();
+				PopupClosed?.Invoke();
+
+				banner.ShowTemporaryMessage(
+					$"Player {currentPlayer + 1} chose: {action}",
+					2.0f,
+					new Color("7DD3FC")
+				);
+				return;
+		}
 	}
-}
 
 	private void OnShiftPowerTargetSelected(int targetPlayerId)
 	{
 		if (pendingAction != EnvisionAction.ShiftPower)
+		{
 			return;
+		}
 
 		var player = players[currentPlayer];
-
 		ApplyAction(player, EnvisionAction.ShiftPower);
 
 		pendingAction = null;
-
 		PopupClosed?.Invoke();
 
 		banner.ShowTemporaryMessage(
@@ -219,159 +661,161 @@ public partial class EnvisionController : Node
 
 		GD.Print($"Shift Power target selected: Player {targetPlayerId + 1}");
 	}
-	
-		private void OnTargetSelectionCancelled()
+
+	private void OnTargetSelectionCancelled()
 	{
 		pendingAction = null;
 
 		popup.Show();
 		popup.UpdateButtons(players[currentPlayer]);
+		PopupOpened?.Invoke();
 
 		banner.ShowMessage("Shift Power cancelled. Choose an action.", new Color("86EFAC"));
 	}
-	
+
 	private void OnConnectConfirmed(string spendType, string gainType)
-{
-	var player = players[currentPlayer];
-
-	if (spendType == "People") player.People -= 2;
-	if (spendType == "Environment") player.Environment -= 2;
-	if (spendType == "Technology") player.Technology -= 2;
-
-	if (gainType == "People") player.People += 1;
-	if (gainType == "Environment") player.Environment += 1;
-	if (gainType == "Technology") player.Technology += 1;
-
-	pendingAction = null;
-
-	PopupClosed?.Invoke();
-
-	banner.ShowTemporaryMessage(
-		$"Player {currentPlayer + 1} chose: Connect ({spendType} → {gainType})",
-		2.0f,
-		new Color("7DD3FC")
-	);
-}
-
-private void OnConnectCancelled()
-{
-	pendingAction = null;
-
-	popup.Show();
-	popup.UpdateButtons(players[currentPlayer]);
-
-	banner.ShowMessage("Connect cancelled. Choose an action.", new Color("86EFAC"));
-}
-
-private void OnSetCourseConfirmed(string mode)
-{
-	var player = players[currentPlayer];
-
-	// 扣除 Set Course 的费用
-	ApplyAction(player, EnvisionAction.SetCourse);
-
-	pendingAction = null;
-
-	PopupClosed?.Invoke();
-
-	if (mode == "MovePeople")
 	{
+		var player = players[currentPlayer];
+
+		if (spendType == "People") player.People -= 2;
+		if (spendType == "Environment") player.Environment -= 2;
+		if (spendType == "Technology") player.Technology -= 2;
+
+		if (gainType == "People") player.People += 1;
+		if (gainType == "Environment") player.Environment += 1;
+		if (gainType == "Technology") player.Technology += 1;
+
+		pendingAction = null;
+		PopupClosed?.Invoke();
+
 		banner.ShowTemporaryMessage(
-			$"Player {currentPlayer + 1} chose: Set Course -> Move People Token",
+			$"Player {currentPlayer + 1} chose: Connect ({spendType} → {gainType})",
 			2.0f,
 			new Color("7DD3FC")
 		);
-
-		GD.Print("Set Course selected: Move People Token");
 	}
-	else if (mode == "RotateStack")
+
+	private void OnConnectCancelled()
 	{
-		banner.ShowTemporaryMessage(
-			$"Player {currentPlayer + 1} chose: Set Course -> Rotate Stack",
-			2.0f,
-			new Color("7DD3FC")
-		);
+		pendingAction = null;
 
-		GD.Print("Set Course selected: Rotate Stack");
+		popup.Show();
+		popup.UpdateButtons(players[currentPlayer]);
+		PopupOpened?.Invoke();
+
+		banner.ShowMessage("Connect cancelled. Choose an action.", new Color("86EFAC"));
 	}
-}
 
-private void OnSetCourseCancelled()
-{
-	pendingAction = null;
-
-	popup.Show();
-	popup.UpdateButtons(players[currentPlayer]);
-
-	banner.ShowMessage("Set Course cancelled. Choose an action.", new Color("86EFAC"));
-}
-
-private void OnSteerConfirmed(string mode)
-{
-	pendingAction = EnvisionAction.Steer;
-
-	if (mode == "AddReserveToken")
+	private void OnSetCourseConfirmed(string mode)
 	{
-		feedbackTokenPopup.Open();
+		var player = players[currentPlayer];
 
-		banner.ShowMessage("Choose a feedback token to add from Reserve to Bag.", new Color("FDE68A"));
-		return;
+		ApplyAction(player, EnvisionAction.SetCourse);
+
+		pendingAction = null;
+		PopupClosed?.Invoke();
+
+		if (mode == "MovePeople")
+		{
+			banner.ShowTemporaryMessage(
+				$"Player {currentPlayer + 1} chose: Set Course -> Move People Token",
+				2.0f,
+				new Color("7DD3FC")
+			);
+
+			GD.Print("Set Course selected: Move People Token");
+		}
+		else if (mode == "RotateStack")
+		{
+			banner.ShowTemporaryMessage(
+				$"Player {currentPlayer + 1} chose: Set Course -> Rotate Stack",
+				2.0f,
+				new Color("7DD3FC")
+			);
+
+			GD.Print("Set Course selected: Rotate Stack");
+		}
 	}
 
-	if (mode == "ManipulateTokens")
+	private void OnSetCourseCancelled()
+	{
+		pendingAction = null;
+
+		popup.Show();
+		popup.UpdateButtons(players[currentPlayer]);
+		PopupOpened?.Invoke();
+
+		banner.ShowMessage("Set Course cancelled. Choose an action.", new Color("86EFAC"));
+	}
+
+	private void OnSteerConfirmed(string mode)
+	{
+		pendingAction = EnvisionAction.Steer;
+
+		if (mode == "AddReserveToken")
+		{
+			steerPopup.Hide();
+			feedbackTokenPopup.Open();
+
+			banner.ShowMessage("Choose a feedback token to add from Reserve to Bag.", new Color("FDE68A"));
+			return;
+		}
+
+		if (mode == "ManipulateTokens")
+		{
+			var player = players[currentPlayer];
+
+			ApplyAction(player, EnvisionAction.Steer);
+			pendingAction = null;
+
+			PopupClosed?.Invoke();
+
+			banner.ShowTemporaryMessage(
+				$"Player {currentPlayer + 1} chose: Steer -> Manipulate Tokens",
+				2.0f,
+				new Color("7DD3FC")
+			);
+
+			GD.Print("Steer selected: Manipulate Tokens");
+		}
+	}
+
+	private void OnSteerCancelled()
+	{
+		pendingAction = null;
+
+		popup.Show();
+		popup.UpdateButtons(players[currentPlayer]);
+		PopupOpened?.Invoke();
+
+		banner.ShowMessage("Steer cancelled. Choose an action.", new Color("86EFAC"));
+	}
+
+	private void OnFeedbackTokenConfirmed(string tokenType)
 	{
 		var player = players[currentPlayer];
 
 		ApplyAction(player, EnvisionAction.Steer);
-		pendingAction = null;
 
+		pendingAction = null;
 		PopupClosed?.Invoke();
 
 		banner.ShowTemporaryMessage(
-			$"Player {currentPlayer + 1} chose: Steer -> Manipulate Tokens",
+			$"Player {currentPlayer + 1} chose: Steer -> Add {tokenType} Feedback",
 			2.0f,
 			new Color("7DD3FC")
 		);
 
-		GD.Print("Steer selected: Manipulate Tokens");
+		GD.Print($"Steer reserve token selected: {tokenType}");
 	}
-}
 
-private void OnSteerCancelled()
-{
-	pendingAction = null;
+	private void OnFeedbackTokenCancelled()
+	{
+		feedbackTokenPopup.Hide();
+		steerPopup.Open();
 
-	popup.Show();
-	popup.UpdateButtons(players[currentPlayer]);
-
-	banner.ShowMessage("Steer cancelled. Choose an action.", new Color("86EFAC"));
-}
-
-private void OnFeedbackTokenConfirmed(string tokenType)
-{
-	var player = players[currentPlayer];
-
-	ApplyAction(player, EnvisionAction.Steer);
-
-	pendingAction = null;
-
-	PopupClosed?.Invoke();
-
-	banner.ShowTemporaryMessage(
-		$"Player {currentPlayer + 1} chose: Steer -> Add {tokenType} Feedback",
-		2.0f,
-		new Color("7DD3FC")
-	);
-
-	GD.Print($"Steer reserve token selected: {tokenType}");
-}
-
-private void OnFeedbackTokenCancelled()
-{
-	steerPopup.Open();
-
-	banner.ShowMessage("Feedback token selection cancelled. Choose how to use Steer.", new Color("86EFAC"));
-}
+		banner.ShowMessage("Feedback token selection cancelled. Choose how to use Steer.", new Color("86EFAC"));
+	}
 
 	private void NextPlayer()
 	{
@@ -393,7 +837,6 @@ private void OnFeedbackTokenCancelled()
 				break;
 
 			case EnvisionAction.Connect:
-				// 暂时占位，后面你可以补更细的关系扣除逻辑
 				break;
 
 			case EnvisionAction.SetCourse:
