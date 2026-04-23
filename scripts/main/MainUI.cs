@@ -149,6 +149,7 @@ public partial class MainUI : Control
 	private HiveBoardView _hiveBoardView = null!;
 	private PlayerPanelView _playerPanelView = null!;
 	private PlayerDetailPopupView _playerDetailPopupView = null!;
+	private IEnvisionGateway _envisionGateway = null!;
 
 	private Button _colorblindToggleButton = null!;
 	private ColorRect _colorblindFilter = null!;
@@ -156,7 +157,7 @@ public partial class MainUI : Control
 	
 	private EnvisionController _envisionController = null!;
 	private Control _chatPanelRoot = null!;
-
+	private ColorRect _popupDimOverlay = null!;
 	[Export]
 	public string ServerUrl { get; set; } = "";
 
@@ -191,20 +192,39 @@ public partial class MainUI : Control
 
 		// Gateway + presenter
 		_gameGateway = new WebSocketGameGateway(ServerUrl);
+		_envisionGateway = new MockEnvisionGateway();
 		_presenter = new MainUiPresenter(
-			_chatPanelView,
+			 _chatPanelView,
 			_teamGoalPanelView,
 			_infoSummaryPanelView,
 			_hiveBoardView,
 			_playerDetailPopupView,
+			_envisionController,
+			_envisionGateway,
 			_gameGateway
 		);
+		
 		_presenter.Initialize();
 
 		// Player panel interaction
 		_playerPanelView.PlayerSelected += _presenter.OnPlayerSelected;
 		_colorblindToggleButton.Pressed += OnColorblindTogglePressed;
 		AccessibilityManager.OnAccessibilityChanged += UpdateAccessibilityUi;
+		
+		_envisionController = GetNode<EnvisionController>("EnvisionController");
+		_envisionController.ActionRequested += OnEnvisionActionRequested;
+		_envisionController.PopupOpened += DimPopupBackground;
+		_envisionController.PopupClosed += RestorePopupBackground;
+		
+		_popupDimOverlay = GetNodeOrNull<ColorRect>("UIMain/PopupDimOverlay");
+
+		if (_popupDimOverlay != null)
+
+		{
+
+			_popupDimOverlay.Visible = false;
+
+		}
 	}
 	
 	private void DimBackground()
@@ -237,6 +257,13 @@ private void RestoreBackground()
 			_envisionController.PopupOpened -= DimBackground;
 			_envisionController.PopupClosed -= RestoreBackground;
 		}
+		
+		if (_envisionController != null)
+{
+			_envisionController.ActionRequested -= OnEnvisionActionRequested;
+			_envisionController.PopupOpened -= DimPopupBackground;
+			_envisionController.PopupClosed -= RestorePopupBackground;
+}
 
 		_presenter?.Dispose();
 		_gameGateway?.Shutdown();
@@ -279,6 +306,36 @@ private void RestoreBackground()
 	}
 
 	_colorblindFilter.Visible = AccessibilityManager.IsGlobalFilterEnabled;
+}
+
+private void OnEnvisionActionRequested(EnvisionActionRequest request)
+{
+	GD.Print(
+		$"Envision action requested -> Action: {request.Action}, " +
+		$"TargetPlayerId: {request.TargetPlayerId}, " +
+		$"SpendType: {request.SpendType}, " +
+		$"GainType: {request.GainType}, " +
+		$"Mode: {request.Mode}, " +
+		$"FeedbackTokenType: {request.FeedbackTokenType}"
+	);
+	
+	_presenter.OnEnvisionActionRequested(request);
+}
+
+private void DimPopupBackground()
+{
+	if (_popupDimOverlay != null)
+	{
+		_popupDimOverlay.Visible = true;
+	}
+}
+
+private void RestorePopupBackground()
+{
+	if (_popupDimOverlay != null)
+	{
+		_popupDimOverlay.Visible = false;
+	}
 }
 
 	private void UpdateBoardAccessibility()

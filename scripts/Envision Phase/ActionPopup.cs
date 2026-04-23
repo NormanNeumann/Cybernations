@@ -71,4 +71,23 @@ public partial class ActionPopup : Control
 		OnActionSelected.Invoke(action);
 		Hide();
 	}
+	
+	public void SetActionAvailability(
+	bool canShiftPower,
+	bool canComeTogether,
+	bool canConnect,
+	bool canSetCourse,
+	bool canPrepare,
+	bool canSteer,
+	bool canPass
+)
+{
+	buttons[EnvisionAction.ShiftPower].Disabled = !canShiftPower;
+	buttons[EnvisionAction.ComeTogether].Disabled = !canComeTogether;
+	buttons[EnvisionAction.Connect].Disabled = !canConnect;
+	buttons[EnvisionAction.SetCourse].Disabled = !canSetCourse;
+	buttons[EnvisionAction.Prepare].Disabled = !canPrepare;
+	buttons[EnvisionAction.Steer].Disabled = !canSteer;
+	buttons[EnvisionAction.Pass].Disabled = !canPass;
+}
 }
