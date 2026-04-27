@@ -128,6 +128,7 @@ offset_right = -2.0
 offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="PlayerDetailPopup" parent="UIMain/Popups" unique_id=351128148 instance=ExtResource("8_popup")]
 layout_mode = 1
