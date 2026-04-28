@@ -107,12 +107,60 @@ public partial class StackView : Node2D
 	private readonly float[] _defaultPathRotations = new float[6];
 	private readonly EdgeState[] _edgeStates = new EdgeState[6];
 
+	private const float HoverScaleFactor = 1.5f;
+	private const float HoverScaleLerpSpeed = 12.0f;
+	private Vector2[] _hoverPolygon = new Vector2[0];
+	private Vector2 _hoverCenter = Vector2.Zero;
+	private int _baseZIndex;
+	private bool _isHoverZIndexApplied;
+	private const int HoverZIndexOffset = 32;
+
 	public override void _Ready()
 	{
 		BindNodes();
 		EnsureLayerRules();
 		RebuildTileVisuals();
 		RebuildEdgeVisuals();
+		_baseZIndex = ZIndex;
+		SetProcess(true);
+	}
+
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+
+		if (_hoverPolygon.Length == 0)
+		{
+			return;
+		}
+
+		var mousePosition = GetViewport().GetMousePosition();
+		var localMousePosition = ToLocal(mousePosition);
+		var isHovered = IsPointInsidePolygon(localMousePosition, _hoverPolygon);
+		var desiredScale = isHovered ? HoverScaleFactor : 1.0f;
+
+		if (isHovered && !_isHoverZIndexApplied)
+		{
+			ZIndex = _baseZIndex + HoverZIndexOffset;
+			_isHoverZIndexApplied = true;
+		}
+		else if (!isHovered && _isHoverZIndexApplied)
+		{
+			ZIndex = _baseZIndex;
+			_isHoverZIndexApplied = false;
+		}
+
+		if (Mathf.IsEqualApprox(Scale.X, desiredScale) && Mathf.IsEqualApprox(Scale.Y, desiredScale))
+		{
+			return;
+		}
+
+		var lerpAmount = Mathf.Clamp((float)delta * HoverScaleLerpSpeed, 0.0f, 1.0f);
+		var nextScale = Mathf.Lerp(Scale.X, desiredScale, lerpAmount);
+		var globalCenterBefore = ToGlobal(_hoverCenter);
+		Scale = new Vector2(nextScale, nextScale);
+		var globalCenterAfter = ToGlobal(_hoverCenter);
+		Position += globalCenterBefore - globalCenterAfter;
 	}
 
 	public void ConfigureTileStack(
@@ -285,6 +333,7 @@ public partial class StackView : Node2D
 	private void RebuildTileVisuals()
 	{
 		var center = GetHexBounds(DownOuterSide) / 2.0f;
+		UpdateHoverPolygon(center);
 
 		_conflictOuter.Color = _highlightOuterColor;
 		_conflictInner.Color = _highlightInnerColor;
@@ -347,6 +396,12 @@ public partial class StackView : Node2D
 			_pathSprites[edgeIndex].Visible = pathTexture != null;
 			_pathSprites[edgeIndex].Rotation = ResolvePathRotation(_edgeStates[edgeIndex], edgeIndex);
 		}
+	}
+
+	private void UpdateHoverPolygon(Vector2 center)
+	{
+		_hoverCenter = center;
+		_hoverPolygon = BuildRegularHexPolygon(DownOuterSide, center);
 	}
 
 	private Texture2D? ResolvePathTexture(EdgeState state, int edgeIndex)
@@ -454,6 +509,33 @@ public partial class StackView : Node2D
 			5 => -Mathf.Pi * 5.0f / 6.0f,
 			_ => 0.0f,
 		};
+	}
+
+	private static bool IsPointInsidePolygon(Vector2 point, Vector2[] polygon)
+	{
+		if (polygon.Length == 0)
+		{
+			return false;
+		}
+
+		var isInside = false;
+		for (var i = 0; i < polygon.Length; i++)
+		{
+			var j = (i + polygon.Length - 1) % polygon.Length;
+			var vertexI = polygon[i];
+			var vertexJ = polygon[j];
+			var intersects = (vertexI.Y > point.Y) != (vertexJ.Y > point.Y);
+			if (intersects)
+			{
+				var xIntersection = (vertexJ.X - vertexI.X) * (point.Y - vertexI.Y) / (vertexJ.Y - vertexI.Y) + vertexI.X;
+				if (point.X < xIntersection)
+				{
+					isInside = !isInside;
+				}
+			}
+		}
+
+		return isInside;
 	}
 
 	private static bool IsEdgeIndexValid(int edgeIndex)
