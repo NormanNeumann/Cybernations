@@ -154,6 +154,7 @@ public partial class MainUI : Control
 	private Button _colorblindToggleButton = null!;
 	private ColorRect _colorblindFilter = null!;
 	private Control _popupHost = null!;
+	private bool _popupWindowsVisible;
 	
 	private EnvisionController _envisionController = null!;
 	private Control _chatPanelRoot = null!;
@@ -188,6 +189,7 @@ public partial class MainUI : Control
 		_colorblindToggleButton = GetNode<Button>("UIMain/ColorblindToggleButton");
 		_colorblindFilter = GetNode<ColorRect>("ColorblindOverlay/Filter");
 		_popupHost = GetNode<Control>("UIMain/Popups");
+		UpdateStackHoverEffectsState();
 
 		_colorblindFilter.Visible = false;
 
@@ -278,6 +280,7 @@ private void RestoreBackground()
 	public override void _Process(double delta)
 	{
 		_gameGateway?.Poll();
+		UpdateStackHoverEffectsState();
 	}
 
 	private void OnColorblindTogglePressed()
@@ -343,6 +346,33 @@ private void RestorePopupBackground()
 		_popupDimOverlay.Visible = false;
 	}
 }
+
+	private void UpdateStackHoverEffectsState()
+	{
+		if (_popupHost == null)
+		{
+			return;
+		}
+
+		bool hasVisiblePopup = false;
+
+		foreach (Node child in _popupHost.GetChildren())
+		{
+			if (child is Control control && control.IsVisibleInTree())
+			{
+				hasVisiblePopup = true;
+				break;
+			}
+		}
+
+		if (hasVisiblePopup == _popupWindowsVisible)
+		{
+			return;
+		}
+
+		_popupWindowsVisible = hasVisiblePopup;
+		StackView.HoverEffectsEnabled = !_popupWindowsVisible;
+	}
 
 	private void UpdateBoardAccessibility()
 	{

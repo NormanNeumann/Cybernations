@@ -109,6 +109,7 @@ public partial class StackView : Node2D
 
 	private const float HoverScaleFactor = 1.5f;
 	private const float HoverScaleLerpSpeed = 12.0f;
+	public static bool HoverEffectsEnabled { get; set; } = true;
 	private Vector2[] _hoverPolygon = new Vector2[0];
 	private Vector2 _hoverCenter = Vector2.Zero;
 	private int _baseZIndex;
@@ -136,15 +137,21 @@ public partial class StackView : Node2D
 
 		var mousePosition = GetViewport().GetMousePosition();
 		var localMousePosition = ToLocal(mousePosition);
-		var isHovered = IsPointInsidePolygon(localMousePosition, _hoverPolygon);
-		var desiredScale = isHovered ? HoverScaleFactor : 1.0f;
+		var absoluteScale = new Vector2(Mathf.Abs(Scale.X), Mathf.Abs(Scale.Y));
+		var scaledLocalMousePosition = new Vector2(
+			localMousePosition.X * absoluteScale.X,
+			localMousePosition.Y * absoluteScale.Y
+		);
+		var isHovered = IsPointInsidePolygon(scaledLocalMousePosition, _hoverPolygon);
+		var hoverAllowed = HoverEffectsEnabled && isHovered;
+		var desiredScale = hoverAllowed ? HoverScaleFactor : 1.0f;
 
-		if (isHovered && !_isHoverZIndexApplied)
+		if (hoverAllowed && !_isHoverZIndexApplied)
 		{
 			ZIndex = _baseZIndex + HoverZIndexOffset;
 			_isHoverZIndexApplied = true;
 		}
-		else if (!isHovered && _isHoverZIndexApplied)
+		else if (!hoverAllowed && _isHoverZIndexApplied)
 		{
 			ZIndex = _baseZIndex;
 			_isHoverZIndexApplied = false;

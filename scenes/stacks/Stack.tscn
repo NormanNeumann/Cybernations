@@ -1,62 +1,62 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://dn8unuq3mxudd"]
 
-[ext_resource type="Script" path="res://scripts/stacks/StackView.cs" id="1_script"]
+[ext_resource type="Script" uid="uid://cnfhm4umhad4r" path="res://scripts/stacks/StackView.cs" id="1_script"]
 
-[node name="Stack" type="Node2D"]
+[node name="Stack" type="Node2D" unique_id=1346703483]
 script = ExtResource("1_script")
 
-[node name="ConflictLayer" type="Node2D" parent="."]
+[node name="ConflictLayer" type="Node2D" parent="." unique_id=990315625]
 
-[node name="ConflictOuter" type="Polygon2D" parent="ConflictLayer"]
+[node name="ConflictOuter" type="Polygon2D" parent="ConflictLayer" unique_id=2042503110]
 
-[node name="ConflictInner" type="Polygon2D" parent="ConflictLayer"]
+[node name="ConflictInner" type="Polygon2D" parent="ConflictLayer" unique_id=919466372]
 
-[node name="ConflictCore" type="Polygon2D" parent="ConflictLayer"]
+[node name="ConflictCore" type="Polygon2D" parent="ConflictLayer" unique_id=1289300261]
 
-[node name="TileLayer" type="Node2D" parent="."]
+[node name="TileLayer" type="Node2D" parent="." unique_id=1812561984]
 
-[node name="DownOutline" type="Polygon2D" parent="TileLayer"]
+[node name="DownOutline" type="Polygon2D" parent="TileLayer" unique_id=1581466873]
 
-[node name="DownFill" type="Polygon2D" parent="TileLayer"]
+[node name="DownFill" type="Polygon2D" parent="TileLayer" unique_id=1554512014]
 
-[node name="UpOutline" type="Polygon2D" parent="TileLayer"]
+[node name="UpOutline" type="Polygon2D" parent="TileLayer" unique_id=1522882431]
 
-[node name="UpFill" type="Polygon2D" parent="TileLayer"]
+[node name="UpFill" type="Polygon2D" parent="TileLayer" unique_id=1967823254]
 
-[node name="EdgeSlots" type="Node2D" parent="."]
+[node name="EdgeSlots" type="Node2D" parent="." unique_id=687024997]
 
-[node name="Edge0" type="Node2D" parent="EdgeSlots"]
+[node name="Edge0" type="Node2D" parent="EdgeSlots" unique_id=2138862980]
 
-[node name="RelationSprite" type="Sprite2D" parent="EdgeSlots/Edge0"]
+[node name="RelationSprite" type="Sprite2D" parent="EdgeSlots/Edge0" unique_id=1979022562]
 
-[node name="PathSprite" type="Sprite2D" parent="EdgeSlots/Edge0"]
+[node name="PathSprite" type="Sprite2D" parent="EdgeSlots/Edge0" unique_id=1062335302]
 
-[node name="Edge1" type="Node2D" parent="EdgeSlots"]
+[node name="Edge1" type="Node2D" parent="EdgeSlots" unique_id=871809749]
 
-[node name="RelationSprite" type="Sprite2D" parent="EdgeSlots/Edge1"]
+[node name="RelationSprite" type="Sprite2D" parent="EdgeSlots/Edge1" unique_id=677785268]
 
-[node name="PathSprite" type="Sprite2D" parent="EdgeSlots/Edge1"]
+[node name="PathSprite" type="Sprite2D" parent="EdgeSlots/Edge1" unique_id=888993397]
 
-[node name="Edge2" type="Node2D" parent="EdgeSlots"]
+[node name="Edge2" type="Node2D" parent="EdgeSlots" unique_id=1492242263]
 
-[node name="RelationSprite" type="Sprite2D" parent="EdgeSlots/Edge2"]
+[node name="RelationSprite" type="Sprite2D" parent="EdgeSlots/Edge2" unique_id=1579508353]
 
-[node name="PathSprite" type="Sprite2D" parent="EdgeSlots/Edge2"]
+[node name="PathSprite" type="Sprite2D" parent="EdgeSlots/Edge2" unique_id=108965687]
 
-[node name="Edge3" type="Node2D" parent="EdgeSlots"]
+[node name="Edge3" type="Node2D" parent="EdgeSlots" unique_id=997568405]
 
-[node name="RelationSprite" type="Sprite2D" parent="EdgeSlots/Edge3"]
+[node name="RelationSprite" type="Sprite2D" parent="EdgeSlots/Edge3" unique_id=1426280091]
 
-[node name="PathSprite" type="Sprite2D" parent="EdgeSlots/Edge3"]
+[node name="PathSprite" type="Sprite2D" parent="EdgeSlots/Edge3" unique_id=1814369006]
 
-[node name="Edge4" type="Node2D" parent="EdgeSlots"]
+[node name="Edge4" type="Node2D" parent="EdgeSlots" unique_id=1464520129]
 
-[node name="RelationSprite" type="Sprite2D" parent="EdgeSlots/Edge4"]
+[node name="RelationSprite" type="Sprite2D" parent="EdgeSlots/Edge4" unique_id=92580165]
 
-[node name="PathSprite" type="Sprite2D" parent="EdgeSlots/Edge4"]
+[node name="PathSprite" type="Sprite2D" parent="EdgeSlots/Edge4" unique_id=1891118140]
 
-[node name="Edge5" type="Node2D" parent="EdgeSlots"]
+[node name="Edge5" type="Node2D" parent="EdgeSlots" unique_id=1886731164]
 
-[node name="RelationSprite" type="Sprite2D" parent="EdgeSlots/Edge5"]
+[node name="RelationSprite" type="Sprite2D" parent="EdgeSlots/Edge5" unique_id=529834939]
 
-[node name="PathSprite" type="Sprite2D" parent="EdgeSlots/Edge5"]
+[node name="PathSprite" type="Sprite2D" parent="EdgeSlots/Edge5" unique_id=639506705]
