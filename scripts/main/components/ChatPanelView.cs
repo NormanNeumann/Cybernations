@@ -59,8 +59,7 @@ public partial class ChatPanelView : Control, IChatPanelView
 			return;
 		}
 
-		_isExpanded = true;
-		SetExpanded(false);
+		_isExpanded = expanded;
 		
 		if (expanded)
 		{

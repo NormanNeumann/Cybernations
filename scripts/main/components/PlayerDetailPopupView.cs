@@ -3,124 +3,139 @@ using Godot;
 
 public partial class PlayerDetailPopupView : Control, IPlayerDetailPopupView
 {
-    private readonly Color _inkColor = Color.FromHtml("#2B2726");
-    private readonly Color _textColor = Color.FromHtml("#16222B");
-    private readonly Color _mutedTextColor = Color.FromHtml("#4B5E69");
+	private const float PreferredHorizontalMargin = 32.0f;
 
-    private Panel _panel = null!;
-    private Label _titleLabel = null!;
-    private Label _bodyLabel = null!;
-    private Button _closeButton = null!;
+	private readonly Color _inkColor = Color.FromHtml("#2B2726");
+	private readonly Color _textColor = Color.FromHtml("#16222B");
+	private readonly Color _mutedTextColor = Color.FromHtml("#4B5E69");
 
-    public event Action? CloseRequested;
+	private Panel _panel = null!;
+	private Label _titleLabel = null!;
+	private Label _bodyLabel = null!;
+	private Button _closeButton = null!;
 
-    public bool IsOpen => Visible && _panel.Visible;
+	public event Action? CloseRequested;
 
-    public override void _Ready()
-    {
-        MouseFilter = MouseFilterEnum.Stop;
-        AnchorRight = 1.0f;
-        AnchorBottom = 1.0f;
-        GrowHorizontal = GrowDirection.Both;
-        GrowVertical = GrowDirection.Both;
-        Visible = false;
+	public bool IsOpen => Visible && _panel.Visible;
 
-        _panel = GetNode<Panel>("PopupPanel");
-        _titleLabel = GetNode<Label>("PopupPanel/Layout/TitleLabel");
-        _bodyLabel = GetNode<Label>("PopupPanel/Layout/BodyLabel");
-        _closeButton = GetNode<Button>("PopupPanel/CloseButton");
+	public override void _Ready()
+	{
+		MouseFilter = MouseFilterEnum.Stop;
+		AnchorRight = 1.0f;
+		AnchorBottom = 1.0f;
+		GrowHorizontal = GrowDirection.Both;
+		GrowVertical = GrowDirection.Both;
+		Visible = false;
 
-        _panel.MouseFilter = MouseFilterEnum.Pass;
-        _titleLabel.AddThemeColorOverride("font_color", _textColor);
-        _bodyLabel.AddThemeColorOverride("font_color", _mutedTextColor);
-        _closeButton.AddThemeColorOverride("font_color", _inkColor);
+		_panel = GetNode<Panel>("PopupPanel");
+		_titleLabel = GetNode<Label>("PopupPanel/Layout/TitleLabel");
+		_bodyLabel = GetNode<Label>("PopupPanel/Layout/BodyLabel");
+		_closeButton = GetNode<Button>("PopupPanel/CloseButton");
 
-        ApplyPanelStyle(_panel, Color.FromHtml("#F4F4F4"), 18, _inkColor, 2);
-        _closeButton.Pressed += () => CloseRequested?.Invoke();
-    }
+		_panel.MouseFilter = MouseFilterEnum.Pass;
+		_titleLabel.AddThemeColorOverride("font_color", _textColor);
+		_bodyLabel.AddThemeColorOverride("font_color", _mutedTextColor);
+		_closeButton.AddThemeColorOverride("font_color", _inkColor);
 
-    public override void _UnhandledInput(InputEvent @event)
-    {
-        if (!Visible || !_panel.Visible)
-        {
-            return;
-        }
+		ApplyPanelStyle(_panel, Color.FromHtml("#F4F4F4"), 18, _inkColor, 2);
+		_closeButton.Pressed += () => CloseRequested?.Invoke();
+	}
 
-        if (@event is not InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left } mouseButton)
-        {
-            return;
-        }
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		if (!Visible || !_panel.Visible)
+		{
+			return;
+		}
 
-        if (GetGlobalRect(_panel).HasPoint(mouseButton.GlobalPosition))
-        {
-            return;
-        }
+		if (@event is not InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left } mouseButton)
+		{
+			return;
+		}
 
-        CloseRequested?.Invoke();
-        GetViewport().SetInputAsHandled();
-    }
+		if (GetGlobalRect(_panel).HasPoint(mouseButton.GlobalPosition))
+		{
+			return;
+		}
 
-    public void ShowPlayerDetail(PlayerDetailVm detail, Vector2 preferredPosition)
-    {
-        _titleLabel.Text = "Player detail";
-        _bodyLabel.Text =
-            $"Player {detail.Slot}\n" +
-            $"Progress: {detail.Progress}\n\n" +
-            detail.Description;
+		CloseRequested?.Invoke();
+		GetViewport().SetInputAsHandled();
+	}
 
-        var viewportSize = GetViewportRect().Size;
-        var clampedPosition = new Vector2(
-            Mathf.Clamp(preferredPosition.X, 0, viewportSize.X - _panel.Size.X),
-            Mathf.Clamp(preferredPosition.Y, 0, viewportSize.Y - _panel.Size.Y)
-        );
+	public void ShowPlayerDetail(PlayerDetailVm detail, Vector2 preferredPosition)
+	{
+		_titleLabel.Text = "Player detail";
+		_bodyLabel.Text =
+			$"Player {detail.Slot}\n" +
+			$"Progress: {detail.Progress}\n\n" +
+			detail.Description;
 
-        Visible = true;
-        _panel.Position = clampedPosition;
-        _panel.Visible = true;
-    }
+		var viewportSize = GetViewportRect().Size;
+		var panelSize = _panel.Size;
+		if (panelSize == Vector2.Zero)
+		{
+			panelSize = _panel.GetRect().Size;
+		}
+		if (panelSize == Vector2.Zero)
+		{
+			panelSize = new Vector2(650.0f, 400.0f);
+		}
+		var horizontalLimit = Mathf.Max(0.0f, viewportSize.X - panelSize.X);
+		var verticalLimit = Mathf.Max(0.0f, viewportSize.Y - panelSize.Y);
+		var localPreferredPosition = preferredPosition - GlobalPosition;
+		var desiredPosition = localPreferredPosition + new Vector2(PreferredHorizontalMargin, 0.0f);
+		var clampedPosition = new Vector2(
+			Mathf.Clamp(desiredPosition.X, 0.0f, horizontalLimit),
+			Mathf.Clamp(localPreferredPosition.Y, 0.0f, verticalLimit)
+		);
 
-    public void HidePopup()
-    {
-        _panel.Visible = false;
-        Visible = false;
-    }
+		Visible = true;
+		_panel.Position = clampedPosition;
+		_panel.Visible = true;
+	}
 
-    public void ShowPopup(int slot, string progress, Vector2 preferredPosition)
-    {
-        ShowPlayerDetail(
-            new PlayerDetailVm(
-                slot,
-                progress,
+	public void HidePopup()
+	{
+		_panel.Visible = false;
+		Visible = false;
+	}
+
+	public void ShowPopup(int slot, string progress, Vector2 preferredPosition)
+	{
+		ShowPlayerDetail(
+			new PlayerDetailVm(
+				slot,
+				progress,
                 "More player data can be rendered here."
-            ),
-            preferredPosition
-        );
-    }
+			),
+			preferredPosition
+		);
+	}
 
-    private static Rect2 GetGlobalRect(Control control)
-    {
-        return new Rect2(control.GlobalPosition, control.Size);
-    }
+	private static Rect2 GetGlobalRect(Control control)
+	{
+		return new Rect2(control.GlobalPosition, control.Size);
+	}
 
-    private static void ApplyPanelStyle(
-        Panel panel,
-        Color fillColor,
-        int radius,
-        Color borderColor,
-        int borderWidth
-    )
-    {
-        var style = new StyleBoxFlat();
-        style.BgColor = fillColor;
-        style.CornerRadiusTopLeft = radius;
-        style.CornerRadiusTopRight = radius;
-        style.CornerRadiusBottomLeft = radius;
-        style.CornerRadiusBottomRight = radius;
-        style.BorderColor = borderColor;
-        style.BorderWidthLeft = borderWidth;
-        style.BorderWidthTop = borderWidth;
-        style.BorderWidthRight = borderWidth;
-        style.BorderWidthBottom = borderWidth;
-        panel.AddThemeStyleboxOverride("panel", style);
-    }
+	private static void ApplyPanelStyle(
+		Panel panel,
+		Color fillColor,
+		int radius,
+		Color borderColor,
+		int borderWidth
+	)
+	{
+		var style = new StyleBoxFlat();
+		style.BgColor = fillColor;
+		style.CornerRadiusTopLeft = radius;
+		style.CornerRadiusTopRight = radius;
+		style.CornerRadiusBottomLeft = radius;
+		style.CornerRadiusBottomRight = radius;
+		style.BorderColor = borderColor;
+		style.BorderWidthLeft = borderWidth;
+		style.BorderWidthTop = borderWidth;
+		style.BorderWidthRight = borderWidth;
+		style.BorderWidthBottom = borderWidth;
+		panel.AddThemeStyleboxOverride("panel", style);
+	}
 }

@@ -5,141 +5,141 @@ using Godot;
 
 public sealed class WebSocketGameGateway : IGameGateway
 {
-    private readonly string _serverUrl;
-    private readonly Queue<string> _pendingOutbound = new();
-    private WebSocketPeer? _peer;
-    private bool _initialized;
+	private readonly string _serverUrl;
+	private readonly Queue<string> _pendingOutbound = new();
+	private WebSocketPeer? _peer;
+	private bool _initialized;
 
-    public WebSocketGameGateway(string serverUrl)
-    {
-        _serverUrl = serverUrl.Trim();
-    }
+	public WebSocketGameGateway(string serverUrl)
+	{
+		_serverUrl = serverUrl.Trim();
+	}
 
-    public event Action<string>? ServerPacketReceived;
+	public event Action<string>? ServerPacketReceived;
 
-    public void Initialize()
-    {
-        if (_initialized)
-        {
-            return;
-        }
+	public void Initialize()
+	{
+		if (_initialized)
+		{
+			return;
+		}
 
-        _initialized = true;
+		_initialized = true;
 
-        if (_serverUrl.Length == 0)
-        {
-            GD.PushWarning("WebSocketGameGateway: server URL is empty, gateway remains disconnected.");
-            return;
-        }
+		if (_serverUrl.Length == 0)
+		{
+			GD.PushWarning("WebSocketGameGateway: server URL is empty, gateway remains disconnected.");
+			return;
+		}
 
-        Connect();
-    }
+		Connect();
+	}
 
-    public void Poll()
-    {
-        if (!_initialized || _peer == null)
-        {
-            return;
-        }
+	public void Poll()
+	{
+		if (!_initialized || _peer == null)
+		{
+			return;
+		}
 
-        _peer.Poll();
-        var state = _peer.GetReadyState();
+		_peer.Poll();
+		var state = _peer.GetReadyState();
 
-        if (state == WebSocketPeer.State.Open)
-        {
-            FlushPendingMessages();
-            ReceivePackets();
-        }
-    }
+		if (state == WebSocketPeer.State.Open)
+		{
+			FlushPendingMessages();
+			ReceivePackets();
+		}
+	}
 
-    public void SendPacket(string packetJson)
-    {
-        if (packetJson.Trim().Length == 0)
-        {
-            return;
-        }
+	public void SendPacket(string packetJson)
+	{
+		if (packetJson.Trim().Length == 0)
+		{
+			return;
+		}
 
-        QueueOrSend(packetJson);
-    }
+		QueueOrSend(packetJson);
+	}
 
-    public void Shutdown()
-    {
-        if (_peer == null)
-        {
-            return;
-        }
+	public void Shutdown()
+	{
+		if (_peer == null)
+		{
+			return;
+		}
 
-        if (_peer.GetReadyState() != WebSocketPeer.State.Closed)
-        {
-            _peer.Close();
-        }
+		if (_peer.GetReadyState() != WebSocketPeer.State.Closed)
+		{
+			_peer.Close();
+		}
 
-        _peer = null;
-        _pendingOutbound.Clear();
-        _initialized = false;
-    }
+		_peer = null;
+		_pendingOutbound.Clear();
+		_initialized = false;
+	}
 
-    private void Connect()
-    {
-        _peer = new WebSocketPeer();
-        var error = _peer.ConnectToUrl(_serverUrl);
-        if (error != Error.Ok)
-        {
-            GD.PushWarning($"WebSocketGameGateway: connect failed ({error}).");
-            _peer = null;
-        }
-    }
+	private void Connect()
+	{
+		_peer = new WebSocketPeer();
+		var error = _peer.ConnectToUrl(_serverUrl);
+		if (error != Error.Ok)
+		{
+			GD.PushWarning($"WebSocketGameGateway: connect failed ({error}).");
+			_peer = null;
+		}
+	}
 
-    private void QueueOrSend(string packet)
-    {
-        if (_peer == null || _peer.GetReadyState() != WebSocketPeer.State.Open)
-        {
-            _pendingOutbound.Enqueue(packet);
-            return;
-        }
+	private void QueueOrSend(string packet)
+	{
+		if (_peer == null || _peer.GetReadyState() != WebSocketPeer.State.Open)
+		{
+			_pendingOutbound.Enqueue(packet);
+			return;
+		}
 
-        SendRaw(packet);
-    }
+		SendRaw(packet);
+	}
 
-    private void FlushPendingMessages()
-    {
-        while (_pendingOutbound.Count > 0 && _peer != null && _peer.GetReadyState() == WebSocketPeer.State.Open)
-        {
-            SendRaw(_pendingOutbound.Dequeue());
-        }
-    }
+	private void FlushPendingMessages()
+	{
+		while (_pendingOutbound.Count > 0 && _peer != null && _peer.GetReadyState() == WebSocketPeer.State.Open)
+		{
+			SendRaw(_pendingOutbound.Dequeue());
+		}
+	}
 
-    private void SendRaw(string packet)
-    {
-        if (_peer == null)
-        {
-            return;
-        }
+	private void SendRaw(string packet)
+	{
+		if (_peer == null)
+		{
+			return;
+		}
 
-        var error = _peer.Send(Encoding.UTF8.GetBytes(packet));
-        if (error != Error.Ok)
-        {
-            GD.PushWarning($"WebSocketGameGateway: send failed ({error}).");
-        }
-    }
+		var error = _peer.Send(Encoding.UTF8.GetBytes(packet));
+		if (error != Error.Ok)
+		{
+			GD.PushWarning($"WebSocketGameGateway: send failed ({error}).");
+		}
+	}
 
-    private void ReceivePackets()
-    {
-        if (_peer == null)
-        {
-            return;
-        }
+	private void ReceivePackets()
+	{
+		if (_peer == null)
+		{
+			return;
+		}
 
-        while (_peer.GetAvailablePacketCount() > 0)
-        {
-            var packet = _peer.GetPacket();
-            if (packet.Length == 0)
-            {
-                continue;
-            }
+		while (_peer.GetAvailablePacketCount() > 0)
+		{
+			var packet = _peer.GetPacket();
+			if (packet.Length == 0)
+			{
+				continue;
+			}
 
-            var packetJson = Encoding.UTF8.GetString(packet);
-            ServerPacketReceived?.Invoke(packetJson);
-        }
-    }
+			var packetJson = Encoding.UTF8.GetString(packet);
+			ServerPacketReceived?.Invoke(packetJson);
+		}
+	}
 }

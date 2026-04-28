@@ -159,10 +159,16 @@ public partial class MainUI : Control
 	private Control _chatPanelRoot = null!;
 	private ColorRect _popupDimOverlay = null!;
 	[Export]
-	public string ServerUrl { get; set; } = "";
+	public string ServerUrl { get; set; } = "ws://localhost:9999";
 
 	public override void _Ready()
 	{
+		// Core UI views
+		if (string.IsNullOrWhiteSpace(ServerUrl))
+		{
+			ServerUrl = "ws://localhost:9999";
+		}
+
 		// Core UI views
 		_chatPanelView = GetNode<ChatPanelView>("UIMain/ChatPanel");
 		_teamGoalPanelView = GetNode<TeamGoalPanelView>("UIMain/TeamGoalPanel");

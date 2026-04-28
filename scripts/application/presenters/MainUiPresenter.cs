@@ -18,6 +18,8 @@ public sealed class MainUiPresenter : IDisposable
 
 	private bool _teamGoalDetailOpenPending;
 	private bool _infoSummaryDetailOpenPending;
+	private TeamGoalStatePayload? _cachedTeamGoalState;
+	private InfoSummaryStatePayload? _cachedInfoSummaryState;
 	private bool _isBound;
 	private readonly EnvisionController _envisionController;
 	private readonly IEnvisionGateway _envisionGateway;
@@ -83,6 +85,9 @@ public sealed class MainUiPresenter : IDisposable
 	public void OnPlayerSelected(int slot, string progress, Vector2 preferredPosition)
 	{
 		_pendingPlayerDetailPositions[slot] = preferredPosition;
+		var placeholderDetail =
+			new PlayerDetailVm(slot, progress, "Loading player details...");
+		_playerDetailPopupView.ShowPlayerDetail(placeholderDetail, preferredPosition);
 		_gateway.SendPacket(
 			GamePacketCodec.BuildCommand(
 				PacketTypes.CmdPlayerDetailRequest,
@@ -173,15 +178,27 @@ private static string BuildEnvisionStatusMessage(EnvisionActionRequest request)
 			return;
 		}
 
-		_teamGoalDetailOpenPending = true;
-		_gateway.SendPacket(
-			GamePacketCodec.BuildCommand(
-				PacketTypes.CmdTeamGoalDetailRequest,
-				LocalRoomId,
-				LocalPlayerId,
-				new EmptyPayload()
-			)
-		);
+		if (_cachedTeamGoalState.HasValue)
+		{
+			var cached = _cachedTeamGoalState.Value;
+			_teamGoalPanelView.SetPreview(cached.title, cached.description);
+			_teamGoalDetailOpenPending = false;
+		}
+		else
+		{
+			_teamGoalDetailOpenPending = true;
+			_teamGoalPanelView.SetPreview("Loading team goal...", "Fetching latest team goal information...");
+			_gateway.SendPacket(
+				GamePacketCodec.BuildCommand(
+					PacketTypes.CmdTeamGoalDetailRequest,
+					LocalRoomId,
+					LocalPlayerId,
+					new EmptyPayload()
+				)
+			);
+		}
+
+		_teamGoalPanelView.SetDropdownVisible(true);
 	}
 
 	private void OnTeamGoalCloseRequested()
@@ -199,15 +216,27 @@ private static string BuildEnvisionStatusMessage(EnvisionActionRequest request)
 			return;
 		}
 
-		_infoSummaryDetailOpenPending = true;
-		_gateway.SendPacket(
-			GamePacketCodec.BuildCommand(
-				PacketTypes.CmdInfoSummaryDetailRequest,
-				LocalRoomId,
-				LocalPlayerId,
-				new EmptyPayload()
-			)
-		);
+		if (_cachedInfoSummaryState.HasValue)
+		{
+			var cached = _cachedInfoSummaryState.Value;
+			_infoSummaryPanelView.SetSummary(cached.title, cached.body);
+			_infoSummaryDetailOpenPending = false;
+		}
+		else
+		{
+			_infoSummaryDetailOpenPending = true;
+			_infoSummaryPanelView.SetSummary("Loading summary...", "Fetching the latest key points...");
+			_gateway.SendPacket(
+				GamePacketCodec.BuildCommand(
+					PacketTypes.CmdInfoSummaryDetailRequest,
+					LocalRoomId,
+					LocalPlayerId,
+					new EmptyPayload()
+				)
+			);
+		}
+
+		_infoSummaryPanelView.SetDropdownVisible(true);
 	}
 
 	private void OnInfoSummaryCloseRequested()
@@ -277,12 +306,14 @@ private static string BuildEnvisionStatusMessage(EnvisionActionRequest request)
 		if (payload.team_goal.HasValue)
 		{
 			var teamGoal = payload.team_goal.Value;
+			_cachedTeamGoalState = teamGoal;
 			_teamGoalPanelView.SetPreview(teamGoal.title, teamGoal.description);
 		}
 
 		if (payload.info_summary.HasValue)
 		{
 			var infoSummary = payload.info_summary.Value;
+			_cachedInfoSummaryState = infoSummary;
 			_infoSummaryPanelView.SetSummary(infoSummary.title, infoSummary.body);
 		}
 
@@ -331,6 +362,7 @@ private static string BuildEnvisionStatusMessage(EnvisionActionRequest request)
 			return;
 		}
 
+		_cachedTeamGoalState = payload;
 		_teamGoalPanelView.SetPreview(payload.title, payload.description);
 		if (_teamGoalDetailOpenPending)
 		{
@@ -346,6 +378,7 @@ private static string BuildEnvisionStatusMessage(EnvisionActionRequest request)
 			return;
 		}
 
+		_cachedInfoSummaryState = payload;
 		_infoSummaryPanelView.SetSummary(payload.title, payload.body);
 		if (_infoSummaryDetailOpenPending)
 		{

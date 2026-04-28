@@ -2,10 +2,10 @@ using System;
 
 public interface IGameGateway
 {
-    event Action<string>? ServerPacketReceived;
+	event Action<string>? ServerPacketReceived;
 
-    void Initialize();
-    void Poll();
-    void SendPacket(string packetJson);
-    void Shutdown();
+	void Initialize();
+	void Poll();
+	void SendPacket(string packetJson);
+	void Shutdown();
 }
