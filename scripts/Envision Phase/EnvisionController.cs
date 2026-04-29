@@ -21,6 +21,7 @@ public partial class EnvisionController : Node
 
 	private EnvisionAction? pendingAction = null;
 	private EnvisionUiState? _state;
+	private FeedbackTrackManipulationPopup feedbackTrackManipulationPopup = null!;
 
 	public event Action? PopupOpened;
 	public event Action? PopupClosed;
@@ -56,6 +57,12 @@ public partial class EnvisionController : Node
 
 		feedbackTokenPopup.OnTokenConfirmed += OnFeedbackTokenConfirmed;
 		feedbackTokenPopup.OnCancelled += OnFeedbackTokenCancelled;
+		
+		feedbackTrackManipulationPopup =
+			GetNode<FeedbackTrackManipulationPopup>("../UIMain/Popups/FeedbackTrackManipulationPopup");
+
+		feedbackTrackManipulationPopup.OnConfirmed += OnFeedbackTrackManipulationConfirmed;
+		feedbackTrackManipulationPopup.OnCancelled += OnFeedbackTrackManipulationCancelled;
 
 		players = new List<PlayerState>
 		{
@@ -307,6 +314,7 @@ public partial class EnvisionController : Node
 
 	private void OnSteerConfirmed(string mode)
 	{
+
 		pendingAction = EnvisionAction.Steer;
 
 		if (mode == "AddReserveToken")
@@ -319,18 +327,37 @@ public partial class EnvisionController : Node
 		}
 
 		if (mode == "ManipulateTokens")
-		{
-			pendingAction = null;
-			PopupClosed?.Invoke();
+{
+	pendingAction = EnvisionAction.Steer;
 
-			ActionRequested?.Invoke(new EnvisionActionRequest
-			{
-				Action = "Steer",
-				Mode = "ManipulateTokens"
-			});
-		}
-	}
+	steerPopup.Hide();
+	
+	var mockTrackTokens = new[]
+{
+	"Wilds",
+	"Wastes",
+	"Develop",
+	"Agora",
+	"Works",
+	"Transform",
+	"Wilds",
+	"Wastes",
+	"Develop",
+	"Agora",
+	"Works"
+};
 
+	feedbackTrackManipulationPopup.Open(mockTrackTokens, "Wilds", "Develop");
+	PopupOpened?.Invoke();
+
+	banner.ShowMessage(
+		"Choose one Feedback token from the Feedback Track.",
+		new Color("FDE68A")
+	);
+
+	return;
+}
+}
 	private void OnSteerCancelled()
 	{
 		pendingAction = null;
@@ -352,7 +379,46 @@ public partial class EnvisionController : Node
 			FeedbackTokenType = tokenType
 		});
 	}
+	
+	private void OnFeedbackTrackManipulationConfirmed(
+	int trackIndex,
+	string trackToken,
+	string drawnToken1,
+	string drawnToken2,
+	string tokenToTrack,
+	string tokenToBag,
+	string tokenToReserve)
+{
+	pendingAction = null;
+	PopupClosed?.Invoke();
 
+	ActionRequested?.Invoke(new EnvisionActionRequest
+	{
+		Action = "Steer",
+		Mode = "ManipulateTokens",
+
+		SelectedFeedbackTrackIndex = trackIndex,
+		TrackTokenType = trackToken,
+		DrawnTokenType1 = drawnToken1,
+		DrawnTokenType2 = drawnToken2,
+
+		TokenToTrack = tokenToTrack,
+		TokenToBag = tokenToBag,
+		TokenToReserve = tokenToReserve
+	});
+}
+
+private void OnFeedbackTrackManipulationCancelled()
+{
+	feedbackTrackManipulationPopup.Hide();
+	steerPopup.Open();
+	PopupOpened?.Invoke();
+
+	banner.ShowMessage(
+		"Feedback token manipulation cancelled. Choose how to use Steer.",
+		new Color("86EFAC")
+	);
+}
 	private void OnFeedbackTokenCancelled()
 	{
 		feedbackTokenPopup.Hide();
@@ -368,6 +434,7 @@ public partial class EnvisionController : Node
 		setCoursePopup.Hide();
 		steerPopup.Hide();
 		feedbackTokenPopup.Hide();
+		feedbackTrackManipulationPopup.Hide();
 	}
 
 	private void HideAllPopups()
@@ -378,6 +445,7 @@ public partial class EnvisionController : Node
 		setCoursePopup.Hide();
 		steerPopup.Hide();
 		feedbackTokenPopup.Hide();
+		feedbackTrackManipulationPopup.Hide();
 		banner.Hide();
 	}
 

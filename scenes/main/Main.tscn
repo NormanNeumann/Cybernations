@@ -21,6 +21,8 @@
 [ext_resource type="PackedScene" uid="uid://mov4atk5umi5" path="res://scenes/Envison Phase/FeedbackTokenPopup.tscn" id="17_u7tt4"]
 [ext_resource type="PackedScene" uid="uid://bhdlqf462da0b" path="res://scenes/Envison Phase/StatusBanner.tscn" id="19_ftc2p"]
 [ext_resource type="Script" uid="uid://cxmu7y1wveyx6" path="res://scripts/Envision Phase/FeedbackTokenPopup.cs" id="19_roob6"]
+[ext_resource type="PackedScene" uid="uid://ba05ikbew35bn" path="res://scenes/Envison Phase/FeedbackTrackManipulationPopup.tscn" id="21_roob6"]
+[ext_resource type="Script" uid="uid://oe0ocgiv06pm" path="res://scripts/Envision Phase/FeedbackTrackManipulationPopup.cs" id="22_enl7a"]
 
 [node name="Main" type="Control" unique_id=786545785]
 layout_mode = 3
@@ -141,7 +143,6 @@ offset_bottom = 26.0
 grow_vertical = 1
 
 [node name="ActionPopup" parent="UIMain/Popups" unique_id=1379592691 instance=ExtResource("10_yub1f")]
-visible = true
 layout_mode = 1
 
 [node name="TargetPlayerPopup" parent="UIMain/Popups" unique_id=1956891871 instance=ExtResource("11_d8523")]
@@ -161,6 +162,10 @@ script = ExtResource("17_d8523")
 [node name="FeedbackTokenPopup" parent="UIMain/Popups" unique_id=1132564910 instance=ExtResource("17_u7tt4")]
 layout_mode = 1
 script = ExtResource("19_roob6")
+
+[node name="FeedbackTrackManipulationPopup" parent="UIMain/Popups" unique_id=1518585830 instance=ExtResource("21_roob6")]
+layout_mode = 1
+script = ExtResource("22_enl7a")
 
 [node name="StatusBanner" parent="UIMain/Popups" unique_id=1519244184 instance=ExtResource("19_ftc2p")]
 layout_mode = 1
